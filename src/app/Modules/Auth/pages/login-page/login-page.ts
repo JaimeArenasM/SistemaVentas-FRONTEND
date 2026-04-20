@@ -48,7 +48,7 @@ erroMessage: string | null=null;
       this.authService.Authentication(this.formLogin.value).subscribe({
         next: (res) => {
           this.authService.saveSession(res); //se guarda la sesion
-          this.router.navigate(['/dasboard']); // nos dirige al sistema
+          this.router.navigate(['/dashboard']); // nos dirige al sistema
 
         },
         error: (err)=>{

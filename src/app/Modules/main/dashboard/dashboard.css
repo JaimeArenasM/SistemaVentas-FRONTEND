@@ -1,0 +1,105 @@
+/* EL CONTENEDOR PRINCIPAL (DIVIDE LA PANTALLA EN DOS) */
+.main-layout {
+  display: flex;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* LA BARRA LATERAL */
+.sidebar {
+  width: 220px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  height: fit-content;
+  position: sticky;
+  top: 24px;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 2px solid #4bb7be; /* Linea con tu color */
+  padding-bottom: 10px;
+}
+
+.sidebar button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+/* Para pintar la categoría seleccionada con tu color */
+.active-category {
+  background-color: #e0f7fa !important; /* Un tono muy clarito de tu color */
+  color: #4bb7be !important;
+  font-weight: bold;
+}
+
+/* EL CONTENIDO DE LA TIENDA */
+.store-container {
+  flex: 1;
+}
+
+/* BARRA SUPERIOR CON TU COLOR TURQUESA */
+.store-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  background-color: #4bb7be; /* Tu color elegido */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.header-title { 
+  font-size: 1.5rem; 
+  font-weight: bold; 
+}
+
+.spacer { 
+  flex: 1 1 auto; 
+}
+
+/* LA CUADRÍCULA DE PRODUCTOS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* LAS TARJETAS */
+.product-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden; 
+  word-wrap: break-word; 
+  padding: 16px;
+}
+
+.product-card:hover { 
+  transform: translateY(-5px); 
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+}
+
+img[mat-card-image] { 
+  height: 180px; 
+  object-fit: cover; 
+  margin: -16px -16px 0 -16px; 
+} 
+
+.price { 
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  color: #4caf50; /* Verde para el precio */
+  display: block; 
+  margin: 10px 0; 
+}
