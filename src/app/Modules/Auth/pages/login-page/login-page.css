@@ -1,21 +1,22 @@
-
-
 /* CABEZERA */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Usa toda la altura de la ventana */
-  background-color: #f5f5f5;
+  height: 100vh; /* <--- ¡¡ESTA ES LA LÍNEA QUE FALTABA!! Ocupa toda la pantalla */
+  background-image: url('https://i.postimg.cc/8cVChbvw/tiendasinlogo.png'); 
+  background-size: cover; 
+  background-position: center; 
 }
 
 .login-card {
   width: 100%;
   max-width: 420px;
   padding: 40px 30px;
-  box-sizing: border-box; /* Evita que el padding sume más ancho */
+  box-sizing: border-box; 
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* Una sombrita elegante */
+  background-color: rgba(255, 255, 255, 0.95) !important; /* Le da un toque de vidrio para que se lea sobre la foto */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important; /* Sombra más pro para que destaque */
 }
 
 .login-header{
@@ -27,7 +28,7 @@
   font-size: 50px;
   height: 50px;
   width: 50px;
-  color: #1976d2; /* Color principal de Material */
+  color: #1976d2; 
   margin-bottom: 15px;
 }
 
@@ -45,9 +46,10 @@
 
 /* FORMULARIO*/
 .full-width {
-  width: 100%; /* Hace que los inputs ocupen todo el ancho de la tarjeta */
+  width: 100%; 
   margin-bottom: 10px;
 }
+
 /*botones y el error*/
 .btn-login{
   width: 100%;
@@ -57,7 +59,8 @@
   border-radius: 8px;
 }
 
-.errorbox{
+/* <--- CORREGIDO: Cambié errorbox por error-box para que coincida con tu HTML */
+.error-box{
   background-color: #ffebee;
   color: #c62828;
   padding: 10px;
