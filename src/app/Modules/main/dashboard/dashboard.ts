@@ -7,12 +7,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu'; // <--- 1. NUEVA IMPORTACIÓN
 
 import { FormsModule } from '@angular/forms';
 
 import { ProductService } from '../services/product.service';
 import { CartService } from '../services/cart.service';
 import { Product } from '../models/product.model';
+
+// <--- 2. NUEVAS IMPORTACIONES PARA EL LOGOUT
+import { Router } from '@angular/router';
+import { AuthSercice } from '../../Auth/Services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +29,8 @@ import { Product } from '../models/product.model';
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule // <--- 3. AGREGAR AQUÍ
   ],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
@@ -44,6 +50,10 @@ export class Dashboard implements OnInit {
 
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  
+  // <--- 4. INYECTAR ROUTER Y AUTH
+  private router = inject(Router);
+  private authService = inject(AuthSercice);
 
   ngOnInit(): void {
 
@@ -111,5 +121,11 @@ export class Dashboard implements OnInit {
     this.cartService.clearCart();
     this.metodoPago = '';
     this.cerrarCarrito();
+  }
+
+  // <--- 5. LA FUNCIÓN DE CERRAR SESIÓN
+  logout() {
+    this.authService.logout(); 
+    this.router.navigate(['/auth']); 
   }
 }

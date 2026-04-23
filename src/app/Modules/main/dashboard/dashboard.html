@@ -14,7 +14,7 @@
 
   <div class="store-container">
 
-    <div class="store-header">
+        <div class="store-header">
       <span class="header-title">Tienda de Don Pepe</span>
       <span class="spacer"></span>
 
@@ -24,7 +24,18 @@
               matBadgeColor="warn">
         <mat-icon>shopping_cart</mat-icon>
       </button>
-    </div>
+
+      <!-- BOTÓN PERFIL -->
+      <button mat-icon-button color="accent" [matMenuTriggerFor]="profileMenu" style="margin-left: 10px;">
+        <mat-icon>person</mat-icon>
+      </button>
+
+      <!-- MENÚ DESPLEGABLE -->
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item><mat-icon>shopping_bag</mat-icon> Mis Compras</button>
+        <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Cerrar Sesión</button>
+      </mat-menu>
+    </div> 
 
     <div class="product-grid">
       <mat-card class="product-card" *ngFor="let product of filteredProducts">

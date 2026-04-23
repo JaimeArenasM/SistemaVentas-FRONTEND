@@ -2,20 +2,20 @@
 .login-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh; /* <--- ¡¡ESTA ES LA LÍNEA QUE FALTABA!! Ocupa toda la pantalla */
+  height: 100vh; 
   background-image: url('https://i.postimg.cc/8cVChbvw/tiendasinlogo.png'); 
   background-size: cover; 
   background-position: center; 
 }
 
 .login-card {
+  margin: auto;
   width: 100%;
   max-width: 420px;
   padding: 40px 30px;
   box-sizing: border-box; 
   border-radius: 10px;
-  background-color: rgba(255, 255, 255, 0.95) !important; /* Le da un toque de vidrio para que se lea sobre la foto */
+  background-color: rgba(255, 255, 255, 0.871) !important; /* Le da un toque de vidrio para que se lea sobre la foto */
   box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important; /* Sombra más pro para que destaque */
 }
 
@@ -50,23 +50,34 @@
   margin-bottom: 10px;
 }
 
-/*botones y el error*/
+/*boton*/
 .btn-login{
   width: 100%;
   padding: 24px 0;
   font-size: 16px;
   margin-top: 15px;
   border-radius: 8px;
+  background-color: #0cae98 !important; 
+  color: white !important; 
 }
 
-/* <--- CORREGIDO: Cambié errorbox por error-box para que coincida con tu HTML */
+
 .error-box{
   background-color: #ffebee;
-  color: #c62828;
+  color: hsl(0, 66%, 47%);
   padding: 10px;
   border-radius: 5px;
   text-align: center;
   margin-bottom: 20px;
   font-size: 14px;
   font-weight: bold;
+}
+/* ESTILO DEL LOGO */
+.login-logo {
+  width: 350px; 
+  height: auto; 
+  margin-bottom: 15px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
