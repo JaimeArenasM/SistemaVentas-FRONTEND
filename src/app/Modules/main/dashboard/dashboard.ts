@@ -52,7 +52,7 @@ export class Dashboard implements OnInit {
       this.filteredProducts = data;
     });
 
-    // 🔥 Cargar carrito guardado
+    // Cargar carrito
     const savedCart = localStorage.getItem('carrito');
     if (savedCart) {
       this.cartService['cartItems'].next(JSON.parse(savedCart));
@@ -63,7 +63,7 @@ export class Dashboard implements OnInit {
       this.cartCount = items.reduce((t, i) => t + i.quantity, 0);
       this.total = this.cartService.getTotalPrice();
 
-      // 🔥 Guardar carrito
+      // Guardar carrito
       localStorage.setItem('carrito', JSON.stringify(items));
     });
   }

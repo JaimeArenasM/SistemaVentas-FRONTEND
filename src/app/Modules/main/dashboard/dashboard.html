@@ -49,10 +49,10 @@
   </div>
 </div>
 
-<!-- 🔥 OVERLAY -->
+<!-- OVERLAY -->
 <div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
 
-<!-- 🛒 MODAL -->
+<!-- MODAL -->
 <div class="cart-modal" *ngIf="mostrarCarrito">
 
   <h2>Carrito ({{cartCount}})</h2>
@@ -67,7 +67,7 @@
       {{item.quantity}} x S/. {{item.product.price}}
     </span>
 
-    <button (click)="remove(item.product.id)">❌</button>
+    <button class="btn-remove" (click)="remove(item.product.id)">✖</button>
   </div>
 
   <p class="cart-total">Total: S/. {{ total }}</p>
@@ -78,6 +78,20 @@
     <option value="yape">📱 Yape</option>
     <option value="plin">📲 Plin</option>
   </select>
+
+  <!-- TARJETA -->
+  <div *ngIf="metodoPago === 'tarjeta'" class="payment-box">
+    <input type="text" placeholder="Número de tarjeta">
+    <input type="text" placeholder="Nombre del titular">
+    <input type="text" placeholder="MM/AA">
+    <input type="text" placeholder="CVV">
+  </div>
+
+  <!-- QR -->
+  <div *ngIf="metodoPago === 'yape' || metodoPago === 'plin'" class="payment-box qr-box">
+    <p>Escanea el QR</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Pago" alt="QR">
+  </div>
 
   <button (click)="pagar()">Pagar</button>
   <button (click)="cerrarCarrito()">Cerrar</button>
