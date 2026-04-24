@@ -7,12 +7,14 @@ export const routes: Routes = [
     loadChildren:()=>import('./Modules/Auth/auth.routes').then(m=> m.AUTH_ROUTES)
   },
   {
-    /* 
-    * ESTA ES LA NUEVA RUTA QUE VAMOS A AGREGAR PARA ENTRAR A TU TIENDA 
-    * Pongo 'dasboard' (sin la h) porque así lo escribió tu compañero en el login.
-    */
+   
     path: 'dashboard', 
     loadComponent: () => import('./Modules/main/dashboard/dashboard').then(m => m.Dashboard)
+  },
+  {
+   
+    path: 'tienda', 
+    loadComponent: () => import('./Modules/main/tienda/tienda').then(m => m.Tienda)
   },
   {
     /*Si abres localhost:4200 sin escribir nada más, te manda directo al Login.*/
