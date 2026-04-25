@@ -2,10 +2,10 @@
 .login-container {
   display: flex;
   justify-content: center;
-  height: 100vh; 
-  background-image: url('https://i.postimg.cc/8cVChbvw/tiendasinlogo.png'); 
-  background-size: cover; 
-  background-position: center; 
+  height: 100vh;
+  background-image: url('../login-page/img/tiendasinlogo.png');
+  background-size: cover;
+  background-position: center;
 }
 
 .login-card {
@@ -13,7 +13,7 @@
   width: 100%;
   max-width: 420px;
   padding: 40px 30px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.871) !important; /* Le da un toque de vidrio para que se lea sobre la foto */
   box-shadow: 0 8px 32px rgba(0,0,0,0.2) !important; /* Sombra más pro para que destaque */
@@ -28,7 +28,7 @@
   font-size: 50px;
   height: 50px;
   width: 50px;
-  color: #1976d2; 
+  color: #1976d2;
   margin-bottom: 15px;
 }
 
@@ -46,7 +46,7 @@
 
 /* FORMULARIO*/
 .full-width {
-  width: 100%; 
+  width: 100%;
   margin-bottom: 10px;
 }
 
@@ -57,8 +57,8 @@
   font-size: 16px;
   margin-top: 15px;
   border-radius: 8px;
-  background-color: #0cae98 !important; 
-  color: white !important; 
+  background-color: #0cae98 !important;
+  color: white !important;
 }
 
 
@@ -74,8 +74,8 @@
 }
 /* ESTILO DEL LOGO */
 .login-logo {
-  width: 350px; 
-  height: auto; 
+  width: 350px;
+  height: auto;
   margin-bottom: 15px;
   display: block;
   margin-left: auto;
