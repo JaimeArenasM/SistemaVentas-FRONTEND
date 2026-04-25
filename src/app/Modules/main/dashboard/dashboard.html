@@ -1,0 +1,159 @@
+<div class="admin-layout">
+  
+  <!-- SIDEBAR (Barra Lateral) -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <mat-icon class="sidebar-icon">storefront</mat-icon>
+      <h1>Don Pepe</h1>
+      <p>Panel de Administración</p>
+    </div>
+
+        <nav class="sidebar-menu">
+      <button class="menu-item" [class.active]="activeSection === 'dashboard'" (click)="changeSection('dashboard')">
+        <mat-icon>dashboard</mat-icon>
+        <span>Dashboard</span>
+      </button>
+      <button class="menu-item" [class.active]="activeSection === 'productos'" (click)="changeSection('productos')">
+        <mat-icon>inventory_2</mat-icon>
+        <span>Productos</span>
+      </button>
+      <button class="menu-item" [class.active]="activeSection === 'usuarios'" (click)="changeSection('usuarios')">
+        <mat-icon>people</mat-icon>
+        <span>Usuarios</span>
+      </button>
+      <button class="menu-item" [class.active]="activeSection === 'pedidos'" (click)="changeSection('pedidos')">
+        <mat-icon>shopping_bag</mat-icon>
+        <span>Pedidos</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">A</div>
+        <div>
+          <p class="user-name">Admin</p>
+          <p class="user-role">Super Admin</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="main-content">
+    
+    <!-- TOPBAR (Barra Superior) -->
+    <header class="topbar">
+      <div class="search-bar">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Buscar pedidos, usuarios...">
+      </div>
+      <div class="topbar-actions">
+        <button mat-icon-button><mat-icon>notifications</mat-icon></button>
+        <button mat-icon-button><mat-icon>settings</mat-icon></button>
+        <div class="avatar-small">A</div>
+      </div>
+    </header>
+
+    <!-- CANVAS (Aquí va el contenido) -->
+    <div class="content-canvas">
+      
+      <!-- TARJETAS DE ESTADÍSTICAS -->
+      <div class="stats-grid">
+        <mat-card class="stat-card stat-turquoise">
+          <mat-card-content>
+            <div class="stat-header">
+              <p>Ventas Totales</p>
+              <mat-icon>shopping_cart</mat-icon>
+            </div>
+            <h2 class="stat-number">S/ 450.00</h2>
+            <p class="stat-trend positive">+12.5% vs ayer</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card stat-white">
+          <mat-card-content>
+            <div class="stat-header">
+              <p>Productos en Stock</p>
+              <mat-icon>inventory_2</mat-icon>
+            </div>
+            <h2 class="stat-number">124</h2>
+            <p class="stat-trend">8 por agotarse</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card stat-white">
+          <mat-card-content>
+            <div class="stat-header">
+              <p>Pedidos Hoy</p>
+              <mat-icon>local_shipping</mat-icon>
+            </div>
+            <h2 class="stat-number">23</h2>
+            <p class="stat-trend">5 en camino</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="stat-card stat-white">
+          <mat-card-content>
+            <div class="stat-header">
+              <p>Clientes Registrados</p>
+              <mat-icon>group</mat-icon>
+            </div>
+            <h2 class="stat-number">58</h2>
+            <p class="stat-trend positive">+3 esta semana</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- TABLA DE PEDIDOS RECIENTES -->
+      <mat-card class="table-card">
+        <mat-card-header>
+          <mat-card-title>Pedidos Recientes</mat-card-title>
+          <button mat-flat-button color="primary">Ver Todos</button>
+        </mat-card-header>
+        <mat-card-content>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID Pedido</th>
+                <th>Cliente</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Progreso</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="id-col">#ORD-001</td>
+                <td>Cliente Pepe</td>
+                <td>S/ 45.00</td>
+                <td><span class="badge success">Completado</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill bg-success" style="width: 100%"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="id-col">#ORD-002</td>
+                <td>Maria Garcia</td>
+                <td>S/ 120.00</td>
+                <td><span class="badge warning">En Camino</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill bg-warning" style="width: 65%"></div></div>
+                </td>
+              </tr>
+              <tr>
+                <td class="id-col">#ORD-003</td>
+                <td>Juan Perez</td>
+                <td>S/ 15.50</td>
+                <td><span class="badge danger">Cancelado</span></td>
+                <td>
+                  <div class="progress-bar"><div class="progress-fill bg-danger" style="width: 0%"></div></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </main>
+</div>

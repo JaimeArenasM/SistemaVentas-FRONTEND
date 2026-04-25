@@ -1,0 +1,110 @@
+<div class="main-layout">
+  
+  <aside class="sidebar">
+    <h3>Categorías</h3>
+
+    <button mat-button (click)="filterByCategory('Todos')" [class.active-category]="selectedCategory === 'Todos'">📦 Todos</button>
+    <button mat-button (click)="filterByCategory('Harinas')" [class.active-category]="selectedCategory === 'Harinas'">🌾 Harinas</button>
+    <button mat-button (click)="filterByCategory('Cereales')" [class.active-category]="selectedCategory === 'Cereales'">🥣 Cereales</button>
+    <button mat-button (click)="filterByCategory('Snacks')" [class.active-category]="selectedCategory === 'Snacks'">🍪 Snacks</button>
+    <button mat-button (click)="filterByCategory('Detergentes')" [class.active-category]="selectedCategory === 'Detergentes'">🧼 Detergente</button>
+    <button mat-button (click)="filterByCategory('Bebidas')" [class.active-category]="selectedCategory === 'Bebidas'">🥤 Bebidas</button>
+    <button mat-button (click)="filterByCategory('Frutas')" [class.active-category]="selectedCategory === 'Frutas'">🍓 Frutas</button>
+  </aside>
+
+  <div class="store-container">
+
+        <div class="store-header">
+      <span class="header-title">Tienda de Don Pepe</span>
+      <span class="spacer"></span>
+
+      <button mat-icon-button color="accent"
+              (click)="abrirCarrito()"
+              [matBadge]="cartCount"
+              matBadgeColor="warn">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+
+      <!-- BOTÓN PERFIL -->
+      <button mat-icon-button color="accent" [matMenuTriggerFor]="profileMenu" style="margin-left: 10px;">
+        <mat-icon>person</mat-icon>
+      </button>
+
+      <!-- MENÚ DESPLEGABLE -->
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item><mat-icon>shopping_bag</mat-icon> Mis Compras</button>
+        <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Cerrar Sesión</button>
+      </mat-menu>
+    </div> 
+
+    <div class="product-grid">
+      <mat-card class="product-card" *ngFor="let product of filteredProducts">
+
+        <img mat-card-image [src]="product.image">
+
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-subtitle>{{ product.description }}</mat-card-subtitle>
+
+        <mat-card-content>
+          <span class="price">S/ {{ product.price }}</span>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-raised-button color="primary" (click)="addToCart(product)">
+            <mat-icon>add_shopping_cart</mat-icon> Agregar
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
+
+<!-- MODAL -->
+<div class="cart-modal" *ngIf="mostrarCarrito">
+
+  <h2>Carrito ({{cartCount}})</h2>
+
+  <div *ngIf="cartItems.length === 0">
+    <p>El carrito está vacío 🛒</p>
+  </div>
+
+  <div *ngFor="let item of cartItems" class="cart-item">
+    <span>
+      {{item.product.name}} <br>
+      {{item.quantity}} x S/. {{item.product.price}}
+    </span>
+
+    <button class="btn-remove" (click)="remove(item.product.id)">✖</button>
+  </div>
+
+  <p class="cart-total">Total: S/. {{ total }}</p>
+
+  <select [(ngModel)]="metodoPago">
+    <option value="">Selecciona método</option>
+    <option value="tarjeta">💳 Tarjeta</option>
+    <option value="yape">📱 Yape</option>
+    <option value="plin">📲 Plin</option>
+  </select>
+
+  <!-- TARJETA -->
+  <div *ngIf="metodoPago === 'tarjeta'" class="payment-box">
+    <input type="text" placeholder="Número de tarjeta">
+    <input type="text" placeholder="Nombre del titular">
+    <input type="text" placeholder="MM/AA">
+    <input type="text" placeholder="CVV">
+  </div>
+
+  <!-- QR -->
+  <div *ngIf="metodoPago === 'yape' || metodoPago === 'plin'" class="payment-box qr-box">
+    <p>Escanea el QR</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Pago" alt="QR">
+  </div>
+
+  <button (click)="pagar()">Pagar</button>
+  <button (click)="cerrarCarrito()">Cerrar</button>
+
+</div>
