@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 // Angular Material
 import { MatCardModule } from '@angular/material/card';
@@ -39,11 +40,9 @@ export class Dashboard implements OnInit {
   cartCount: number = 0;
   total: number = 0;
 
-  mostrarCarrito: boolean = false;
-  metodoPago: string = '';
-
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private router = inject(Router);
 
   ngOnInit(): void {
 
@@ -88,28 +87,7 @@ export class Dashboard implements OnInit {
   }
 
   abrirCarrito() {
-    this.mostrarCarrito = true;
-  }
-
-  cerrarCarrito() {
-    this.mostrarCarrito = false;
-  }
-
-  pagar() {
-    if (this.total === 0) {
-      alert("Carrito vacío");
-      return;
-    }
-
-    if (!this.metodoPago) {
-      alert("Selecciona un método de pago");
-      return;
-    }
-
-    alert(`Compra exitosa 🛒\nTotal: S/. ${this.total}\nMétodo: ${this.metodoPago}`);
-
-    this.cartService.clearCart();
-    this.metodoPago = '';
-    this.cerrarCarrito();
+    // Navegar a la ruta del carrito
+    this.router.navigate(['/carrito']);
   }
 }

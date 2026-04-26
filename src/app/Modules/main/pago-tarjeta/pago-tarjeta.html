@@ -1,0 +1,74 @@
+<div class="pago-tarjeta-container">
+  <h3>💳 Datos de la Tarjeta</h3>
+
+  <form [formGroup]="pagoForm" class="tarjeta-form">
+    
+    <!-- Número de Tarjeta -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Número de Tarjeta</mat-label>
+      <input matInput 
+             formControlName="numeroTarjeta"
+             (input)="formatearNumeroTarjeta($event)"
+             placeholder="1234567890123456"
+             maxlength="16">
+      <mat-icon matPrefix>credit_card</mat-icon>
+      <mat-error *ngIf="tieneError('numeroTarjeta')">
+        {{ obtenerMensajeError('numeroTarjeta') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Nombre del Titular -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nombre del Titular</mat-label>
+      <input matInput 
+             formControlName="nombreTitular"
+             placeholder="Juan Pérez"
+             maxlength="50">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-error *ngIf="tieneError('nombreTitular')">
+        {{ obtenerMensajeError('nombreTitular') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Fecha de Expiración y CVV en la misma fila -->
+    <div class="fila-datos">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Fecha Expiración</mat-label>
+        <input matInput 
+               formControlName="fechaExpiracion"
+               (input)="formatearFecha($event)"
+               placeholder="MM/AA"
+               maxlength="5">
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <mat-error *ngIf="tieneError('fechaExpiracion')">
+          {{ obtenerMensajeError('fechaExpiracion') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>CVV</mat-label>
+        <input matInput 
+               formControlName="cvv"
+               (input)="formatearCVV($event)"
+               placeholder="123"
+               maxlength="4"
+               type="password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <mat-error *ngIf="tieneError('cvv')">
+          {{ obtenerMensajeError('cvv') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Botón Confirmar Pago -->
+    <button mat-raised-button 
+            color="primary" 
+            class="btn-confirmar"
+            [disabled]="pagoForm.invalid"
+            (click)="confirmarPago()">
+      <mat-icon>check_circle</mat-icon>
+      Confirmar Pago
+    </button>
+
+  </form>
+</div>
