@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthSercice } from '../../Services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-
+import { AuthService } from '../../../../Core/Services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -21,19 +20,28 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonModule,
     MatCardModule,
     MatIconModule
-  ], /* -> necesario para el funcionamiento del Form Group en html :D */
+  ],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   formLogin: FormGroup;
-erroMessage: string | null=null;
+  erroMessage: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthSercice,
-    private router: Router,
-  ) {
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  ngOnInit(): void {
+    const session = this.authService.getSession ();
+
+    if (session) {
+              this.router.navigate(['store/catalogo'])
+
+    }
+  }
+
+  constructor() {
     this.formLogin = this.fb.group({
       vUsuario: ['', [Validators.required, Validators.email]],
       vPassword: ['', Validators.required]
@@ -41,23 +49,23 @@ erroMessage: string | null=null;
   }
 
   onAuthentication() {
-
-    this.erroMessage=null;
+    this.erroMessage = null;
 
     if (this.formLogin.valid) {
-      this.authService.Authentication(this.formLogin.value).subscribe({
+      // Usamos el método 'login' de AuthService
+      this.authService.login(this.formLogin.value).subscribe({
         next: (res) => {
-          this.authService.saveSession(res); //se guarda la sesion
-          this.router.navigate(['/dashboard']); // nos dirige al sistema
-
+          // El servicio ya guardó la sesión internamente, solo redireccionamos
+          if (res.user.iIdTipoUsuario === 1) {
+            this.router.navigate(['/admin/dashboard']); // Si es Admin (1)
+          } else {
+            this.router.navigate(['/store/catalogo']); // Si es Cliente (2)
+          }
         },
-        error: (err)=>{
-          //por si falla las credenciales
-          this.erroMessage= 'Correo o Contraseña incorrectas.';
+        error: (err) => {
+          this.erroMessage = 'Correo o Contraseña incorrectas.';
         }
       });
     }
   }
-
-
 }

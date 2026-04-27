@@ -1,0 +1,104 @@
+<div class="login-container">
+  <mat-card class="login-card" style="max-width: 500px; padding: 20px 30px;"> <div class="login-header">
+      <img src="https://i.postimg.cc/sXKjbG05/logotipo-(1).png" alt="Logo Tienda" class="login-logo">
+      <h1>Crea tu cuenta</h1>
+      <p>Únete a Tienda Don Pepe</p>
+    </div>
+
+    <mat-card-content>
+      <div *ngIf="erroMessage" class="error-box">
+        {{ erroMessage }}
+      </div>
+
+     <form [formGroup]="formRegister" (ngSubmit)="onRegister()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombres</mat-label>
+          <input matInput formControlName="nombres" placeholder="Ej. Juan">
+          <mat-icon matSuffix>person</mat-icon>
+          <mat-error *ngIf="formRegister.get('nombres')?.hasError('required')">
+            Este campo es <strong>obligatorio</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Apellidos</mat-label>
+          <input matInput formControlName="apellidos" placeholder="Ej. Pérez Gonzales">
+          <mat-icon matSuffix>person_outline</mat-icon>
+          <mat-error *ngIf="formRegister.get('apellidos')?.hasError('required')">
+            Este campo es <strong>obligatorio</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Celular</mat-label>
+          <input matInput formControlName="telefono" placeholder="Ej. 987654321" maxlength="9" inputmode="numeric">
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error *ngIf="formRegister.get('telefono')?.hasError('required')">
+            El celular es <strong>obligatorio</strong>.
+          </mat-error>
+          <mat-error *ngIf="formRegister.get('telefono')?.hasError('pattern')">
+            Debe tener exactamente <strong>9 números</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>DNI</mat-label>
+          <input matInput formControlName="dni" placeholder="Ej. 12345678" maxlength="8" inputmode="numeric">
+          <div matSuffix style="font-size: 1.3rem; padding-right: 10px;">🪪</div>
+          <mat-error *ngIf="formRegister.get('dni')?.hasError('required')">
+            El DNI es <strong>obligatorio</strong>.
+          </mat-error>
+          <mat-error *ngIf="formRegister.get('dni')?.hasError('pattern')">
+            Debe tener exactamente <strong>8 números</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="vUsuario" placeholder="ejemplo@correo.com">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="formRegister.get('vUsuario')?.hasError('required')">
+            El correo es <strong>obligatorio</strong>.
+          </mat-error>
+          <mat-error *ngIf="formRegister.get('vUsuario')?.hasError('email')">
+            Escribe un correo <strong>válido</strong> (ej. usuario@dominio.com).
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Crea una contraseña</mat-label>
+          <input matInput type="password" formControlName="vPassword">
+          <mat-icon matSuffix>lock</mat-icon>
+          <mat-error *ngIf="formRegister.get('vPassword')?.hasError('required')">
+            La contraseña es <strong>obligatoria</strong>.
+          </mat-error>
+          <mat-error *ngIf="formRegister.get('vPassword')?.hasError('minlength')">
+            Debe tener al menos <strong>6 caracteres</strong>.
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-flat-button color="primary" class="btn-login" type="submit" [disabled]="formRegister.invalid">
+          Registrarme
+        </button>
+        <div style="background: #222; color: #0f0; padding: 15px; margin-top: 20px; border-radius: 8px; text-align: left; font-family: monospace;">
+  <p><strong>ESTADO:</strong> {{ formRegister.status }}</p>
+  <p><strong>¿Nombres válidos?:</strong> {{ formRegister.get('nombres')?.valid }}</p>
+  <p><strong>¿Apellidos válidos?:</strong> {{ formRegister.get('apellidos')?.valid }}</p>
+  <p><strong>¿Celular válido?:</strong> {{ formRegister.get('telefono')?.valid }}</p>
+  <p><strong>¿DNI válido?:</strong> {{ formRegister.get('dni')?.valid }}</p>
+  <p><strong>¿Correo válido?:</strong> {{ formRegister.get('vUsuario')?.valid }}</p>
+  <p><strong>¿Contraseña válida?:</strong> {{ formRegister.get('vPassword')?.valid }}</p>
+</div>
+
+      </form>
+
+      <div style="text-align: center; margin-top: 15px;">
+        <a routerLink="/auth/login" style="color: #0cae98; text-decoration: none; font-weight: bold;">
+          ¿Ya tienes cuenta? Inicia sesión aquí
+        </a>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>

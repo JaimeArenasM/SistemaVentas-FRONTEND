@@ -1,0 +1,36 @@
+/* LA CUADRÍCULA DE PRODUCTOS */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* LAS TARJETAS */
+.product-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  word-wrap: break-word;
+  padding: 16px;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+img[mat-card-image] {
+  height: 180px;
+  object-fit: cover;
+  margin: -16px -16px 0 -16px;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4caf50;
+  display: block;
+  margin: 10px 0;
+}

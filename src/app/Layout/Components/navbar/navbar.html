@@ -1,0 +1,59 @@
+<div class="store-header">
+  <span class="header-title">Tienda de Don Pepe</span>
+  <span class="spacer"></span>
+
+  <button mat-icon-button color="accent" (click)="abrirCarrito()" [matBadge]="cartCount" matBadgeColor="warn">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
+
+  <button mat-icon-button color="accent" [matMenuTriggerFor]="profileMenu" style="margin-left: 10px">
+    <mat-icon>person</mat-icon>
+  </button>
+
+  <mat-menu #profileMenu="matMenu">
+    <button mat-menu-item><mat-icon>shopping_bag</mat-icon> Mis Compras</button>
+    <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Cerrar Sesión</button>
+  </mat-menu>
+</div>
+
+<div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
+
+<div class="cart-modal" *ngIf="mostrarCarrito">
+  <h2>Carrito ({{ cartCount }})</h2>
+
+  <div *ngIf="cartItems.length === 0">
+    <p>El carrito está vacío 🛒</p>
+  </div>
+
+  <div *ngFor="let item of cartItems" class="cart-item">
+    <span>
+      {{ item.product.name }} <br />
+      {{ item.quantity }} x S/. {{ item.product.price }}
+    </span>
+    <button class="btn-remove" (click)="remove(item.product.id)">✖</button>
+  </div>
+
+  <p class="cart-total">Total: S/. {{ total }}</p>
+
+  <select [(ngModel)]="metodoPago">
+    <option value="">Selecciona método</option>
+    <option value="tarjeta">💳 Tarjeta</option>
+    <option value="yape">📱 Yape</option>
+    <option value="plin">📲 Plin</option>
+  </select>
+
+  <div *ngIf="metodoPago === 'tarjeta'" class="payment-box">
+    <input type="text" placeholder="Número de tarjeta" />
+    <input type="text" placeholder="Nombre del titular" />
+    <input type="text" placeholder="MM/AA" />
+    <input type="text" placeholder="CVV" />
+  </div>
+
+  <div *ngIf="metodoPago === 'yape' || metodoPago === 'plin'" class="payment-box qr-box">
+    <p>Escanea el QR</p>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Pago" alt="QR" />
+  </div>
+
+  <button (click)="pagar()">Pagar</button>
+  <button (click)="cerrarCarrito()">Cerrar</button>
+</div>
