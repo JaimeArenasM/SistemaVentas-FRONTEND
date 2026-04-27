@@ -1,0 +1,12 @@
+
+.main-layout{
+  display: flex;
+  gap:24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.store-container{
+  flex: 1;
+}

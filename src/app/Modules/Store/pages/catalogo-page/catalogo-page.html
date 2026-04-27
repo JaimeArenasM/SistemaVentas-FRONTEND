@@ -1,0 +1,20 @@
+<div class="product-grid">
+  <mat-card class="product-card" *ngFor="let product of filteredProducts">
+
+    <img mat-card-image [src]="product.image">
+
+    <mat-card-title>{{ product.name }}</mat-card-title>
+    <mat-card-subtitle>{{ product.description }}</mat-card-subtitle>
+
+    <mat-card-content>
+      <span class="price">S/ {{ product.price }}</span>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" (click)="addToCart(product)">
+        <mat-icon>add_shopping_cart</mat-icon> Agregar
+      </button>
+    </mat-card-actions>
+
+  </mat-card>
+</div>
