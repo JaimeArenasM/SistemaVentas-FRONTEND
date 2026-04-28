@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
-import { PagoTarjetaComponent } from '../pago-tarjeta/pago-tarjeta';
+import { PagoTarjetaComponent } from '../pago-tarjeta-page/pago-tarjeta';
 
 @Component({
   selector: 'app-checkout',
