@@ -21,7 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   templateUrl: './carrito-page.html',
   styleUrls: ['./carrito-page.css']
 })
-export class CarritoComponent {
+export class CarritoPage {
 
   // ✅ Datos simulados (SIN model)
   cartItems = [
