@@ -1,5 +1,5 @@
 import { Routes } from "@angular/router";
-import { HomePage } from "./pages/home-page/home-page";
+import { ProductosPage } from "./pages/productos-page/productos-page";
 import { CatalogoPage } from "./pages/catalogo-page/catalogo-page";
 import { CarritoPage } from "./pages/carrito-page/carrito-page";
 import { CheckoutPage } from "./pages/checkout-page/checkout-page";
@@ -9,10 +9,14 @@ import { authGuard } from "../../Core/Guards/auth-guard";
 
 export const storeRoutes: Routes =[
 /*{
-  path:'home',component:HomePage
+  path:'productos',component:ProductosPage
 },*/
 {
   path:'catalogo',component:CatalogoPage
+},
+{
+  path: 'productos',
+  component: ProductosPage
 },
 /*{
 path: 'carrito',component:CarritoPage

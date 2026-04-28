@@ -1,36 +1,31 @@
-/* LA CUADRÍCULA DE PRODUCTOS */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-}
-
-/* LAS TARJETAS */
-.product-card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+/* ===== CARRUSEL ===== */
+.promo-carousel{
+  position: relative;
+  width: 100%;
+  height: 500px;
   overflow: hidden;
-  word-wrap: break-word;
-  padding: 16px;
+  border-radius: 0;
+  margin-top: 0;
+  box-shadow: 0 6px 18px rgba(0,0,0,.12);
 }
 
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-img[mat-card-image] {
-  height: 180px;
+.banner{
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  margin: -16px -16px 0 -16px;
 }
 
-.price {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #4caf50;
-  display: block;
-  margin: 10px 0;
+.btn{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,.35);
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  border-radius: 50%;
 }
+
+.prev{ left: 12px; }
+.next{ right: 12px; }

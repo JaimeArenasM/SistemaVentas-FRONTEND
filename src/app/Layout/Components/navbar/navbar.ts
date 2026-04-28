@@ -68,6 +68,43 @@ export class Navbar {
   }
 
   logout() {
-    this.authService.logout();
-  }
+  this.authService.logout();
+}
+
+mostrarMenuCategorias: boolean = false;
+
+abrirMenuCategorias() {
+  this.mostrarMenuCategorias = true;
+}
+
+cerrarMenuCategorias() {
+  this.mostrarMenuCategorias = false;
+}
+
+filterByCategory(category: string) {
+  this.router.navigate(
+    ['/store/productos'],
+    { queryParams: { categoria: category } }
+  );
+
+  this.cerrarMenuCategorias();
+}
+
+textoBusqueda: string = '';
+
+buscarProducto() {
+  this.router.navigate(
+    ['/store/productos'],
+    { queryParams: { search: this.textoBusqueda } }
+  );
+}
+
+irInicio() {
+
+  this.textoBusqueda = '';
+
+  this.router.navigate(['/store/catalogo']);
+
+}
+
 }

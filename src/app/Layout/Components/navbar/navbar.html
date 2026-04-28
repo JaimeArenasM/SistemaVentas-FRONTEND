@@ -1,19 +1,105 @@
 <div class="store-header">
+
+<!-- LOGO -->
+  <img src="assets/img/logotipotienda.png" class="logo-store"(click)="irInicio()">
+  
+  <!-- BOTÓN MENÚ CATEGORÍAS -->
+<button mat-icon-button (click)="abrirMenuCategorias()">
+  <mat-icon>menu</mat-icon>
+</button>
+<div class="menu-overlay" *ngIf="mostrarMenuCategorias" (click)="cerrarMenuCategorias()"></div>
+
+<aside class="side-menu" *ngIf="mostrarMenuCategorias">
+
+  <h3>CATEGORÍAS</h3>
+
+  <button (click)="filterByCategory('Todos')">
+    <mat-icon>apps</mat-icon>
+    Todos
+  </button>
+
+  <button (click)="filterByCategory('Cereales')">
+    <mat-icon>inventory_2</mat-icon>
+    Cereales
+  </button>
+
+  <button (click)="filterByCategory('Snacks')">
+    <mat-icon>fastfood</mat-icon>
+    Snacks
+  </button>
+
+  <button (click)="filterByCategory('Detergentes')">
+    <mat-icon>cleaning_services</mat-icon>
+    Limpieza
+  </button>
+
+  <button (click)="filterByCategory('Bebidas')">
+    <mat-icon>local_drink</mat-icon>
+    Bebidas
+  </button>
+
+  <button (click)="filterByCategory('Frutas')">
+    <mat-icon>bakery_dining</mat-icon>
+    Frutas
+  </button>
+
+  <button class="config-btn">
+    <mat-icon>settings</mat-icon>
+    Configuración
+  </button>
+
+</aside>
+
+
+  <!-- TÍTULO -->
   <span class="header-title">Tienda de Don Pepe</span>
+
   <span class="spacer"></span>
 
-  <button mat-icon-button color="accent" (click)="abrirCarrito()" [matBadge]="cartCount" matBadgeColor="warn">
+  <div class="search-box">
+  <mat-icon>search</mat-icon>
+
+  <input
+    type="text"
+    placeholder="Buscar productos..."
+    [(ngModel)]="textoBusqueda"
+    (keyup.enter)="buscarProducto()"
+  />
+
+  <button (click)="buscarProducto()">
+    Buscar
+  </button>
+</div>
+
+  <!-- CARRITO -->
+  <button mat-icon-button color="accent"
+          (click)="abrirCarrito()"
+          [matBadge]="cartCount"
+          matBadgeColor="warn">
+
     <mat-icon>shopping_cart</mat-icon>
   </button>
 
-  <button mat-icon-button color="accent" [matMenuTriggerFor]="profileMenu" style="margin-left: 10px">
+  <!-- PERFIL -->
+  <button mat-icon-button color="accent"
+          [matMenuTriggerFor]="profileMenu"
+          style="margin-left:10px">
+
     <mat-icon>person</mat-icon>
   </button>
 
   <mat-menu #profileMenu="matMenu">
-    <button mat-menu-item><mat-icon>shopping_bag</mat-icon> Mis Compras</button>
-    <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon> Cerrar Sesión</button>
+    <button mat-menu-item>
+      <mat-icon>shopping_bag</mat-icon>
+      Mis Compras
+    </button>
+
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Cerrar Sesión
+    </button>
   </mat-menu>
+
 </div>
 
 <div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
