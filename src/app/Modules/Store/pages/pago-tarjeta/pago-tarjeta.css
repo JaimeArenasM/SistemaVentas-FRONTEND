@@ -1,0 +1,59 @@
+.pago-tarjeta-container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.pago-tarjeta-container h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.tarjeta-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.fila-datos {
+  display: flex;
+  gap: 15px;
+}
+
+.half-width {
+  flex: 1;
+}
+
+.btn-confirmar {
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 16px;
+}
+
+.btn-confirmar:disabled {
+  background-color: #ccc;
+  color: #666;
+}
+
+/* Estilos para errores */
+::ng-deep .mat-mdc-form-field-error {
+  color: #f44336 !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-invalid .mat-form-field-outline {
+  color: #f44336 !important;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .fila-datos {
+    flex-direction: column;
+    gap: 0;
+  }
+}

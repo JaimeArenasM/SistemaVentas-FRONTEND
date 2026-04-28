@@ -21,9 +21,9 @@ export const storeRoutes: Routes =[
 /*{
 path: 'carrito',component:CarritoPage
 },*/
-/*{
+{
   path: 'checkout', component: CheckoutPage, canActivate: [authGuard]
-},*/
+},
 {
 path:'',redirectTo:'catalogo',pathMatch:'full'
 }

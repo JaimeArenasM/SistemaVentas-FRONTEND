@@ -1,1 +1,66 @@
-<p>checkout-page works!</p>
+<div class="checkout-container">
+  <div class="checkout-header">
+    <button mat-button (click)="volverAlCarrito()">
+      <mat-icon>arrow_back</mat-icon> Volver al carrito
+    </button>
+    <h1>Checkout - Finalizar Compra</h1>
+  </div>
+
+  <div class="checkout-content">
+    <div class="resumen-pedido">
+      <h2>Resumen del Pedido</h2>
+      
+      <div *ngIf="cartItems.length === 0">
+        <p>No hay productos en el carrito</p>
+      </div>
+
+      <div *ngFor="let item of cartItems" class="resumen-item">
+        <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+        <span>S/ {{ item.product.price * item.quantity }}</span>
+      </div>
+
+      <div class="resumen-total">
+        <h3>Total a pagar: S/ {{ total }}</h3>
+      </div>
+    </div>
+
+    <div class="metodos-pago">
+      <h2>Selecciona método de pago</h2>
+
+      <mat-radio-group [(ngModel)]="metodoPago" class="opciones-pago">
+        <mat-radio-button value="tarjeta" class="opcion-pago">
+          <mat-icon>credit_card</mat-icon>
+          <span>💳 Tarjeta de Crédito/Débito</span>
+        </mat-radio-button>
+
+        <mat-radio-button value="yape" class="opcion-pago">
+          <mat-icon>smartphone</mat-icon>
+          <span>📱 Yape</span>
+        </mat-radio-button>
+
+        <mat-radio-button value="plin" class="opcion-pago">
+          <mat-icon>contactless</mat-icon>
+          <span>📲 Plin</span>
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <!-- Formulario de Tarjeta -->
+      <div *ngIf="metodoPago === 'tarjeta'" class="pago-tarjeta-section">
+        <app-pago-tarjeta (pagoExitoso)="onPagoExitoso()"></app-pago-tarjeta>
+      </div>
+
+      <!-- QR para Yape/Plin -->
+      <div *ngIf="metodoPago === 'yape' || metodoPago === 'plin'" class="qr-section">
+        <p>Escanea el código QR para pagar</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Pago{{metodoPago}}" 
+             [alt]="'QR ' + metodoPago">
+        <p class="qr-instruccion">
+          Abre la app de {{ metodoPago === 'yape' ? 'Yape' : 'Plin' }} y escanea el código
+        </p>
+        <button mat-raised-button color="primary" (click)="confirmarPago()">
+          Confirmar Pago
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
