@@ -1,1 +1,44 @@
-<p>carrito-page works!</p>
+<div class="carrito-container">
+  <div class="carrito-header">
+    <button mat-button (click)="volverAlDashboard()">
+      <mat-icon>arrow_back</mat-icon> Volver
+    </button>
+    <h1>Mi Carrito 🛒</h1>
+  </div>
+
+  <div *ngIf="cartItems.length === 0" class="carrito-vacio">
+    <mat-icon>shopping_cart</mat-icon>
+    <p>El carrito está vacío</p>
+    <button mat-raised-button color="primary" (click)="volverAlDashboard()">
+      Ir a la tienda
+    </button>
+  </div>
+
+  <div *ngIf="cartItems.length > 0" class="carrito-content">
+    <div class="cart-items-list">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <img [src]="item.product.image" [alt]="item.product.name" class="item-image">
+        
+        <div class="item-details">
+          <h3>{{ item.product.name }}</h3>
+          <p class="item-price">S/ {{ item.product.price }}</p>
+          <p class="item-quantity">Cantidad: {{ item.quantity }}</p>
+        </div>
+
+        <div class="item-actions">
+          <span class="item-subtotal">S/ {{ item.product.price * item.quantity }}</span>
+          <button mat-icon-button color="warn" (click)="remove(item.product.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h2>Total: S/ {{ total }}</h2>
+      <button mat-raised-button color="primary" class="btn-pagar" (click)="irAPagar()">
+        <mat-icon>payment</mat-icon> Pagar
+      </button>
+    </div>
+  </div>
+</div>
