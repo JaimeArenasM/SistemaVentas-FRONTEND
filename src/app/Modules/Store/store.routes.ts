@@ -18,9 +18,9 @@ export const storeRoutes: Routes =[
   path: 'productos',
   component: ProductosPage
 },
-/*{
+{
 path: 'carrito',component:CarritoPage
-},*/
+},
 {
   path: 'checkout', component: CheckoutPage, canActivate: [authGuard]
 },

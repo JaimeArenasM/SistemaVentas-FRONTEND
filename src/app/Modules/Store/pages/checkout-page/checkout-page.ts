@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
-// Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+
 import { PagoTarjetaComponent } from '../pago-tarjeta-page/pago-tarjeta';
+import { CarritoService } from '../../../../Core/Services/carrito.service';
 
 @Component({
   selector: 'app-checkout',
@@ -22,33 +23,29 @@ import { PagoTarjetaComponent } from '../pago-tarjeta-page/pago-tarjeta';
     FormsModule,
     PagoTarjetaComponent
   ],
-  templateUrl: './checkout-page.html',  
-  styleUrls: ['./checkout-page.css']   
+  templateUrl: './checkout-page.html',
+  styleUrls: ['./checkout-page.css']
 })
 export class CheckoutPage {
 
-  cartItems = [
-    { id: 1, name: 'Laptop', price: 2500, quantity: 1 },
-    { id: 2, name: 'Mouse', price: 100, quantity: 2 }
-  ];
-
+  cartItems: any[] = [];
   metodoPago: string = '';
 
-  constructor(private router: Router) {}
+  private router = inject(Router);
+  private cartService = inject(CarritoService);
 
-  get total(): number {
-    return this.cartItems.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+  ngOnInit(): void {
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItems = items;
+    });
   }
 
-  seleccionarMetodo(metodo: string): void {
-    this.metodoPago = metodo;
+  get total(): number {
+    return this.cartService.getTotalPrice();
   }
 
   volverAlCarrito(): void {
-    this.router.navigate(['/carrito']);
+    this.router.navigate(['/store/carrito']);
   }
 
   confirmarPago(): void {
@@ -57,16 +54,14 @@ export class CheckoutPage {
       return;
     }
 
-    if (this.metodoPago === 'tarjeta') {
-      return;
-    }
-
     alert('Pago realizado con éxito. Gracias por tu compra!');
-    this.router.navigate(['/dashboard']);
+    this.cartService.clearCart();
+    this.router.navigate(['/store/catalogo']);
   }
 
   onPagoExitoso(): void {
     alert('Pago realizado con éxito. Gracias por tu compra!');
-    this.router.navigate(['/dashboard']);
+    this.cartService.clearCart();
+    this.router.navigate(['/store/catalogo']);
   }
 }

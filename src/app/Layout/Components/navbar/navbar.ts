@@ -40,6 +40,7 @@ export class Navbar {
       this.cartCount = items.reduce((t, i) => t + i.quantity, 0);
       this.total = this.cartService.getTotalPrice();
     });
+    
   }
 
   abrirCarrito() {
@@ -51,7 +52,10 @@ export class Navbar {
   remove(id: number) {
     this.cartService.removeFromCart(id);
   }
-
+  irAlCarrito() {
+  this.mostrarCarrito = false;
+  this.router.navigate(['/store/carrito']);
+}
   pagar() {
     if (this.total === 0) {
       alert('Carrito vacio');

@@ -3,7 +3,7 @@
     <button mat-button (click)="volverAlDashboard()">
       <mat-icon>arrow_back</mat-icon> Volver
     </button>
-    <h1>Mi Carrito 🛒</h1>
+    <h1>Confirmar Mi Carrito </h1>
   </div>
 
   <div *ngIf="cartItems.length === 0" class="carrito-vacio">
@@ -17,8 +17,9 @@
   <div *ngIf="cartItems.length > 0" class="carrito-content">
     <div class="cart-items-list">
       <div *ngFor="let item of cartItems" class="cart-item">
+
         <img [src]="item.product.image" [alt]="item.product.name" class="item-image">
-        
+
         <div class="item-details">
           <h3>{{ item.product.name }}</h3>
           <p class="item-price">S/ {{ item.product.price }}</p>
@@ -26,11 +27,15 @@
         </div>
 
         <div class="item-actions">
-          <span class="item-subtotal">S/ {{ item.product.price * item.quantity }}</span>
+          <span class="item-subtotal">
+            S/ {{ item.product.price * item.quantity }}
+          </span>
+
           <button mat-icon-button color="warn" (click)="remove(item.product.id)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
+
       </div>
     </div>
 

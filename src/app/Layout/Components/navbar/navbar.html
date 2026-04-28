@@ -121,25 +121,7 @@
 
   <p class="cart-total">Total: S/. {{ total }}</p>
 
-  <select [(ngModel)]="metodoPago">
-    <option value="">Selecciona método</option>
-    <option value="tarjeta">💳 Tarjeta</option>
-    <option value="yape">📱 Yape</option>
-    <option value="plin">📲 Plin</option>
-  </select>
-
-  <div *ngIf="metodoPago === 'tarjeta'" class="payment-box">
-    <input type="text" placeholder="Número de tarjeta" />
-    <input type="text" placeholder="Nombre del titular" />
-    <input type="text" placeholder="MM/AA" />
-    <input type="text" placeholder="CVV" />
-  </div>
-
-  <div *ngIf="metodoPago === 'yape' || metodoPago === 'plin'" class="payment-box qr-box">
-    <p>Escanea el QR</p>
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Pago" alt="QR" />
-  </div>
-
-  <button (click)="pagar()">Pagar</button>
-  <button (click)="cerrarCarrito()">Cerrar</button>
+  <button class="btn-ir-carrito" (click)="irAlCarrito()">
+  IR AL CARRITO
+</button>
 </div>

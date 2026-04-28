@@ -60,83 +60,75 @@
 
 .cart-modal{
   position: fixed;
-  top: 78px;
-  right: 25px;
-  width: 340px;
+  top: 85px;
+  right: 28px;
+  width: 360px;
   max-height: 80vh;
   overflow-y: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+  background: #fff;
+  padding: 22px;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0,0,0,.25);
   z-index: 1000;
 }
 
-/* ===== TITULO CARRITO ===== */
 .cart-modal h2{
-  margin-top: 0;
+  margin: 0 0 15px;
   color: #0cae98;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 8px;
+  font-size: 1.6rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 12px;
 }
 
-/* ===== ITEMS ===== */
 .cart-item{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  gap: 12px;
+  padding: 14px 0;
   border-bottom: 1px solid #eee;
-  font-size: 14px;
+}
+
+.cart-item span{
+  flex: 1;
+  color: #222;
+  font-size: 15px;
+  line-height: 1.4;
 }
 
 .btn-remove{
-  background: none;
+  width: 34px !important;
+  height: 34px !important;
+  min-width: 34px !important;
+  border-radius: 50% !important;
+  background: #ffe5e5 !important;
+  color: #e53935 !important;
   border: none;
-  color: red;
   cursor: pointer;
   font-size: 16px;
+  font-weight: bold;
 }
 
-/* ===== TOTAL ===== */
+.btn-remove:hover{
+  background: #ffcaca !important;
+}
+
 .cart-total{
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 12px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #111;
+  margin: 18px 0;
 }
 
-/* ===== FORMULARIOS ===== */
-.cart-modal select,
-.payment-box input{
+.btn-ir-carrito{
   width: 100%;
-  padding: 9px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-/* ===== BOTONES ===== */
-.cart-modal button{
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
+  height: 46px;
+  border-radius: 12px;
+  background: #0cae98 !important;
+  color: white !important;
+  font-weight: 700;
   border: none;
-  border-radius: 8px;
   cursor: pointer;
-  font-weight: bold;
-}
-
-.cart-modal button:first-of-type{
-  background: #0cae98;
-  color: white;
-}
-
-.cart-modal button:last-of-type{
-  background: #ddd;
-}
-
-.qr-box{
-  text-align: center;
 }
 
 /*menu - categoria*/
