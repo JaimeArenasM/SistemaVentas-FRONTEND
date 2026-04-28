@@ -1,0 +1,20 @@
+<div class="sidebar-admin">
+  <div class="sidebar-header">
+    <h3><mat-icon>store</mat-icon> Tienda Don Pepe</h3>
+    <p>Administrativo</p>
+  </div>
+
+  <nav class="admin-nav">
+    <a routerLink="/admin/dashboard" routerLinkActive="active">
+      <mat-icon>dashboard</mat-icon> Dashboard</a>
+    <a routerLink="/admin/productos" routerLinkActive="active">
+      <mat-icon>inventory_2</mat-icon> Productos</a>
+    <a routerLink="/admin/pedidos" routerLinkActive="active">
+      <mat-icon>local_shipping</mat-icon> Pedidos</a>
+    <a routerLink="/admin/clientes" routerLinkActive="active">
+      <mat-icon>groups</mat-icon> Clientes</a>
+  </nav>
+  <div class="sider-footer">
+    <button class="btn-logout" (click)="logout()"><mat-icon>logout</mat-icon> Cerrar Sesion</button>
+  </div>
+</div>

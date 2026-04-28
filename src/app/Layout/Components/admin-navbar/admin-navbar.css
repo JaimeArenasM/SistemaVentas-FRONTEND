@@ -1,0 +1,70 @@
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  height: 70px;
+  padding: 0 30px;
+  border-bottom: 1px solid #eff2f5; /* Línea súper sutil */
+  z-index: 10;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.menu-icon { color: #a1a5b7; cursor: pointer; }
+
+.topbar-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e1e2d;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: #a1a5b7;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+}
+
+.icon-button:hover { color: #50cd89; }
+
+.badge {
+  position: absolute;
+  top: 0px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background-color: #f1416c;
+  border-radius: 50%;
+}
+
+.admin-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.profile-avatar {
+  font-size: 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: #d8d8e5;
+}
+
+.profile-name {
+  font-weight: 600;
+  color: #5e6278;
+  font-size: 0.95rem;
+}
