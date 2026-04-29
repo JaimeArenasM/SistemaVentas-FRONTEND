@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-product-confirm-dialog',
@@ -9,9 +10,19 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./product-confirm-dialog.css']
 })
 export class ProductConfirmDialog {
-  @Input() message = '¿Estás seguro de eliminar este producto?';
-  @Output() confirm = new EventEmitter<boolean>();
+  title: string;
+  message: string;
+  confirmText: string;
 
-  onConfirm() { this.confirm.emit(true); }
-  onCancel() { this.confirm.emit(false); }
+  constructor(
+    private dialogRef: MatDialogRef<ProductConfirmDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    this.title = data?.title || 'Confirmar';
+    this.message = data?.message || '¿Estás seguro?';
+    this.confirmText = data?.confirmText || 'Aceptar';
+  }
+
+  onConfirm() { this.dialogRef.close(true); }
+  onCancel() { this.dialogRef.close(false); }
 }

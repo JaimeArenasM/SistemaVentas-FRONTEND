@@ -3,8 +3,6 @@ import { DashboardPage } from './pages/dashboard-page/dashboard-page';
 import { AdminLayoutPage } from '../../Layout/admin-layout-page/admin-layout-page';
 import { GestionClientesPage } from './pages/gestion-clientes-page/gestion-clientes-page';
 import { GestionProductosPage } from './pages/gestion-productos-page/gestion-productos-page';
-import { ProductConfirmDialog } from '../../../Shared/Components/product-confirm-dialog/product-confirm-dialog.component.ts';
-import { ProductFormDialog } from '../../../Shared/Components/product-form-dialog/product-form-dialog.component.ts';
 
 
 export const Admin_ROUTES: Routes = [
@@ -23,7 +21,7 @@ export const Admin_ROUTES: Routes = [
       },
 
       { 
-        path: 'gestion-productos', 
+        path: 'productos', 
         component: GestionProductosPage 
       },
 

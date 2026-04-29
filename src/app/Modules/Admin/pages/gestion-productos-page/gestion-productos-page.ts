@@ -1,57 +1,93 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatCard } from "@angular/material/card";
+
+import { ProductConfirmDialog } from '../../../../Shared/Components/product-confirm-dialog/product-confirm-dialog';
+import { ProductFormDialog } from '../../../../Shared/Components/product-form-dialog/product-form-dialog';
 import { FormsModule } from '@angular/forms';
-import { Product } from '../../../Core/Interfaces/IProduct.interface';
-import { ProductConfirmDialog } from '../../../Shared/Components/product-confirm-dialog/product-confirm-dialog.ts';
-import { ProductFormDialog } from '../../../Shared/Components/product-form-dialog/product-form-dialog.ts';
+
+import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 
 @Component({
   selector: 'app-gestion-productos-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, ProductConfirmDialog, ProductFormDialog],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatButtonModule,
+    MatIconModule,
+    
+    FormsModule
+  ],
   templateUrl: './gestion-productos-page.html',
-  styleUrls: ['./gestion-productos-page.css']
+  styleUrl: './gestion-productos-page.css',
 })
 export class GestionProductosPage {
-  products: Product[] = [];
-  selectedProduct: Product | null = null;
-  showConfirmDialog = false;
-  showFormDialog = false;
 
-  openNewProductForm() {
-    this.selectedProduct = { id: 0, name: '', price: 0, image: '', description: '', category: '' };
-    this.showFormDialog = true;
+  private dialog = inject(MatDialog);
+
+  dataSource = new MatTableDataSource<Product>([]);
+
+  displayedColumns: string[] = ['id', 'name', 'price', 'image', 'description', 'category', 'acciones'];
+
+  ngOnInit() {
+    this.cargarDatos();
   }
 
-  openEditProductForm(product: Product) {
-    this.selectedProduct = { ...product };
-    this.showFormDialog = true;
+  cargarDatos() {
+    const productos = JSON.parse(localStorage.getItem('donPepe_products_db') || '[]');
+    this.dataSource.data = productos;
   }
 
-  saveProduct(product: Product) {
-    if (product.id === 0) {
-      product.id = this.products.length + 1;
-      this.products.push(product);
-    } else {
-      const index = this.products.findIndex(p => p.id === product.id);
-      if (index !== -1) this.products[index] = product;
+  aplicarFiltro(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  abrirModalProducto(producto?: Product) {
+    const dialogRef = this.dialog.open(ProductFormDialog, {
+      width: '500px',
+      data: producto ? { ...producto } : null
+    });
+
+    dialogRef.afterClosed().subscribe(resultado => {
+    if (resultado) {
+      let db = JSON.parse(localStorage.getItem('donPepe_products_db') || '[]');
+
+      if (producto) {
+        const index = db.findIndex((p: Product) => p.id === producto.id);
+        if (index !== -1) db[index] = resultado;
+      } else {
+        resultado.id = db.length + 1;
+        db.push(resultado);
+      }
+
+      localStorage.setItem('donPepe_products_db', JSON.stringify(db));
+      this.cargarDatos();
     }
-    this.showFormDialog = false;
+    });
   }
 
-  cancelForm() {
-    this.showFormDialog = false;
-  }
+  eliminar(producto: Product) {
+    const dialogRef = this.dialog.open(ProductConfirmDialog, {
+      data: {
+        title: 'Confirmar Eliminación',
+        message: `¿Desea eliminar el producto ${producto.name}?`,
+        confirmText: 'Eliminar'
+      }
+    });
 
-  confirmDelete(product: Product) {
-    this.selectedProduct = product;
-    this.showConfirmDialog = true;
-  }
-
-  deleteProduct(confirm: boolean) {
-    if (confirm && this.selectedProduct) {
-      this.products = this.products.filter(p => p.id !== this.selectedProduct!.id);
-    }
-    this.showConfirmDialog = false;
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        let db = JSON.parse(localStorage.getItem('donPepe_products_db') || '[]');
+        db = db.filter((p: Product) => p.id !== producto.id);
+        localStorage.setItem('donPepe_products_db', JSON.stringify(db));
+        this.cargarDatos();
+      }
+    });
   }
 }

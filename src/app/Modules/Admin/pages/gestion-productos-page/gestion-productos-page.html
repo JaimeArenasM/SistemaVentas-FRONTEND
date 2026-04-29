@@ -1,37 +1,54 @@
 <h2>Gestión de Productos</h2>
-<button (click)="openNewProductForm()">Añadir Producto</button>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th><th>Nombre</th><th>Precio</th><th>Imagen</th><th>Descripción</th><th>Categoría</th><th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let product of products">
-      <td>{{ product.id }}</td>
-      <td>{{ product.name }}</td>
-      <td>{{ product.price }}</td>
-      <td><img [src]="product.image" width="50"></td>
-      <td>{{ product.description }}</td>
-      <td>{{ product.category }}</td>
-      <td>
-        <button (click)="openEditProductForm(product)">Editar</button>
-        <button (click)="confirmDelete(product)">Eliminar</button>
-      </td>
-    </tr>
-  </tbody>
+<div>
+  <input (keyup)="aplicarFiltro($event)" placeholder="Buscar producto...">
+  <button mat-raised-button color="primary" (click)="abrirModalProducto()">Añadir Producto</button>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>ID</th>
+    <td mat-cell *matCellDef="let product">{{ product.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Nombre</th>
+    <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Precio</th>
+    <td mat-cell *matCellDef="let product">{{ product.price }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="image">
+    <th mat-header-cell *matHeaderCellDef>Imagen</th>
+    <td mat-cell *matCellDef="let product"><img [src]="product.image" width="50"></td>
+  </ng-container>
+
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Descripción</th>
+    <td mat-cell *matCellDef="let product">{{ product.description }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="category">
+    <th mat-header-cell *matHeaderCellDef>Categoría</th>
+    <td mat-cell *matCellDef="let product">{{ product.category }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+    <td mat-cell *matCellDef="let product">
+      <button mat-icon-button color="accent" (click)="abrirModalProducto(product)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="eliminar(product)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
-
-<app-product-confirm-dialog 
-  *ngIf="showConfirmDialog"
-  [message]="'¿Eliminar ' + selectedProduct?.name + '?'"
-  (confirm)="deleteProduct($event)">
-</app-product-confirm-dialog>
-
-<app-product-form-dialog 
-  *ngIf="showFormDialog"
-  [product]="selectedProduct!"
-  (save)="saveProduct($event)"
-  (cancel)="cancelForm()">
-</app-product-form-dialog>
