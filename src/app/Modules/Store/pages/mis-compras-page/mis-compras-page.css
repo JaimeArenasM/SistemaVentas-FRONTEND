@@ -1,0 +1,34 @@
+.container {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.acciones {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.card {
+  margin-top: 15px;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.producto {
+  display: flex;
+  justify-content: space-between;
+}
+
+.empty {
+  margin-top: 20px;
+  text-align: center;
+  color: gray;
+}

@@ -13,6 +13,6 @@ import { Navbar } from '../Components/navbar/navbar';
     Navbar
   ],
   templateUrl: './shop-layout-page.html',
-  styleUrl: './shop-layout-page.css',
+  styleUrls: ['./shop-layout-page.css']
 })
 export class ShopLayoutPage {}

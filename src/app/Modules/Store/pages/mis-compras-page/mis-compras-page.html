@@ -1,1 +1,52 @@
-<p>mis-compras-page works!</p>
+<div class="container">
+
+  <!-- Título -->
+  <h2 class="title">
+    <mat-icon>shopping_bag</mat-icon>
+    Mis Compras
+  </h2>
+
+  <!-- Acciones -->
+  <div class="acciones">
+    <button mat-raised-button color="warn" (click)="limpiarHistorial()">
+      <mat-icon>delete</mat-icon>
+      Limpiar historial
+    </button>
+
+    <!-- Navega a productos con categoría -->
+    <button 
+      mat-button 
+      color="primary"
+      [routerLink]="['/store/productos']"
+      [queryParams]="{ categoria: 'Todos' }">
+
+      <mat-icon>store</mat-icon>
+      Ir a la tienda
+    </button>
+  </div>
+
+  <!-- Si no hay compras -->
+  <div *ngIf="compras.length === 0" class="empty">
+    <p>No tienes compras aún</p>
+  </div>
+
+  <!-- Lista de compras -->
+  <mat-card *ngFor="let compra of compras" class="card">
+
+    <h3>Compra #{{ compra.id }}</h3>
+
+    <p><strong>Fecha:</strong> {{ compra.fecha }}</p>
+    <p><strong>Total:</strong> S/ {{ compra.total }}</p>
+    <p><strong>Estado:</strong> {{ compra.estado }}</p>
+
+    <hr>
+
+    <!-- Productos de la compra -->
+    <div *ngFor="let p of compra.productos" class="producto">
+      <span>{{ p.nombre }}</span>
+      <span>S/ {{ p.precio }}</span>
+    </div>
+
+  </mat-card>
+
+</div>
