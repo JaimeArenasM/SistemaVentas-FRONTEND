@@ -1,0 +1,90 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 0;
+}
+
+h2 {
+  margin: 0;
+  color: #181c32;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.close-btn {
+  color: #a1a5b7;
+}
+
+.dialog-content {
+  padding: 20px 24px;
+  min-width: 400px;
+}
+
+.crm-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #5e6278;
+  text-transform: uppercase;
+}
+
+input,
+select {
+  padding: 12px 15px;
+  border: 1px solid #eef0f4;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  color: #181c32;
+  font-size: 0.95rem;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #00e599;
+  background-color: #ffffff;
+}
+
+.dialog-actions {
+  padding: 15px 24px 20px;
+  gap: 12px;
+}
+
+.btn-cancel {
+  color: #a1a5b7;
+  font-weight: 600;
+}
+
+.btn-save {
+  background-color: #00e599;
+  color: #093f2c;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+.btn-save:disabled {
+  background-color: #eef0f4;
+  color: #a1a5b7;
+}

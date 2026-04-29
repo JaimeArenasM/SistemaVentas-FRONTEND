@@ -1,0 +1,44 @@
+.crm-dialog-title {
+  color: #181c32;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  padding-top: 10px;
+}
+
+.crm-dialog-content {
+  color: #5e6278;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  min-width: 300px; /* Para que el modal no se vea muy aplastado */
+}
+
+.crm-dialog-actions {
+  padding: 10px 24px 20px 24px;
+  gap: 12px; /* Separación entre los botones */
+}
+
+.btn-cancel {
+  color: #a1a5b7;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background-color: #f5f8fa;
+  color: #5e6278;
+}
+
+.btn-confirm {
+  background-color: #f1416c;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(241, 65, 108, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-confirm:hover {
+  background-color: #d9214e;
+}
