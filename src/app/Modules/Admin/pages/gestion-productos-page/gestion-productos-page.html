@@ -1,1 +1,40 @@
-<p>gestion-productos-page works!</p>
+<h2>Gestión de Productos</h2>
+
+<!-- Formulario para agregar/editar -->
+<form (ngSubmit)="addProduct()">
+  <input [(ngModel)]="newProduct.name" name="name" placeholder="Nombre" required>
+  <input [(ngModel)]="newProduct.price" name="price" type="number" placeholder="Precio" required>
+  <input [(ngModel)]="newProduct.image" name="image" placeholder="Imagen">
+  <input [(ngModel)]="newProduct.description" name="description" placeholder="Descripción">
+  <input [(ngModel)]="newProduct.category" name="category" placeholder="Categoría">
+  <button type="submit">Guardar Producto</button>
+</form>
+
+<!-- Tabla de productos -->
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Precio</th>
+      <th>Imagen</th>
+      <th>Descripción</th>
+      <th>Categoría</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of products">
+      <td>{{ product.id }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ product.price }}</td>
+      <td><img [src]="product.image" alt="{{product.name}}" width="50"></td>
+      <td>{{ product.description }}</td>
+      <td>{{ product.category }}</td>
+      <td>
+        <button (click)="editProduct(product)">Editar</button>
+        <button (click)="deleteProduct(product.id)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

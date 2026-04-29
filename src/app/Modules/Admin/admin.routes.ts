@@ -18,6 +18,12 @@ export const Admin_ROUTES: Routes = [
         component: GestionClientesPage
       },
 
+      { 
+        path: 'gestion-productos', 
+        component: GestionProductosPage 
+      }
+
+
       {
         path: '',
         redirectTo: 'dashboard',
