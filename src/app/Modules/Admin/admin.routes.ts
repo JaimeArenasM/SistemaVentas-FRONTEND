@@ -23,6 +23,8 @@ export const Admin_ROUTES: Routes = [
         redirectTo: 'dashboard',
         pathMatch: 'full',
       },
+      
+      
 
       {path:'**',redirectTo:'dashboard'}
     ]
