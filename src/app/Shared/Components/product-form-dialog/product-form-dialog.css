@@ -1,0 +1,16 @@
+.dialog {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 300px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+input {
+  margin-bottom: 10px;
+}
+button {
+  margin-top: 5px;
+}

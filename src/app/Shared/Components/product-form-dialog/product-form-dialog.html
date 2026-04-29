@@ -1,1 +1,12 @@
-<p>product-form-dialog works!</p>
+<div class="dialog">
+  <h3>{{ product.id ? 'Editar Producto' : 'Nuevo Producto' }}</h3>
+  <form (ngSubmit)="onSave()">
+    <input [(ngModel)]="product.name" name="name" placeholder="Nombre" required>
+    <input [(ngModel)]="product.price" name="price" type="number" placeholder="Precio" required>
+    <input [(ngModel)]="product.image" name="image" placeholder="Imagen">
+    <input [(ngModel)]="product.description" name="description" placeholder="Descripción">
+    <input [(ngModel)]="product.category" name="category" placeholder="Categoría">
+    <button type="submit">Guardar</button>
+    <button type="button" (click)="onCancel()">Cancelar</button>
+  </form>
+</div>

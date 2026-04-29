@@ -1,26 +1,10 @@
 <h2>Gestión de Productos</h2>
+<button (click)="openNewProductForm()">Añadir Producto</button>
 
-<!-- Formulario para agregar/editar -->
-<form (ngSubmit)="addProduct()">
-  <input [(ngModel)]="newProduct.name" name="name" placeholder="Nombre" required>
-  <input [(ngModel)]="newProduct.price" name="price" type="number" placeholder="Precio" required>
-  <input [(ngModel)]="newProduct.image" name="image" placeholder="Imagen">
-  <input [(ngModel)]="newProduct.description" name="description" placeholder="Descripción">
-  <input [(ngModel)]="newProduct.category" name="category" placeholder="Categoría">
-  <button type="submit">Guardar Producto</button>
-</form>
-
-<!-- Tabla de productos -->
 <table>
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Nombre</th>
-      <th>Precio</th>
-      <th>Imagen</th>
-      <th>Descripción</th>
-      <th>Categoría</th>
-      <th>Acciones</th>
+      <th>ID</th><th>Nombre</th><th>Precio</th><th>Imagen</th><th>Descripción</th><th>Categoría</th><th>Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -28,13 +12,26 @@
       <td>{{ product.id }}</td>
       <td>{{ product.name }}</td>
       <td>{{ product.price }}</td>
-      <td><img [src]="product.image" alt="{{product.name}}" width="50"></td>
+      <td><img [src]="product.image" width="50"></td>
       <td>{{ product.description }}</td>
       <td>{{ product.category }}</td>
       <td>
-        <button (click)="editProduct(product)">Editar</button>
-        <button (click)="deleteProduct(product.id)">Eliminar</button>
+        <button (click)="openEditProductForm(product)">Editar</button>
+        <button (click)="confirmDelete(product)">Eliminar</button>
       </td>
     </tr>
   </tbody>
 </table>
+
+<app-product-confirm-dialog 
+  *ngIf="showConfirmDialog"
+  [message]="'¿Eliminar ' + selectedProduct?.name + '?'"
+  (confirm)="deleteProduct($event)">
+</app-product-confirm-dialog>
+
+<app-product-form-dialog 
+  *ngIf="showFormDialog"
+  [product]="selectedProduct!"
+  (save)="saveProduct($event)"
+  (cancel)="cancelForm()">
+</app-product-form-dialog>
