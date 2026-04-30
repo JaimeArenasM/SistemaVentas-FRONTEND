@@ -3,7 +3,9 @@ import { ProductosPage } from "./pages/productos-page/productos-page";
 import { CatalogoPage } from "./pages/catalogo-page/catalogo-page";
 import { CarritoPage } from "./pages/carrito-page/carrito-page";
 import { CheckoutPage } from "./pages/checkout-page/checkout-page";
+import { TermsComponent } from "./pages/terminos-page/terminos-page";
 import { authGuard } from "../../Core/Guards/auth-guard";
+import { PoliticaprivPage } from "./pages/politicapriv-page/politicapriv-page";
 
 
 
@@ -25,6 +27,14 @@ path: 'carrito',component:CarritoPage
   path: 'checkout', component: CheckoutPage, canActivate: [authGuard]
 },
 {
+  path: 'terminos', component: TermsComponent
+},
+{
+  path: 'politica-de-privacidad', component: PoliticaprivPage
+},
+{
 path:'',redirectTo:'catalogo',pathMatch:'full'
-}
+},
+
+
 ];

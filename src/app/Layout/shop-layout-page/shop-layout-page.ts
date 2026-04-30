@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { Navbar } from '../Components/navbar/navbar';
+import { FooterComponent } from '../Components/footer/footer';
 
 @Component({
   selector: 'app-shop-layout-page',
@@ -10,7 +11,8 @@ import { Navbar } from '../Components/navbar/navbar';
   imports: [
     CommonModule,
     RouterModule,
-    Navbar
+    Navbar,
+    FooterComponent
   ],
   templateUrl: './shop-layout-page.html',
   styleUrl: './shop-layout-page.css',
