@@ -1,6 +1,5 @@
 import { Observable, of } from "rxjs";
 import { Product } from "../Interfaces/IProduct.interface";
-import { C } from "@angular/cdk/keycodes";
 import { Injectable } from "@angular/core";
 
 
@@ -43,7 +42,8 @@ export class ProductService{
         { id: 9, name: 'Inca Kola 1.5L', price: 7.50, image: 'https://www.donbelisario.com.pe/media/catalog/product/2/1/2146463136.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg', description: 'El sabor que nos hace únicos.', category: 'Bebidas' },
         { id: 10, name: 'Plátano Seda', price: 3.00, image: 'https://arandanosdelhuerto.com/wp-content/uploads/2021/10/platano-seda-normal_1000x1000-1-450x450.png', description: 'Kilo de plátano fresco.', category: 'Frutas' },
         { id: 11, name: 'Jabón Bolívar', price: 5.50, image: 'https://corporacionliderperu.com/51237-large_default/bolivar-jabon-vida-x-190-gr-cuidado-total.jpg', description: 'Pack x3 para ropa limpia.', category: 'Detergentes' },
-        { id: 12, name: 'Galletas Morochas', price: 1.20, image: 'https://grandcentral.pe/wp-content/uploads/2025/09/GCG086-M1.jpg', description: 'Galletas bañadas en chocolate.', category: 'Snacks' }
+        { id: 12, name: 'Pan francés', price: 0.50, image: 'https://www.recetasdesbieta.com/wp-content/uploads/2018/08/pan-frances-1.jpg', description: '1 unidad', category: 'Cereales' },
+        { id: 13, name: 'Galletas Morochas', price: 1.20, image: 'https://grandcentral.pe/wp-content/uploads/2025/09/GCG086-M1.jpg', description: 'Galletas bañadas en chocolate.', category: 'Snacks' }
       ];
 
       // Lo guardamos en el LocalStorage

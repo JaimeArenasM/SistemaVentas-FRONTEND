@@ -1,0 +1,81 @@
+<div class="content-wrapper">
+  <div class="table-header">
+    <div>
+      <h2>Gestión de Ventas</h2>
+      <p>Historial de transacciones y tickets de Tienda Romero's</p>
+    </div>
+
+    <div class="header-actions">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input type="text" (keyup)="aplicarFiltro($event)" placeholder="Buscar por ticket, cliente...">
+      </div>
+    </div>
+  </div>
+
+  <mat-card class="crm-table-card">
+    <table mat-table [dataSource]="dataSource" class="crm-table">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> TICKET </th>
+        <td mat-cell *matCellDef="let v" style="font-weight: 700; color: #181c32;">
+          #000-{{ v.iIdVenta }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cliente">
+        <th mat-header-cell *matHeaderCellDef> CLIENTE </th>
+        <td mat-cell *matCellDef="let v"> {{ v.vNombreCliente }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef> FECHA </th>
+        <td mat-cell *matCellDef="let v"> {{ v.vFechaEmision }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef> TOTAL </th>
+        <td mat-cell *matCellDef="let v" style="font-weight: 600;">
+          S/ {{ v.dTotal | number:'1.2-2' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef> ESTADO </th>
+        <td mat-cell *matCellDef="let v">
+           <span class="badge-status" [ngClass]="v.vEstado.toLowerCase()">
+             {{ v.vEstado }}
+           </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
+        <td mat-cell *matCellDef="let v">
+
+          <button mat-icon-button style="color: #00e599;" title="Marcar como Completado"
+                  *ngIf="v.vEstado === 'Pendiente'" (click)="completarVenta(v)">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+
+          <button mat-icon-button class="action-btn delete" title="Anular Venta"
+                  *ngIf="v.vEstado !== 'Anulado'" (click)="anularVenta(v)">
+            <mat-icon>cancel</mat-icon>
+          </button>
+
+          <button mat-icon-button class="action-btn view" title="Ver Detalle">
+            <mat-icon>visibility</mat-icon>
+          </button>
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+    </table>
+
+    <div *ngIf="dataSource.data.length === 0" class="no-data-msg" style="text-align: center; padding: 30px; color: #a1a5b7;">
+      Aún no hay ventas registradas en el sistema.
+    </div>
+  </mat-card>
+</div>

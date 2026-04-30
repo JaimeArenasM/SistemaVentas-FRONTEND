@@ -6,6 +6,7 @@ import { CheckoutPage } from "./pages/checkout-page/checkout-page";
 import { TermsComponent } from "./pages/terminos-page/terminos-page";
 import { MisComprasPage } from "./pages/mis-compras-page/mis-compras-page";
 import { PoliticaprivPage } from "./pages/politicapriv-page/politicapriv-page";
+import { authGuard } from "../../Core/Guards/auth-guard";
 
 
 

@@ -61,20 +61,21 @@ saveSession(data: IAuthenticationResponse): void{
 }
 
 getSession(): IAuthenticationResponse | null{
-    const data = localStorage.getItem(this.SESSION_KEY);
-    if (!data) return null;
+const data = localStorage.getItem(this.SESSION_KEY);
 
-    try {
-      const parsedData = JSON.parse(data);
-      // Validamos estrictamente que sea un objeto completo
-      if (parsedData && parsedData.user && parsedData.user.iIdTipoUsuario) {
-        return parsedData;
-      }
-      return null;
-    } catch (error) {
-      return null;
+  if (!data) return null;
+
+  try{
+    const parsedData= JSON.parse(data);
+
+    if (parsedData && parsedData.user && parsedData.user.iIdTipoUsuario) {
+      return parsedData;
     }
+    return null;
+  } catch(error){
+    return null;
   }
+}
 
 logout(): void{
   localStorage.removeItem(this.SESSION_KEY);
@@ -109,12 +110,12 @@ return data ? JSON.parse(data) : [];
     if ( usuarios.length === 0){
       const admin = {
         iIdUsuario: 1,
-        vUsuario:'admin@tienda.com',
+        vUsuario: 'admin@tienda.com',
         password: '123456',
         nombres: 'Isaac',
         apellidos: 'Livaque',
-        dni: '78945623',
-        iIdTipoUsuario: 1/** ADMIN: 1 , CLIENTE: 2 */
+        dni: '96587432',
+        iIdTipoUsuario: 1
       };
       localStorage.setItem(this.DB_USERS_KEY,JSON.stringify([admin]));
     }
