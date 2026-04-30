@@ -7,6 +7,17 @@
   padding: 24px;
 }
 
-.store-container{
-  flex: 1;
+.store-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-layout {
+  display: flex;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  width: 100%;
 }

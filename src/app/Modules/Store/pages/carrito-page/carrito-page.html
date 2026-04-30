@@ -1,20 +1,27 @@
 <div class="carrito-container">
+
   <div class="carrito-header">
-    <button mat-button (click)="volverAlDashboard()">
+    <button mat-button [routerLink]="['/store/productos']" [queryParams]="{ categoria: 'Todos' }">
       <mat-icon>arrow_back</mat-icon> Volver
     </button>
-    <h1>Confirmar Mi Carrito </h1>
+    <h1>Confirmar Mi Carrito</h1>
   </div>
 
-  <div *ngIf="cartItems.length === 0" class="carrito-vacio">
+  <div *ngIf="!cartItems || cartItems.length === 0" class="carrito-vacio">
     <mat-icon>shopping_cart</mat-icon>
     <p>El carrito está vacío</p>
-    <button mat-raised-button color="primary" (click)="volverAlDashboard()">
+
+    <button 
+      mat-raised-button 
+      color="primary"
+      [routerLink]="['/store/productos']"
+      [queryParams]="{ categoria: 'Todos' }">
       Ir a la tienda
     </button>
   </div>
 
-  <div *ngIf="cartItems.length > 0" class="carrito-content">
+  <div *ngIf="cartItems && cartItems.length > 0" class="carrito-content">
+
     <div class="cart-items-list">
       <div *ngFor="let item of cartItems" class="cart-item">
 
@@ -41,9 +48,12 @@
 
     <div class="cart-summary">
       <h2>Total: S/ {{ total }}</h2>
+
       <button mat-raised-button color="primary" class="btn-pagar" (click)="irAPagar()">
         <mat-icon>payment</mat-icon> Pagar
       </button>
     </div>
+
   </div>
+
 </div>

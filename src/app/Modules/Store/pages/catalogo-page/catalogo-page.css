@@ -1,4 +1,4 @@
-/* ===== CARRUSEL ===== */
+/* ===== CARRUSEL PRINCIPAL ===== */
 .promo-carousel{
   position: relative;
   width: 100%;
@@ -29,3 +29,153 @@
 
 .prev{ left: 12px; }
 .next{ right: 12px; }
+
+/* ===== BLOQUE POR CATEGORÍA ===== */
+.categoria-bloque{
+  padding: 40px 20px;
+  background: #fff7f7;
+}
+
+.categoria-bloque h2{
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #222;
+}
+
+/* ===== CARRUSEL DE PRODUCTOS ===== */
+.categoria-carousel{
+  position: relative;
+}
+
+.product-grid{
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 60px;
+}
+
+.product-grid::-webkit-scrollbar{
+  display: none;
+}
+
+/* ===== FLECHAS ===== */
+.cat-arrow{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #777;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.cat-arrow.left{
+  left: 10px;
+}
+
+.cat-arrow.right{
+  right: 10px;
+}
+
+/* ===== TARJETAS ===== */
+.product-card{
+  min-width: 280px;
+  max-width: 280px;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  min-height: 430px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  transition: transform .20s ease, box-shadow .20s ease;
+  cursor: pointer;
+}
+
+.product-card:hover{
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.14);
+}
+
+img[mat-card-image]{
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  margin: 0;
+  background: #f8f8f8;
+}
+
+.product-card mat-card-content{
+  padding: 16px 18px 8px;
+}
+
+.product-card mat-card-title{
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.product-card mat-card-subtitle{
+  font-size: 0.98rem;
+  color: #666;
+  min-height: 40px;
+}
+
+.price{
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: #35b44a;
+  margin-top: 10px;
+  display: block;
+}
+
+.product-card mat-card-actions{
+  padding: 0 16px 16px;
+}
+
+.product-card button{
+  width: 100%;
+  border-radius: 30px;
+  font-weight: 700;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px){
+  .promo-carousel{
+    height: 300px;
+  }
+
+  .product-grid{
+    gap: 14px;
+    padding: 20px 50px;
+  }
+
+  .product-card{
+    min-width: 180px;
+    max-width: 180px;
+    min-height: 330px;
+  }
+
+  img[mat-card-image]{
+    height: 150px;
+  }
+
+  .product-card mat-card-title{
+    font-size: 1.1rem;
+  }
+
+  .price{
+    font-size: 1.4rem;
+  }
+}

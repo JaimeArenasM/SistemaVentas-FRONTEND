@@ -81,15 +81,6 @@
         <button mat-flat-button color="primary" class="btn-login" type="submit" [disabled]="formRegister.invalid">
           Registrarme
         </button>
-        <div style="background: #222; color: #0f0; padding: 15px; margin-top: 20px; border-radius: 8px; text-align: left; font-family: monospace;">
-  <p><strong>ESTADO:</strong> {{ formRegister.status }}</p>
-  <p><strong>¿Nombres válidos?:</strong> {{ formRegister.get('nombres')?.valid }}</p>
-  <p><strong>¿Apellidos válidos?:</strong> {{ formRegister.get('apellidos')?.valid }}</p>
-  <p><strong>¿Celular válido?:</strong> {{ formRegister.get('telefono')?.valid }}</p>
-  <p><strong>¿DNI válido?:</strong> {{ formRegister.get('dni')?.valid }}</p>
-  <p><strong>¿Correo válido?:</strong> {{ formRegister.get('vUsuario')?.valid }}</p>
-  <p><strong>¿Contraseña válida?:</strong> {{ formRegister.get('vPassword')?.valid }}</p>
-</div>
 
       </form>
 

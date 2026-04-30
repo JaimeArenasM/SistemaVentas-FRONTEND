@@ -1,0 +1,57 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h2>Mi Cuenta</h2>
+    <p>Gestiona tu información personal y de seguridad</p>
+  </div>
+
+  <mat-card class="profile-card">
+    <div class="card-header">
+      <h3>Datos Personales</h3>
+      <button mat-icon-button color="primary" *ngIf="!modoEdicion" (click)="activarEdicion()" title="Editar Perfil">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+
+    <div class="card-body">
+      <div class="form-grid">
+
+        <!-- Nombres -->
+        <div class="form-group">
+          <label>Nombres</label>
+          <input type="text" [(ngModel)]="usuario.nombres" [disabled]="!modoEdicion" class="custom-input">
+        </div>
+
+        <!-- Apellidos -->
+        <div class="form-group">
+          <label>Apellidos</label>
+          <input type="text" [(ngModel)]="usuario.apellidos" [disabled]="!modoEdicion" class="custom-input">
+        </div>
+
+        <!-- DNI -->
+        <div class="form-group">
+          <label>DNI</label>
+          <input type="text" [(ngModel)]="usuario.dni" [disabled]="!modoEdicion" class="custom-input" maxlength="8">
+        </div>
+
+        <!-- Correo (vUsuario) -->
+        <div class="form-group">
+          <label>Correo Electrónico (Usuario)</label>
+          <input type="email" [(ngModel)]="usuario.vUsuario" [disabled]="!modoEdicion" class="custom-input">
+        </div>
+
+        <!-- Contraseña -->
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" [(ngModel)]="usuario.password" [disabled]="!modoEdicion" class="custom-input">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Acciones (Solo se muestran en modo edición) -->
+    <div class="card-actions" *ngIf="modoEdicion">
+      <button mat-button (click)="cancelarEdicion()">Cancelar</button>
+      <button mat-raised-button color="primary" (click)="guardarCambios()">Guardar Cambios</button>
+    </div>
+  </mat-card>
+</div>

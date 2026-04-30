@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 /* Angular Material */
 import { MatCardModule } from '@angular/material/card';
@@ -20,69 +20,46 @@ import { CarritoService } from '../../../../Core/Services/carrito.service';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatToolbarModule
+    MatToolbarModule,
+    RouterModule
   ],
 
   templateUrl: './carrito-page.html',
   styleUrls: ['./carrito-page.css']
 })
-
 export class CarritoPage {
 
   cartItems: any[] = [];
 
   private router = inject(Router);
-
-  private cartService =
-    inject(CarritoService);
+  private cartService = inject(CarritoService);
 
   ngOnInit() {
-
-    this.cartService.cartItems$
-      .subscribe(items => {
-
-        this.cartItems = items;
-
-      });
-
+    this.cartService.cartItems$.subscribe(items => {
+      this.cartItems = items;
+    });
   }
 
   get total(): number {
-
-    return this.cartService
-      .getTotalPrice();
-
+    return this.cartService.getTotalPrice();
   }
 
   remove(productId: number): void {
-
-    this.cartService
-      .removeFromCart(productId);
-
+    this.cartService.removeFromCart(productId);
   }
 
   irAPagar(): void {
 
     if (this.total === 0) {
-
       alert('El carrito está vacío');
-
       return;
-
     }
 
-    this.router.navigate(
-      ['/store/checkout']
-    );
-
+    this.router.navigate(['/store/checkout']);
   }
 
   volverAlDashboard(): void {
-
-    this.router.navigate(
-      ['/store/catalogo']
-    );
-
+    this.router.navigate(['/store/catalogo']);
   }
 
 }

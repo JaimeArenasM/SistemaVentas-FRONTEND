@@ -23,7 +23,7 @@ export class GestionVentasPage {
   private dialog = inject(MatDialog);
 
   dataSource = new MatTableDataSource<any>([]);
-  displayColumns: string[] = ['Id', 'Cliente', 'Fecha', 'Total', 'Estado', 'Acciones'];
+  displayColumns: string[] = ['id', 'cliente', 'fecha', 'total', 'estado', 'acciones'];
 
   ngOnInit() {
     this.cargarDatos();
@@ -76,7 +76,7 @@ export class GestionVentasPage {
         let db = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
 
         const index = db.findIndex((v: any) => v.iIdVenta === venta.iIdVenta);
-        if (index !== 1) {
+        if (index !== -1) {
           db[index].vEstado = 'Anulado';
           localStorage.setItem('donPepe_ventas_db', JSON.stringify(db));
           this.cargarDatos();

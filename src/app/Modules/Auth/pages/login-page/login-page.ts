@@ -68,4 +68,7 @@ export class LoginPage implements OnInit {
       });
     }
   }
+  irRegistro() {
+    this.router.navigate(['/auth/register']);
+  }
 }
