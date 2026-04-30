@@ -14,9 +14,13 @@ export class AuthService{
   private readonly DB_USERS_KEY = 'donPepe_users_db';
   /* para el usuario logueado actualmente se le simule un token */
   private readonly SESSION_KEY = 'sistema_ventas_data';
+private readonly APP_VERSION_KEY = 'donPepe_app_version';
+  private readonly CURRENT_VERSION = '1.1';
 
   constructor(){
+      this.migrarBaseDeDatosLocal();
     this.crearAdminPorDefecto();
+
   }
 
   /**LOGIN */
@@ -57,9 +61,20 @@ saveSession(data: IAuthenticationResponse): void{
 }
 
 getSession(): IAuthenticationResponse | null{
-const data = localStorage.getItem(this.SESSION_KEY);
-return data ? JSON.parse(data): null;
-}
+    const data = localStorage.getItem(this.SESSION_KEY);
+    if (!data) return null;
+
+    try {
+      const parsedData = JSON.parse(data);
+      // Validamos estrictamente que sea un objeto completo
+      if (parsedData && parsedData.user && parsedData.user.iIdTipoUsuario) {
+        return parsedData;
+      }
+      return null;
+    } catch (error) {
+      return null;
+    }
+  }
 
 logout(): void{
   localStorage.removeItem(this.SESSION_KEY);
@@ -72,13 +87,34 @@ const data = localStorage.getItem(this.DB_USERS_KEY);
 return data ? JSON.parse(data) : [];
   }
 
+  private migrarBaseDeDatosLocal(): void {
+    const versionGuardada = localStorage.getItem(this.APP_VERSION_KEY);
+
+    // Si no hay versión, o es una versión vieja (ej. 1.0)
+    if (versionGuardada !== this.CURRENT_VERSION) {
+      console.warn(`Actualizando base de datos local a la versión ${this.CURRENT_VERSION}...`);
+
+      // Borramos los datos conflictivos antiguos
+      localStorage.removeItem(this.DB_USERS_KEY);
+      localStorage.removeItem(this.SESSION_KEY);
+      localStorage.removeItem('donPepe_ventas_db');
+
+      // Guardamos la nueva versión para que no lo vuelva a borrar mañana
+      localStorage.setItem(this.APP_VERSION_KEY, this.CURRENT_VERSION);
+    }
+  }
+
   private crearAdminPorDefecto():void {
     const usuarios = this.obtenerTodosLosUsuarios();
     if ( usuarios.length === 0){
       const admin = {
+        iIdUsuario: 1,
         vUsuario:'admin@tienda.com',
         password: '123456',
-        iIdTipoUsuario: 1 /** ADMIN: 1 , CLIENTE: 2 */
+        nombres: 'Isaac',
+        apellidos: 'Livaque',
+        dni: '78945623',
+        iIdTipoUsuario: 1/** ADMIN: 1 , CLIENTE: 2 */
       };
       localStorage.setItem(this.DB_USERS_KEY,JSON.stringify([admin]));
     }

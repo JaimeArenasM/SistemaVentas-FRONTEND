@@ -3,45 +3,30 @@ import { ProductosPage } from "./pages/productos-page/productos-page";
 import { CatalogoPage } from "./pages/catalogo-page/catalogo-page";
 import { CarritoPage } from "./pages/carrito-page/carrito-page";
 import { CheckoutPage } from "./pages/checkout-page/checkout-page";
+import { TermsComponent } from "./pages/terminos-page/terminos-page";
 import { MisComprasPage } from "./pages/mis-compras-page/mis-compras-page";
+import { PoliticaprivPage } from "./pages/politicapriv-page/politicapriv-page";
 
-// Rutas del módulo Store
-export const storeRoutes: Routes = [
 
-  // Página principal de tienda
-  {
-    path: 'catalogo',
-    component: CatalogoPage
-  },
 
-  // Lista de productos
-  {
-    path: 'productos',
-    component: ProductosPage
-  },
-
-  // Carrito de compras
-  {
-    path: 'carrito',
-    component: CarritoPage
-  },
-
-  // Checkout
-  {
-    path: 'checkout',
-    component: CheckoutPage
-  },
-
-  // Historial de compras
-  {
-    path: 'mis-compras',
-    component: MisComprasPage
-  },
-
-  // Redirección por defecto
-  {
-    path: '',
-    redirectTo: 'catalogo',
-    pathMatch: 'full'
-  }
+export const storeRoutes: Routes =[
+/*{
+  path:'productos',component:ProductosPage
+},*/
+{
+  path:'catalogo',component:CatalogoPage
+},
+{
+  path: 'productos',
+  component: ProductosPage
+},
+{
+path: 'carrito',component:CarritoPage
+},
+{
+  path: 'checkout', component: CheckoutPage, canActivate: [authGuard]
+},
+{
+path:'',redirectTo:'catalogo',pathMatch:'full'
+}
 ];
