@@ -50,6 +50,24 @@ export class Navbar {
     this.router.navigate(['/store/catalogo']);
   }
 
+  // ¡AQUÍ ESTÁN LAS FUNCIONES QUE FALTABAN!
+  irPerfil() {
+    this.router.navigate(['/store/perfil']);
+  }
+
+  irMisCompras() {
+    this.router.navigate(['/store/mis-compras']);
+  }
+
+  // --- NAVEGACIÓN DE AUTENTICACIÓN ---
+  irLogin() {
+    this.router.navigate(['/auth/login']);
+  }
+
+  irRegistro() {
+    this.router.navigate(['/auth/register']);
+  }
+
   // --- MENÚ LATERAL CATEGORÍAS ---
   abrirMenuCategorias() { this.mostrarMenuCategorias = true; }
   cerrarMenuCategorias() { this.mostrarMenuCategorias = false; }
@@ -96,6 +114,11 @@ export class Navbar {
     this.cerrarCarrito();
     this.router.navigate(['/store/checkout']);
   }
+
+  get session() {
+    return this.authService.getSession();
+  }
+
 
   // --- AUTENTICACIÓN ---
   logout() {

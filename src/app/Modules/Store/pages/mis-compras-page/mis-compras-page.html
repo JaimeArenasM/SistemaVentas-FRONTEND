@@ -1,52 +1,47 @@
-<div class="container">
-
-  <!-- Título -->
-  <h2 class="title">
-    <mat-icon>shopping_bag</mat-icon>
-    Mis Compras
-  </h2>
-
-  <!-- Acciones -->
-  <div class="acciones">
-    <button mat-raised-button color="warn" (click)="limpiarHistorial()">
-      <mat-icon>delete</mat-icon>
-      Limpiar historial
-    </button>
-
-    <!-- Navega a productos con categoría -->
-    <button 
-      mat-button 
-      color="primary"
-      [routerLink]="['/store/productos']"
-      [queryParams]="{ categoria: 'Todos' }">
-
-      <mat-icon>store</mat-icon>
-      Ir a la tienda
-    </button>
+<div class="compras-container">
+  <div class="header-section">
+    <h2>Mi Historial de Compras</h2>
+    <p>Revisa el estado de tus pedidos en Tienda Romero's</p>
   </div>
 
-  <!-- Si no hay compras -->
-  <div *ngIf="compras.length === 0" class="empty">
-    <p>No tienes compras aún</p>
+  <!-- SI NO HAY COMPRAS -->
+  <div class="empty-state" *ngIf="misHistorial.length === 0">
+    <mat-icon class="empty-icon">sentiment_dissatisfied</mat-icon>
+    <h3>Aún no tienes compras</h3>
+    <p>¡Explora nuestro catálogo y llena tu carrito!</p>
+    <button mat-raised-button color="primary" routerLink="/store/catalogo">Ir a comprar</button>
   </div>
 
-  <!-- Lista de compras -->
-  <mat-card *ngFor="let compra of compras" class="card">
+  <!-- SI SÍ HAY COMPRAS -->
+  <div class="tickets-grid" *ngIf="misHistorial.length > 0">
+    <mat-card class="ticket-card" *ngFor="let ticket of misHistorial">
 
-    <h3>Compra #{{ compra.id }}</h3>
+      <div class="ticket-header">
+        <div>
+          <span class="ticket-id">Pedido #000-{{ ticket.iIdVenta }}</span>
+          <span class="ticket-date">{{ ticket.vFechaEmision }}</span>
+        </div>
+        <span class="badge-status" [ngClass]="ticket.vEstado.toLowerCase()">
+          {{ ticket.vEstado }}
+        </span>
+      </div>
 
-    <p><strong>Fecha:</strong> {{ compra.fecha }}</p>
-    <p><strong>Total:</strong> S/ {{ compra.total }}</p>
-    <p><strong>Estado:</strong> {{ compra.estado }}</p>
+      <mat-card-content class="ticket-body">
+        <h4>Resumen de productos:</h4>
+        <ul class="product-list">
+          <!-- Iteramos los productos que guardamos en aDetalle -->
+          <li *ngFor="let item of ticket.aDetalle">
+             {{ item.product?.name || item.name }}
+             <span class="item-price">S/ {{ (item.price || item.product?.price) | number:'1.2-2' }}</span>
+          </li>
+        </ul>
+      </mat-card-content>
 
-    <hr>
+      <div class="ticket-footer">
+        <span class="total-label">Total pagado:</span>
+        <span class="total-amount">S/ {{ ticket.dTotal | number:'1.2-2' }}</span>
+      </div>
 
-    <!-- Productos de la compra -->
-    <div *ngFor="let p of compra.productos" class="producto">
-      <span>{{ p.nombre }}</span>
-      <span>S/ {{ p.precio }}</span>
-    </div>
-
-  </mat-card>
-
+    </mat-card>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../../../Core/Services/auth.service';
 
 @Component({
   selector: 'app-mis-compras',
@@ -25,21 +26,40 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class MisComprasPage implements OnInit {
 
-  // Lista de compras almacenadas
-  compras: any[] = [];
+private authService = inject(AuthService);
 
-  ngOnInit(): void {
-    this.cargarCompras();
+  misHistorial: any[] = [];
+
+  ngOnInit() {
+    this.cargarMisCompras();
   }
 
-  // Cargar compras desde localStorage
-  cargarCompras(): void {
-    this.compras = JSON.parse(localStorage.getItem('compras') || '[]');
-  }
+  cargarMisCompras() {
+    const session = this.authService.getSession();
+    if (!session) {
+      console.log('🔴 No hay sesión activa.');
+      return;
+    }
 
-  // Limpiar historial
-  limpiarHistorial(): void {
-    localStorage.removeItem('compras');
-    this.compras = [];
+    const todasLasVentas = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
+
+    // --- MODO DETECTIVE ACTIVADO ---
+    console.log('=== DEBUG: MIS COMPRAS ===');
+    console.log('1. Mi ID de usuario actual es:', session.user.iIdUsuario);
+    console.log('2. Total de ventas en la base de datos:', todasLasVentas.length);
+
+    this.misHistorial = todasLasVentas.filter((venta: any) => {
+      const idTicket = Number(venta.iIdCliente);
+      const miId = Number(session.user.iIdUsuario);
+
+      console.log(`-> Revisando Ticket #${venta.iIdVenta} | iIdCliente del ticket: ${idTicket} | ¿Coincide?: ${idTicket === miId}`);
+
+      return idTicket === miId;
+    });
+
+    console.log('3. Ventas finales encontradas para mí:', this.misHistorial.length);
+    // ---------------------------------
+
+    this.misHistorial.sort((a, b) => b.iIdVenta - a.iIdVenta);
   }
 }

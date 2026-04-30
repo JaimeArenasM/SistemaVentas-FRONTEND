@@ -79,7 +79,7 @@ const data = localStorage.getItem(this.SESSION_KEY);
 
 logout(): void{
   localStorage.removeItem(this.SESSION_KEY);
-  this.router.navigate(['/auth/login']);
+  this.router.navigate(['/auth/catalogo']);
 }
 
   /** METODOS PRIVADOS */

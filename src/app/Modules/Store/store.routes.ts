@@ -25,6 +25,18 @@ export const storeRoutes: Routes =[
 path: 'carrito',component:CarritoPage
 },
 {
+  path:'mis-compras',
+  component:MisComprasPage, canActivate:[authGuard]
+},
+{
+  path:'terminos',
+  component:TermsComponent
+},
+{
+  path:'politica-de-privacidad',
+  component: PoliticaprivPage
+},
+{
   path: 'checkout', component: CheckoutPage, canActivate: [authGuard]
 },
 {

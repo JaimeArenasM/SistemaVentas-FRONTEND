@@ -44,10 +44,10 @@ export class ProductService{
         { id: 11, name: 'Jabón Bolívar', price: 5.50, image: 'https://corporacionliderperu.com/51237-large_default/bolivar-jabon-vida-x-190-gr-cuidado-total.jpg', description: 'Pack x3 para ropa limpia.', category: 'Detergentes' },
         { id: 12, name: 'Cereal Fresa', price: 0.50, image: 'https://dojiw2m9tvv09.cloudfront.net/49572/product/freziaalmohada0272.jpg', description: '1 unidad', category: 'Cereales' },
         { id: 13, name: 'Galletas Morochas', price: 1.20, image: 'https://grandcentral.pe/wp-content/uploads/2025/09/GCG086-M1.jpg', description: 'Cereal fresa almohaditas.', category: 'Snacks' },
-        
+
 { id: 14, name: 'Cereal Angel Flakes', price: 6.80, image: 'https://perufarma.com.pe/wp-content/uploads/2022/02/4.png', description: 'Cereal de maíz crocante.', category: 'Cereales' },
 { id: 15, name: 'Avena Quaker', price: 5.90, image: 'https://www.pngitem.com/pimgs/b/9-92169_quaker-oats-png.png', description: 'Avena tradicional nutritiva.', category: 'Cereales' },
-{ id: 16, name: 'Cereal chocolate', price: 9.50, image: 'https://cdn.acelerala.com/files/uploads/1499/1600743393-137-img-9255-jpg.jpg', description: 'Cereal de chocolate.', category: 'Cereales' },
+{ id: 16, name: 'Cereal fresitas', price: 9.50, image: 'https://cdn.acelerala.com/files/uploads/1499/1600743393-137-img-9255-jpg.jpg', description: 'Cereal de chocolate.', category: 'Cereales' },
 { id: 17, name: 'Cereal chocapic', price: 7.20, image: 'https://m.media-amazon.com/images/I/91KU4hxXXCL._SX679_.jpg', description: 'Granola con avena y miel.', category: 'Cereales' },
 
 { id: 18, name: 'Doritos Queso', price: 3.50, image: 'https://m.media-amazon.com/images/I/71ql7g8DRkL._AC_UL960_QL65_.jpg', description: 'Snack sabor queso.', category: 'Snacks' },
