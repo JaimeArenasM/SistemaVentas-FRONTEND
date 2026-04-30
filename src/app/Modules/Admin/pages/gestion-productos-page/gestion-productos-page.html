@@ -1,10 +1,34 @@
 <h2 class="titulo">Gestión de Productos</h2>
 
-<div class="acciones">
-  <input class="buscador" (keyup)="aplicarFiltro($event)" placeholder="Buscar producto...">
+<!-- Le agregamos flex y gap para que los inputs no estén pegados -->
+<div class="acciones" style="display: flex; align-items: center; gap: 15px;">
+
+  <!-- 1. Buscador por texto (Actualizado) -->
+  <input
+    class="buscador"
+    [(ngModel)]="textoBusqueda"
+    (keyup)="aplicarFiltroCompuesto()"
+    placeholder="Buscar producto...">
+
+  <!-- 2. NUEVO: Filtro por categoría -->
+  <select
+    class="buscador"
+    [(ngModel)]="categoriaSeleccionada"
+    (change)="aplicarFiltroCompuesto()"
+    style="cursor: pointer; min-width: 150px;">
+    <option *ngFor="let cat of categorias" [value]="cat">
+      {{ cat }}
+    </option>
+  </select>
+
+  <!-- Espaciador para empujar el botón a la derecha -->
+  <span style="flex: 1;"></span>
+
+  <!-- 3. Botón de añadir -->
   <button mat-raised-button color="primary" (click)="abrirModalProducto()">Añadir Producto</button>
 </div>
 
+<!-- Tu tabla se queda exactamente igual -->
 <table mat-table [dataSource]="dataSource" class="tabla-productos mat-elevation-z8">
 
   <ng-container matColumnDef="id">

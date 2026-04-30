@@ -1,14 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatCard } from "@angular/material/card";
+import { MatCardModule } from "@angular/material/card";
 
 import { ProductConfirmDialog } from '../../../../Shared/Components/product-confirm-dialog/product-confirm-dialog';
 import { ProductFormDialog } from '../../../../Shared/Components/product-form-dialog/product-form-dialog';
 import { FormsModule } from '@angular/forms';
+
+// IMPORTAMOS SELECT Y FORM FIELD PARA EL FILTRO
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 
@@ -20,32 +25,56 @@ import { Product } from '../../../../Core/Interfaces/IProduct.interface';
     MatTableModule,
     MatButtonModule,
     MatIconModule,
-    
-    FormsModule
+    MatCardModule,
+    FormsModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './gestion-productos-page.html',
   styleUrl: './gestion-productos-page.css',
 })
-export class GestionProductosPage {
+export class GestionProductosPage implements OnInit {
 
   private dialog = inject(MatDialog);
 
   dataSource = new MatTableDataSource<Product>([]);
-
   displayedColumns: string[] = ['id', 'name', 'price', 'image', 'description', 'category', 'acciones'];
+  categoriaSeleccionada: string = 'Todos';
+  textoBusqueda: string = '';
+
+  // Lista de categorías de tu tienda
+  categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Frutas'];
 
   ngOnInit() {
+    this.cargarDatos();
+
+    this.dataSource.filterPredicate = (data: Product, filter: string) => {
+      const searchTerms = JSON.parse(filter);
+      const coincideTexto = data.name.toLowerCase().includes(searchTerms.texto) ||
+                            data.description.toLowerCase().includes(searchTerms.texto);
+
+      const coincideCategoria = searchTerms.categoria === 'Todos' || data.category === searchTerms.categoria;
+
+      return coincideTexto && coincideCategoria;
+    };
     this.cargarDatos();
   }
 
   cargarDatos() {
-    const productos = JSON.parse(localStorage.getItem('donPepe_products_db') || '[]');
+    const productos = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
     this.dataSource.data = productos;
+    this.aplicarFiltroCompuesto();
   }
 
-  aplicarFiltro(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  // MÉTODO PARA FILTRAR
+  aplicarFiltroCompuesto() {
+    const filtros = {
+      texto: this.textoBusqueda.trim().toLowerCase(),
+      categoria: this.categoriaSeleccionada
+    };
+
+    this.dataSource.filter = JSON.stringify(filtros);
   }
 
   abrirModalProducto(producto?: Product) {
@@ -56,17 +85,17 @@ export class GestionProductosPage {
 
     dialogRef.afterClosed().subscribe(resultado => {
     if (resultado) {
-      let db = JSON.parse(localStorage.getItem('donPepe_products_db') || '[]');
+      let db = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
 
       if (producto) {
         const index = db.findIndex((p: Product) => p.id === producto.id);
         if (index !== -1) db[index] = resultado;
       } else {
-        resultado.id = db.length + 1;
+        resultado.id = db.length > 0 ? Math.max(...db.map((p:any) => p.id)) + 1 : 1;
         db.push(resultado);
       }
 
-      localStorage.setItem('donPepe_products_db', JSON.stringify(db));
+      localStorage.setItem('donPepe_products', JSON.stringify(db));
       this.cargarDatos();
     }
     });
@@ -83,9 +112,9 @@ export class GestionProductosPage {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let db = JSON.parse(localStorage.getItem('donPepe_products_db') || '[]');
+        let db = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
         db = db.filter((p: Product) => p.id !== producto.id);
-        localStorage.setItem('donPepe_products_db', JSON.stringify(db));
+        localStorage.setItem('donPepe_products', JSON.stringify(db));
         this.cargarDatos();
       }
     });
