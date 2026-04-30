@@ -20,7 +20,9 @@ export class DashboardPage implements OnInit{
 
   totalProductos: number =0;
   totalClientes: number=0;
-  ingresosMensuales: number = 425115;
+  ingresosMensuales: number = 0;
+
+
 
   ngOnInit(){
     this.calcularEstadisticas();
@@ -34,6 +36,13 @@ export class DashboardPage implements OnInit{
     /**leer clientes */
     const usuarios= JSON.parse(localStorage.getItem('donPepe_users_db')||'[]');
     this.totalClientes= usuarios.filter((u: any)=>u.iIdTipoUsuario ===2).length;
+
+    const ventas =JSON.parse(localStorage.getItem('donPepe_ventas_db')||'[]');
+    this.ingresosMensuales = ventas
+    .filter((v:any)=> v.vEstado === 'Completado')
+    .reduce((acum:number,ventaActual:any)=>
+    acum +ventaActual.dTotal,0);
   }
+
 
 }

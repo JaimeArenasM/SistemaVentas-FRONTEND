@@ -3,7 +3,7 @@ import { DashboardPage } from './pages/dashboard-page/dashboard-page';
 import { AdminLayoutPage } from '../../Layout/admin-layout-page/admin-layout-page';
 import { GestionClientesPage } from './pages/gestion-clientes-page/gestion-clientes-page';
 import { GestionProductosPage } from './pages/gestion-productos-page/gestion-productos-page';
-
+import { GestionVentasPage } from './pages/gestion-ventas-page/gestion-ventas-page';
 
 export const Admin_ROUTES: Routes = [
   {
@@ -18,6 +18,10 @@ export const Admin_ROUTES: Routes = [
       {
         path:'clientes',
         component: GestionClientesPage
+      },
+      {
+        path:'ventas',
+        component:GestionVentasPage
       },
 
       { 

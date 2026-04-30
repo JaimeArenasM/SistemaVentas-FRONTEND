@@ -58,7 +58,19 @@ saveSession(data: IAuthenticationResponse): void{
 
 getSession(): IAuthenticationResponse | null{
 const data = localStorage.getItem(this.SESSION_KEY);
-return data ? JSON.parse(data): null;
+
+  if (!data) return null;
+
+  try{
+    const parsedData= JSON.parse(data);
+
+    if (parsedData && parsedData.user && parsedData.user.iIdTipoUsuario) {
+      return parsedData;
+    }
+    return null;
+  } catch(error){
+    return null;
+  }
 }
 
 logout(): void{
@@ -76,9 +88,13 @@ return data ? JSON.parse(data) : [];
     const usuarios = this.obtenerTodosLosUsuarios();
     if ( usuarios.length === 0){
       const admin = {
-        vUsuario:'admin@tienda.com',
+        iIdUsuario: 1,
+        vUsuario: 'admin@tienda.com',
         password: '123456',
-        iIdTipoUsuario: 1 /** ADMIN: 1 , CLIENTE: 2 */
+        nombres: 'Isaac',
+        apellidos: 'Livaque',
+        dni: '96587432',
+        iIdTipoUsuario: 1
       };
       localStorage.setItem(this.DB_USERS_KEY,JSON.stringify([admin]));
     }
