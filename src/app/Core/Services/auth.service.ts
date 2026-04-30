@@ -79,6 +79,7 @@ const data = localStorage.getItem(this.SESSION_KEY);
 
 logout(): void{
   localStorage.removeItem(this.SESSION_KEY);
+  localStorage.removeItem('carrito');
   this.router.navigate(['/auth/catalogo']);
 }
 

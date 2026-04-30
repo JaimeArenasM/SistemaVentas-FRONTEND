@@ -57,6 +57,7 @@ export class LoginPage implements OnInit {
         next: (res) => {
           // El servicio ya guardó la sesión internamente, solo redireccionamos
           if (res.user.iIdTipoUsuario === 1) {
+            localStorage.removeItem('carrito');
             this.router.navigate(['/admin/dashboard']); // Si es Admin (1)
           } else {
             this.router.navigate(['/store/catalogo']); // Si es Cliente (2)
