@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,18 +10,30 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    DecimalPipe
   ],
   templateUrl: './dashboard-page.html',
   styleUrl: './dashboard-page.css',
 })
-export class DashboardPage {
+export class DashboardPage implements OnInit{
 
-  // Variable para saber qué botón está activo
-  activeSection: string = 'dashboard';
+  totalProductos: number =0;
+  totalClientes: number=0;
+  ingresosMensuales: number = 425115;
 
-  // Función para cambiar la sección al hacer clic
-  changeSection(section: string) {
-    this.activeSection = section;
+  ngOnInit(){
+    this.calcularEstadisticas();
   }
+
+  calcularEstadisticas(){
+    /**leer productos */
+    const productos= JSON.parse(localStorage.getItem('donPepe_products')||'[]');
+    this.totalProductos= productos.length;
+
+    /**leer clientes */
+    const usuarios= JSON.parse(localStorage.getItem('donPepe_users_db')||'[]');
+    this.totalClientes= usuarios.filter((u: any)=>u.iIdTipoUsuario ===2).length;
+  }
+
 }

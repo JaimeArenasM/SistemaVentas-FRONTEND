@@ -1,0 +1,25 @@
+/* Este es el contenedor padre que abraza toda la pantalla */
+.admin-main-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f4f6f8;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-content-container {
+  flex: 1; /* Ocupa todo el espacio sobrante a la derecha */
+  display: flex;
+  flex-direction: column; /* Apila el Navbar arriba y la tabla abajo */
+  height: 100vh;
+}
+
+/* Donde va la tabla */
+.admin-page-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto; /* Scroll solo para la tabla */
+}
