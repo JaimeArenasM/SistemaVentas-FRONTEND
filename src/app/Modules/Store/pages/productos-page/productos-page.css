@@ -92,3 +92,31 @@ img[mat-card-image]{
     font-size: 1.4rem;
   }
 }
+
+
+.categoria-carousel{
+  position: relative;
+}
+
+.cat-arrow{
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: #777;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.cat-arrow.left{
+  left: 5px;
+}
+
+.cat-arrow.right{
+  right: 5px;
+}
