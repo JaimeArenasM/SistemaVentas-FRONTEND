@@ -1,16 +1,58 @@
-.dialog {
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 20px;
-  width: 300px;
+.titulo-dialog {
+  color: #008b8b;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 18px;
 }
-form {
+
+.contenido-dialog {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+  padding: 10px;
 }
-input {
-  margin-bottom: 10px;
+
+.campo {
+  width: 100%;
 }
-button {
-  margin-top: 5px;
+
+.mat-form-field {
+  border-radius: 8px;
+}
+
+/* Botones */
+.acciones-dialog {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 2px solid #20b2aa;
+}
+
+button[mat-button] {
+  color: #008b8b;
+  border: 2px solid #20b2aa;
+  border-radius: 6px;
+  padding: 5px 15px;
+  transition: 0.3s;
+}
+
+button[mat-button]:hover {
+  background-color: #e0ffff;
+}
+
+button[mat-raised-button] {
+  background-color: #20b2aa;
+  color: white;
+  border: 2px solid #008b8b;
+  border-radius: 6px;
+  padding: 5px 15px;
+  transition: 0.3s;
+}
+
+button[mat-raised-button]:hover {
+  background-color: #008b8b;
+  border-color: #006666;
 }

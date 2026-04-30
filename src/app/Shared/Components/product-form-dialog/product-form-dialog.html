@@ -1,22 +1,35 @@
-<h2 mat-dialog-title>{{ product.id === 0 ? 'Nuevo Producto' : 'Editar Producto' }}</h2>
-<div mat-dialog-content>
-  <mat-form-field>
-    <input matInput [(ngModel)]="product.name" placeholder="Nombre">
+<h2 mat-dialog-title class="titulo-dialog">
+  {{ product.id === 0 ? 'Nuevo Producto' : 'Editar Producto' }}
+</h2>
+
+<div mat-dialog-content class="contenido-dialog">
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>Nombre</mat-label>
+    <input matInput [(ngModel)]="product.name">
   </mat-form-field>
-  <mat-form-field>
-    <input matInput [(ngModel)]="product.price" type="number" placeholder="Precio">
+
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>Precio</mat-label>
+    <input matInput [(ngModel)]="product.price" type="number">
   </mat-form-field>
-  <mat-form-field>
-    <input matInput [(ngModel)]="product.image" placeholder="Imagen URL">
+
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>Imagen URL</mat-label>
+    <input matInput [(ngModel)]="product.image">
   </mat-form-field>
-  <mat-form-field>
-    <input matInput [(ngModel)]="product.description" placeholder="Descripción">
+
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>Descripción</mat-label>
+    <input matInput [(ngModel)]="product.description">
   </mat-form-field>
-  <mat-form-field>
-    <input matInput [(ngModel)]="product.category" placeholder="Categoría">
+
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>Categoría</mat-label>
+    <input matInput [(ngModel)]="product.category">
   </mat-form-field>
 </div>
-<div mat-dialog-actions>
+
+<div mat-dialog-actions class="acciones-dialog">
   <button mat-button (click)="onCancel()">Cancelar</button>
   <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
 </div>

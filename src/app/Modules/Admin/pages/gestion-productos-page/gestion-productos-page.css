@@ -1,15 +1,66 @@
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th, td {
-  border: 1px solid #ccc;
-  padding: 8px;
+.titulo {
+  color: #008b8b;
+  font-weight: bold;
+  margin-bottom: 20px;
   text-align: center;
 }
-form {
-  margin-bottom: 20px;
+
+.acciones {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
 }
-input {
-  margin-right: 10px;
+
+.buscador {
+  padding: 8px;
+  border: 2px solid #20b2aa;
+  border-radius: 6px;
+  outline: none;
+}
+
+.buscador:focus {
+  border-color: #008b8b;
+  box-shadow: 0 0 5px rgba(0, 139, 139, 0.5);
+}
+
+/* Contenedor de la tabla con borde externo turquesa */
+.tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid #20b2aa; /* borde externo turquesa */
+  border-radius: 8px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Forzar que Angular Material muestre el borde externo */
+.mat-elevation-z8 {
+  border: 3px solid #20b2aa !important;
+  border-radius: 8px;
+}
+
+/* Líneas internas negras */
+th, td {
+  border: 2px solid #000; /* líneas internas negras */
+  padding: 10px;
+  text-align: center;
+}
+
+/* Encabezados con fondo suave turquesa y texto negro */
+th {
+  background-color: #e0ffff; /* fondo suave turquesa */
+  color: #000;               /* texto negro */
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Imagen dentro de la tabla */
+.imagen {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 2px solid #20b2aa;
 }

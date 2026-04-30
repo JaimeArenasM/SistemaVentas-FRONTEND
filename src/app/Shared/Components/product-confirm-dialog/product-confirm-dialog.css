@@ -1,9 +1,24 @@
 .dialog {
-  background: #fff;
-  border: 1px solid #ccc;
+  background: #ffffff;
+  border: 2px solid #20b2aa;
+  border-radius: 10px;
   padding: 20px;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
-button {
-  margin: 5px;
+
+.dialog h3 {
+  color: #008b8b;
+  margin-bottom: 10px;
+}
+
+.dialog p {
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }

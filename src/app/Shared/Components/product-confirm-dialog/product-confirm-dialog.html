@@ -1,5 +1,8 @@
 <div class="dialog">
+  <h3>{{ title }}</h3>
   <p>{{ message }}</p>
-  <button (click)="onConfirm()">Sí</button>
-  <button (click)="onCancel()">No</button>
+  <div class="botones">
+    <button mat-raised-button color="warn" (click)="onConfirm()">{{ confirmText }}</button>
+    <button mat-button (click)="onCancel()">Cancelar</button>
+  </div>
 </div>
