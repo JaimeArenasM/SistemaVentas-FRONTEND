@@ -27,7 +27,19 @@ export class CatalogoPage {
     'assets/img/tiendasinlogo.png',
     'assets/img/tiendadedonpepe.png'
   ];
+  moverDerecha(track: HTMLElement) {
+  track.scrollBy({
+    left: 320,
+    behavior: 'smooth'
+  });
+}
 
+moverIzquierda(track: HTMLElement) {
+  track.scrollBy({
+    left: -320,
+    behavior: 'smooth'
+  });
+}
   indice = 0;
 
   private productService = inject(ProductService);
