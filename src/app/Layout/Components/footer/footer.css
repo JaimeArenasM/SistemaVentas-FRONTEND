@@ -76,3 +76,67 @@
   border-top: 1px solid #e5e7eb;
   color: #6b7280;
 }
+@media (max-width: 600px){
+
+  .store-header{
+    height: auto;
+    padding: 8px 10px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .logo-store{
+    width: 70px;
+    height: 70px;
+    margin-right: 0;
+  }
+
+  .header-title{
+    font-size: 1rem;
+  }
+
+  .spacer{
+    display: none;
+  }
+
+  .search-box{
+    order: 2;
+    width: 100%;
+    height: 42px;
+    margin-top: 6px;
+  }
+
+  .search-box input{
+    font-size: 13px;
+  }
+
+  .search-box button{
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .cart-modal{
+    top: 95px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    padding: 18px;
+  }
+
+  .side-menu{
+    width: 260px;
+  }
+
+  .search-results{
+    top: 50px;
+  }
+
+  .result-item{
+    padding: 10px;
+  }
+
+  .result-item img{
+    width: 40px;
+    height: 40px;
+  }
+}

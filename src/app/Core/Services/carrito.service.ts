@@ -23,9 +23,12 @@ private cartItems = new BehaviorSubject<CartItem[]>(this.loadCart());
   }
 
   removeFromCart(productId: number) {
-    const currentItems = this.cartItems.value.filter(item => item.product.id !== productId);
-    this.updateCart(currentItems);
-  }
+  const updatedItems = this.cartItems.value.filter(
+    item => item.product.id !== productId
+  );
+
+  this.updateCart([...updatedItems]);
+}
 
   clearCart() {
     this.updateCart([]);

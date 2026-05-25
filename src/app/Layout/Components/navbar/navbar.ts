@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../../Core/Services/auth.service';
 import { CarritoService } from '../../../Core/Services/carrito.service';
-
+import { ProductService } from '../../../Core/Services/product.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -26,6 +26,10 @@ import { CarritoService } from '../../../Core/Services/carrito.service';
   styleUrls: ['./navbar.css']
 })
 export class Navbar {
+  private productService = inject(ProductService);
+
+productos: any[] = [];
+sugerencias: any[] = [];
 
   private router = inject(Router);
   private authService = inject(AuthService);
@@ -41,9 +45,22 @@ export class Navbar {
   cartCount = 0;
   total = 0;
 
-  ngOnInit() {
-    this.actualizarCarritoLocal();
-  }
+ngOnInit() {
+  this.cartService.cartItems$.subscribe(items => {
+    this.cartItems = items;
+    this.cartCount = items.reduce((total, item) => total + item.quantity, 0);
+    this.total = Math.round(
+  items.reduce(
+    (sum, item) => sum + (Number(item.product.price) * item.quantity),
+    0
+  ) * 100
+) / 100;
+  });
+  this.productService.getProductos().subscribe(data => {
+    this.productos = data;
+  });
+}
+  
 
   // --- NAVEGACIÓN ---
   irInicio() {
@@ -87,7 +104,7 @@ export class Navbar {
 
   // --- CARRITO OVERLAY ---
   abrirCarrito() {
-    this.actualizarCarritoLocal();
+    
     this.mostrarCarrito = true;
   }
 
@@ -104,15 +121,12 @@ export class Navbar {
   }
 
   remove(id: number) {
-    // Si tu servicio tiene método para borrar, úsalo. Si no, borramos localmente:
-    this.cartItems = this.cartItems.filter(item => (item.id || item.product?.id) !== id);
-    localStorage.setItem('carrito', JSON.stringify(this.cartItems));
-    this.actualizarCarritoLocal();
-  }
+  this.cartService.removeFromCart(id);
+}
 
   irAlCarrito() {
     this.cerrarCarrito();
-    this.router.navigate(['/store/checkout']);
+    this.router.navigate(['/store/carrito']);
   }
 
   get session() {
@@ -124,5 +138,26 @@ export class Navbar {
   logout() {
     this.authService.logout();
   }
+  filtrarSugerencias() {
+  const texto = this.textoBusqueda.toLowerCase().trim();
+
+  if (!texto) {
+    this.sugerencias = [];
+    return;
+  }
+
+  this.sugerencias = this.productos
+    .filter(p => p.name.toLowerCase().includes(texto))
+    .slice(0, 5);
+}
+
+seleccionarProducto(producto: any) {
+  this.textoBusqueda = producto.name;
+  this.sugerencias = [];
+
+  this.router.navigate(['/store/productos'], {
+    queryParams: { search: producto.name }
+  });
+}
 
 }
