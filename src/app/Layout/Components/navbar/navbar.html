@@ -24,23 +24,54 @@
   <span class="spacer"></span>
 
   <div class="search-box">
-    <mat-icon>search</mat-icon>
-    <input
-      type="text"
-      placeholder="Buscar productos..."
-      [(ngModel)]="textoBusqueda"
-      (keyup.enter)="buscarProducto()"
-    />
-    <button (click)="buscarProducto()">Buscar</button>
+
+  <mat-icon>search</mat-icon>
+
+  <input
+    type="text"
+    placeholder="Buscar productos..."
+    [(ngModel)]="textoBusqueda"
+    (input)="filtrarSugerencias()"
+    (keyup.enter)="buscarProducto()"
+  />
+
+  <button (click)="buscarProducto()">Buscar</button>
+
+  <!-- SUGERENCIAS -->
+  <div class="search-results" *ngIf="sugerencias.length > 0">
+
+    <div
+      class="result-item"
+      *ngFor="let producto of sugerencias"
+      (click)="seleccionarProducto(producto)"
+    >
+
+      <img [src]="producto.image" alt="" />
+
+      <div class="info">
+        <strong>{{ producto.name }}</strong>
+        <small>{{ producto.category }}</small>
+      </div>
+
+      <span>S/. {{ producto.price }}</span>
+
+    </div>
+
   </div>
 
-  <!-- CARRITO -->
-  <button mat-icon-button color="accent"
-          (click)="abrirCarrito()"
-          [matBadge]="cartCount"
-          matBadgeColor="warn">
-    <mat-icon>shopping_cart</mat-icon>
-  </button>
+</div>  
+
+<!-- CARRITO -->
+<button mat-icon-button
+        color="accent"
+        (click)="abrirCarrito()"
+        [matBadge]="cartCount"
+        [matBadgeHidden]="cartCount === 0"
+        matBadgeColor="warn">
+
+  <mat-icon>shopping_cart</mat-icon>
+
+</button>
 
   <!-- PERFIL -->
   <button mat-icon-button color="accent"
@@ -88,7 +119,7 @@
 <div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
 
 <div class="cart-modal" *ngIf="mostrarCarrito">
-  <h2>Carrito ({{ cartCount }})</h2>
+  <h2>Carrito</h2>
 
   <div *ngIf="cartItems.length === 0">
     <p>El carrito está vacío 🛒</p>
@@ -102,9 +133,13 @@
     <button class="btn-remove" (click)="remove(item.product.id)">✖</button>
   </div>
 
-  <p class="cart-total">Total: S/. {{ total }}</p>
-
-  <button class="btn-ir-carrito" (click)="irAlCarrito()">
-    IR AL CARRITO
-  </button>
+  <p class="cart-total" *ngIf="cartItems.length > 0">
+  Total: S/. {{ total.toFixed(2) }}
+</p>
+  <button 
+  class="btn-ir-carrito" 
+  *ngIf="cartItems.length > 0"
+  (click)="irAlCarrito()">
+  IR AL CARRITO
+</button>
 </div>

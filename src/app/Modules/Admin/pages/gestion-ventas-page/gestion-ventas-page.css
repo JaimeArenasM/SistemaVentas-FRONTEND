@@ -1,99 +1,171 @@
-.table-header {
+.ventas-wrapper {
+  padding: 28px 32px;
+  background: #f5f7fb;
+  min-height: calc(100vh - 70px);
+}
+
+.ventas-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-.table-header h2 {
-  font-size: 20px;
-  font-weight: 700;
-  color: #181c32;
-  margin: 0;
+.eyebrow {
+  display: block;
+  color: #0cae98;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
 }
 
-.table-header p {
-  color: #a1a5b7;
-  font-size: 13px;
-  margin: 5px 0 0 0;
+.ventas-header h2 {
+  font-size: 38px;
+  font-weight: 900;
+  margin: 0 0 10px;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.ventas-header p {
+  font-size: 15px;
+  color: #6b7280;
 }
 
-/* Buscador estilo Monolith */
 .search-box {
+  width: 330px;
+  height: 46px;
+  border: 1px solid #dbe3ee;
+  border-radius: 14px;
+  background: white;
   display: flex;
   align-items: center;
-  background-color: #ffffff;
-  border: 1px solid #eef0f4;
-  border-radius: 8px;
-  padding: 8px 15px;
-  gap: 10px;
-  width: 280px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
-}
-
-.search-box:focus-within {
-  border-color: #00e599;
-  box-shadow: 0 0 0 3px rgba(0, 229, 153, 0.1);
+  padding: 0 14px;
 }
 
 .search-box mat-icon {
-  color: #a1a5b7;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  color: #94a3b8;
+  margin-right: 8px;
 }
 
 .search-box input {
   border: none;
-  background: transparent;
   outline: none;
-  color: #181c32;
-  font-size: 0.9rem;
   width: 100%;
+  background: transparent;
 }
 
-.search-box input::placeholder {
-  color: #a1a5b7;
+.ventas-card {
+  background: white !important;
+  border-radius: 24px;
+  padding: 22px;
+  border: 1px solid #eef1f6;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06) !important;
 }
 
-/* Badges de estado */
-.badge-status {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
+.table-container {
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid #eef1f6;
+}
+
+.ventas-table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+}
+
+.ventas-table th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
   text-transform: uppercase;
-  display: inline-block;
-  letter-spacing: 0.5px;
+}
+
+.ventas-table td,
+.ventas-table th {
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid #eef1f6;
+}
+
+.ventas-table tr:hover td {
+  background: #f9fafb;
+}
+
+.ticket {
+  font-weight: 900;
+  color: #111827;
+}
+
+.total {
+  color: #0cae98;
+  font-weight: 900;
+}
+
+.badge-status {
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .badge-status.completado {
-  background-color: #e8fff3;
-  color: #00e599;
+  background: #dcfff7;
+  color: #0cae98;
 }
 
 .badge-status.pendiente {
-  background-color: #fff8dd;
-  color: #ffc700;
+  background: #fff7d6;
+  color: #d97706;
 }
 
 .badge-status.anulado {
-  background-color: #fff5f8;
-  color: #f1416c;
+  background: #fee2e2;
+  color: #ef4444;
 }
 
-/* Botones de acción */
-.action-btn.view {
-  color: #009ef7;
+.btn-complete {
+  color: #0cae98 !important;
 }
 
-.action-btn.delete {
-  color: #f1416c;
+.btn-cancel {
+  color: #ef4444 !important;
+}
+
+.no-data-msg {
+  text-align: center;
+  padding: 45px 20px;
+  color: #94a3b8;
+}
+
+.no-data-msg mat-icon {
+  font-size: 42px;
+  width: 42px;
+  height: 42px;
+  margin-bottom: 10px;
+}
+
+.no-data-msg h3 {
+  margin: 0 0 8px;
+  color: #111827;
+  font-size: 20px;
+}
+
+.no-data-msg p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .ventas-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
 }

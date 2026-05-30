@@ -1,66 +1,184 @@
-.titulo {
-  color: #008b8b;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
+.productos-wrapper {
+  padding: 28px 32px;
+  background: #f5f7fb;
+  min-height: calc(100vh - 70px);
+}
+
+.productos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  display: block;
+  color: #0cae98;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.productos-header h2 {
+  font-size: 38px;
+  font-weight: 900;
+  color: #111827;
+  margin: 0 0 14px 0;
+  line-height: 1.1;
+}
+
+.productos-header p {
+  color: #6b7280;
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.8;
+  max-width: 650px;
+}
+
+.btn-add {
+  background: #0cae98 !important;
+  color: white !important;
+  border-radius: 14px;
+  height: 46px;
+  padding: 0 20px;
+  font-weight: 800;
+}
+
+.productos-card {
+  background: #ffffff !important;
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06) !important;
+  border: 1px solid #eef1f6;
 }
 
 .acciones {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 15px;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
 }
 
-.buscador {
-  padding: 8px;
-  border: 2px solid #20b2aa;
-  border-radius: 6px;
+.search-box {
+  width: 320px;
+  height: 44px;
+  border: 1px solid #dbe3ee;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  background: #f9fafb;
+}
+
+.search-box mat-icon {
+  color: #94a3b8;
+  margin-right: 8px;
+}
+
+.search-box input {
+  border: none;
   outline: none;
+  background: transparent;
+  width: 100%;
 }
 
-.buscador:focus {
-  border-color: #008b8b;
-  box-shadow: 0 0 5px rgba(0, 139, 139, 0.5);
+.select-category {
+  height: 44px;
+  min-width: 170px;
+  border-radius: 14px;
+  border: 1px solid #dbe3ee;
+  padding: 0 14px;
+  background: #f9fafb;
+  outline: none;
+  cursor: pointer;
 }
 
-/* Contenedor de la tabla con borde externo turquesa */
+.table-container {
+  overflow-x: auto;
+  border-radius: 18px;
+  border: 1px solid #eef1f6;
+}
+
 .tabla-productos {
   width: 100%;
+  background: #ffffff;
   border-collapse: collapse;
-  border: 3px solid #20b2aa; /* borde externo turquesa */
-  border-radius: 8px;
-  overflow: hidden;
-  box-sizing: border-box;
 }
 
-/* Forzar que Angular Material muestre el borde externo */
-.mat-elevation-z8 {
-  border: 3px solid #20b2aa !important;
-  border-radius: 8px;
+.tabla-productos th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
-/* Líneas internas negras */
-th, td {
-  border: 2px solid #000; /* líneas internas negras */
-  padding: 10px;
+.tabla-productos td,
+.tabla-productos th {
+  padding: 16px;
   text-align: center;
+  border-bottom: 1px solid #eef1f6;
 }
 
-/* Encabezados con fondo suave turquesa y texto negro */
-th {
-  background-color: #e0ffff; /* fondo suave turquesa */
-  color: #000;               /* texto negro */
-  font-weight: bold;
+.tabla-productos tr:hover td {
+  background: #f9fafb;
 }
 
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* Imagen dentro de la tabla */
 .imagen {
   width: 50px;
   height: 50px;
-  border-radius: 6px;
-  border: 2px solid #20b2aa;
+  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid #dbe3ee;
+  background: white;
+}
+
+.product-name {
+  font-weight: 800;
+  color: #111827;
+}
+
+.price {
+  font-weight: 800;
+  color: #0cae98;
+}
+
+.description {
+  color: #64748b;
+}
+
+.category-badge {
+  background: #dcfff7;
+  color: #0cae98;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.btn-edit {
+  color: #2563eb !important;
+}
+
+.btn-delete {
+  color: #ef4444 !important;
+}
+
+@media (max-width: 900px) {
+  .productos-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .acciones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    width: auto;
+  }
 }

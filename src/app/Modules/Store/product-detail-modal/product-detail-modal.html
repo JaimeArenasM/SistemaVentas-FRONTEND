@@ -1,0 +1,34 @@
+<div class="modal-product">
+  <button class="close-btn" (click)="cerrar()">×</button>
+
+  <div class="modal-image">
+    <img [src]="product.image" [alt]="product.name">
+  </div>
+
+  <div class="modal-info">
+    <span class="tag">{{ product.category }}</span>
+
+    <h2>{{ product.name }}</h2>
+
+    <p class="price">S/ {{ product.price }}</p>
+
+    <p class="description">{{ product.description }}</p>
+
+    <p class="stock">✔ Stock disponible en tienda</p>
+
+    <div class="quantity-section">
+      <label>CANTIDAD</label>
+
+      <div class="quantity-control">
+  <button type="button" (click)="disminuir()">−</button>
+  <span>{{ cantidad }}</span>
+  <button type="button" (click)="aumentar()">+</button>
+</div>
+    </div>
+
+    <button class="add-btn" (click)="agregar()">
+      <mat-icon>add_shopping_cart</mat-icon>
+      Añadir al carrito
+    </button>
+  </div>
+</div>

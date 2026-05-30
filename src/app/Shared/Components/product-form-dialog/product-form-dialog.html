@@ -3,8 +3,9 @@
 </h2>
 
 <div mat-dialog-content class="contenido-dialog">
+
   <mat-form-field appearance="outline" class="campo">
-    <mat-label>Nombre</mat-label>
+    <mat-label>Nombre del producto</mat-label>
     <input matInput [(ngModel)]="product.name">
   </mat-form-field>
 
@@ -14,22 +15,28 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="campo">
-    <mat-label>Imagen URL</mat-label>
+    <mat-label>URL de imagen</mat-label>
     <input matInput [(ngModel)]="product.image">
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="campo">
     <mat-label>Descripción</mat-label>
-    <input matInput [(ngModel)]="product.description">
+    <textarea matInput rows="3" [(ngModel)]="product.description"></textarea>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="campo">
     <mat-label>Categoría</mat-label>
     <input matInput [(ngModel)]="product.category">
   </mat-form-field>
+
 </div>
 
 <div mat-dialog-actions class="acciones-dialog">
-  <button mat-button (click)="onCancel()">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
+  <button mat-stroked-button class="btn-cancelar" (click)="onCancel()">
+    Cancelar
+  </button>
+
+  <button mat-raised-button class="btn-guardar" (click)="onSave()">
+    Guardar
+  </button>
 </div>

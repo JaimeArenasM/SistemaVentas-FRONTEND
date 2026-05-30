@@ -200,3 +200,50 @@ img[mat-card-image]{
     font-size: 1.3rem;
   }
 }
+.category-banner {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding: 40px 20px;
+  background: #f8fafc;
+  flex-wrap: wrap;
+}
+
+.category-item {
+  width: 170px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.category-item:hover {
+  transform: translateY(-6px);
+}
+
+.category-item img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  background: linear-gradient(
+    to bottom,
+    #a4e0d8,
+    #0cae98
+  );
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+}
+
+.category-item:hover img {
+  transform: scale(1.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+.category-item p {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2c3e50;
+  line-height: 1.3;
+}
