@@ -1,25 +1,24 @@
-/* Este es el contenedor padre que abraza toda la pantalla */
 .admin-main-layout {
   display: flex;
-  flex-direction: row;
   height: 100vh;
-  width: 100vw;
-  background-color: #f4f6f8;
+  width: 100%;
+  background: #f5f7fb;
   overflow: hidden;
   margin: 0;
   padding: 0;
 }
 
 .admin-content-container {
-  flex: 1; /* Ocupa todo el espacio sobrante a la derecha */
+  flex: 1;
   display: flex;
-  flex-direction: column; /* Apila el Navbar arriba y la tabla abajo */
+  flex-direction: column;
   height: 100vh;
+  min-width: 0;
 }
 
-/* Donde va la tabla */
 .admin-page-content {
   flex: 1;
-  padding: 30px;
-  overflow-y: auto; /* Scroll solo para la tabla */
+  padding: 0;
+  overflow-y: auto;
+  background: #f5f7fb;
 }

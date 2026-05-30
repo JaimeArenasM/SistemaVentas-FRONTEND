@@ -1,0 +1,89 @@
+.modal-product {
+  width: 100%;
+  min-height: 500px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 35px;
+  padding: 35px;
+  background: white;
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  border: none;
+  background: transparent;
+  font-size: 34px;
+  cursor: pointer;
+}
+
+.modal-image {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-image img {
+  width: 350px;
+  height: 350px;
+  object-fit: contain;
+}
+
+.modal-info h2 {
+  font-size: 32px;
+  margin: 15px 0;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 800;
+  color: #0cae98;
+}
+
+.description {
+  font-size: 16px;
+  color: #444;
+}
+
+.stock {
+  color: #16a34a;
+}
+
+.quantity-control {
+  display: flex;
+  width: 130px;
+  height: 45px;
+  border: 1px solid #ccc;
+  margin: 15px 0;
+}
+
+.quantity-control button {
+  width: 40px;
+  border: none;
+  background: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.quantity-control span {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-btn {
+  height: 55px;
+  width: 100%;
+  background: #0cae98;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 800;
+  cursor: pointer;
+}

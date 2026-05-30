@@ -21,25 +21,22 @@ import { ProductService } from '../../../../Core/Services/product.service';
 export class CatalogoPage {
 
   productos: Product[] = [];
+  categoriaSeleccionada = '';
 
   imagenes = [
     'assets/img/portadalimpieza.png',
     'assets/img/tiendasinlogo.png',
     'assets/img/tiendadedonpepe.png'
   ];
-  moverDerecha(track: HTMLElement) {
-  track.scrollBy({
-    left: 320,
-    behavior: 'smooth'
-  });
-}
 
-moverIzquierda(track: HTMLElement) {
-  track.scrollBy({
-    left: -320,
-    behavior: 'smooth'
-  });
-}
+  categorias = [
+    { nombre: 'Cereales', imagen: 'assets/img/categorias/cereales.png' },
+    { nombre: 'Snacks', imagen: 'assets/img/categorias/snacks.png' },
+    { nombre: 'Detergentes', imagen: 'assets/img/categorias/detergentes.png' },
+    { nombre: 'Bebidas', imagen: 'assets/img/categorias/bebidas.png' },
+    { nombre: 'Frutas', imagen: 'assets/img/categorias/frutas.png' },
+  ];
+
   indice = 0;
 
   private productService = inject(ProductService);
@@ -55,20 +52,36 @@ moverIzquierda(track: HTMLElement) {
     }, 3000);
   }
 
-  siguiente() {
+  siguiente(): void {
     this.indice = (this.indice + 1) % this.imagenes.length;
   }
 
-  anterior() {
+  anterior(): void {
     this.indice =
       (this.indice - 1 + this.imagenes.length) % this.imagenes.length;
+  }
+
+  moverDerecha(track: HTMLElement): void {
+    track.scrollBy({
+      left: 320,
+      behavior: 'smooth'
+    });
+  }
+
+  moverIzquierda(track: HTMLElement): void {
+    track.scrollBy({
+      left: -320,
+      behavior: 'smooth'
+    });
   }
 
   obtenerPorCategoria(categoria: string): Product[] {
     return this.productos.filter(producto => producto.category === categoria);
   }
 
-  irCategoria(categoria: string) {
+  irCategoria(categoria: string): void {
+    this.categoriaSeleccionada = categoria;
+
     this.router.navigate(
       ['/store/productos'],
       { queryParams: { categoria } }

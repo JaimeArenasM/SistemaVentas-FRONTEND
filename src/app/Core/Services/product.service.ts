@@ -45,7 +45,7 @@ export class ProductService{
 
 { id: 7, name: 'Papas Lays Clásicas', price: 2.50, image: 'https://aceleralastatic.nyc3.cdn.digitaloceanspaces.com/files/uploads/1499/1596226959-77-frito-lay-papas-lays-clasicas-70-jpg.jpg', description: 'Papas crocantes sabor clásico.', category: 'Snacks' },
 
-{ id: 8, name: 'Cereal Ángel Mel', price: 1.50, image: 'https://images.rappi.pe/products/1719005557489_1719005555337_1719005550832.png', description: 'Cereal de maíz con toque de miel.', category: 'Cereales' },
+{ id: 8, name: 'Cereal Ángel Mel', price: 5.50, image: 'https://images.rappi.pe/products/1719005557489_1719005555337_1719005550832.png', description: 'Cereal de maíz con toque de miel.', category: 'Cereales' },
 
 { id: 9, name: 'Inca Kola 1.5L', price: 7.50, image: 'https://www.donbelisario.com.pe/media/catalog/product/2/1/2146463136.png?optimize=medium&bg-color=255,255,255&fit=bounds&height=700&width=700&canvas=700:700&format=jpeg', description: 'La bebida peruana favorita.', category: 'Bebidas' },
 
@@ -53,7 +53,7 @@ export class ProductService{
 
 { id: 11, name: 'Jabón Bolívar', price: 5.50, image: 'https://corporacionliderperu.com/51237-large_default/bolivar-jabon-vida-x-190-gr-cuidado-total.jpg', description: 'Jabón ideal para el lavado de ropa.', category: 'Detergentes' },
 
-{ id: 12, name: 'Cereal Fresa', price: 0.50, image: 'https://dojiw2m9tvv09.cloudfront.net/49572/product/freziaalmohada0272.jpg', description: 'Cereal sabor fresa con almohaditas rellenas.', category: 'Cereales' },
+{ id: 12, name: 'Cereal Fresa', price: 5.50, image: 'https://dojiw2m9tvv09.cloudfront.net/49572/product/freziaalmohada0272.jpg', description: 'Cereal sabor fresa con almohaditas rellenas.', category: 'Cereales' },
 
 { id: 13, name: 'Galletas Morochas', price: 1.20, image: 'https://grandcentral.pe/wp-content/uploads/2025/09/GCG086-M1.jpg', description: 'Galletas rellenas bañadas en chocolate.', category: 'Snacks' },
 
@@ -71,7 +71,7 @@ export class ProductService{
 
 { id: 20, name: 'Chizitos', price: 1.50, image: 'https://miamarket.pe/assets/uploads/1cfed3b10ead9c36e3bd8c43a7a91823.jpg', description: 'Snack ligero y crocante.', category: 'Snacks' },
 
-{ id: 21, name: 'Piqueo Snax', price: 4.20, image: 'https://candylandperu.com/wp-content/uploads/2024/10/piqueo-snack.png', description: 'Mix variado de snacks salados.', category: 'Snacks' },
+{ id: 21, name: 'Piqueo Snax', price: 4.20, image: 'https://plazavea.vteximg.com.br/arquivos/ids/32427760-1000-1000/20565469.jpg', description: 'Mix variado de snacks salados.', category: 'Snacks' },
 
 { id: 22, name: 'Ariel Líquido', price: 12.90, image: 'https://www.molinasecaonline.com/image/cache/data/Limpieza/ariel%20liquido%20actilift-882x882.jpg', description: 'Detergente líquido para ropa.', category: 'Detergentes' },
 

@@ -101,7 +101,47 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+
+  .checkout-container {
+    padding: 14px;
+  }
+
+  .checkout-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .checkout-header h1 {
+    font-size: 1.5rem;
+  }
+
   .checkout-content {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .resumen-pedido,
+  .metodos-pago {
+    width: 100%;
+  }
+
+  .resumen-item {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .resumen-total {
+    text-align: left;
+  }
+
+  .opcion-pago {
+    padding: 14px;
+  }
+
+  .qr-section img {
+    max-width: 180px;
+    width: 100%;
   }
 }
