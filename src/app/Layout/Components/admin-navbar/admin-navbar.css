@@ -29,26 +29,6 @@
   gap: 25px;
 }
 
-.icon-button {
-  background: none;
-  border: none;
-  color: #a1a5b7;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-}
-
-.icon-button:hover { color: #50cd89; }
-
-.badge {
-  position: absolute;
-  top: 0px;
-  right: -2px;
-  width: 8px;
-  height: 8px;
-  background-color: #f1416c;
-  border-radius: 50%;
-}
 
 .admin-profile {
   display: flex;

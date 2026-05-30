@@ -1,58 +1,73 @@
+:host {
+  display: block;
+  width: 460px;
+}
+
 .titulo-dialog {
-  color: #008b8b;
-  font-weight: bold;
+  margin: 0;
+  padding: 26px 28px 12px;
   text-align: center;
-  margin-bottom: 15px;
-  font-size: 18px;
+  color: #0cae98;
+  font-size: 26px;
+  font-weight: 900;
 }
 
 .contenido-dialog {
+  padding: 10px 28px 8px !important;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 10px;
+  gap: 16px;
+  max-height: 65vh;
 }
 
 .campo {
   width: 100%;
 }
 
-.mat-form-field {
-  border-radius: 8px;
+::ng-deep .campo .mat-mdc-text-field-wrapper {
+  border-radius: 14px !important;
+  background: #ffffff !important;
 }
 
-/* Botones */
+::ng-deep .campo .mdc-notched-outline__leading,
+::ng-deep .campo .mdc-notched-outline__notch,
+::ng-deep .campo .mdc-notched-outline__trailing {
+  border-color: #dbe3ee !important;
+}
+
+::ng-deep .campo.mat-focused .mdc-notched-outline__leading,
+::ng-deep .campo.mat-focused .mdc-notched-outline__notch,
+::ng-deep .campo.mat-focused .mdc-notched-outline__trailing {
+  border-color: #0cae98 !important;
+  border-width: 2px !important;
+}
+
+::ng-deep .campo.mat-focused mat-label {
+  color: #0cae98 !important;
+}
+
 .acciones-dialog {
+  padding: 18px 28px 24px !important;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 20px;
-  padding-top: 10px;
-  border-top: 2px solid #20b2aa;
+  border-top: 1px solid #eef1f6;
 }
 
-button[mat-button] {
-  color: #008b8b;
-  border: 2px solid #20b2aa;
-  border-radius: 6px;
-  padding: 5px 15px;
-  transition: 0.3s;
+.btn-cancelar {
+  height: 42px;
+  border-radius: 12px !important;
+  border: 1px solid #ef4444 !important;
+  color: #ef4444 !important;
+  background: #fef2f2 !important;
+  font-weight: 800;
 }
 
-button[mat-button]:hover {
-  background-color: #e0ffff;
-}
-
-button[mat-raised-button] {
-  background-color: #20b2aa;
-  color: white;
-  border: 2px solid #008b8b;
-  border-radius: 6px;
-  padding: 5px 15px;
-  transition: 0.3s;
-}
-
-button[mat-raised-button]:hover {
-  background-color: #008b8b;
-  border-color: #006666;
+.btn-guardar {
+  height: 42px;
+  border-radius: 12px !important;
+  background: #0cae98 !important;
+  color: white !important;
+  font-weight: 800;
+  padding: 0 22px !important;
 }
