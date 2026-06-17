@@ -29,21 +29,16 @@
   background: #ffffff !important;
 }
 
-::ng-deep .campo .mdc-notched-outline__leading,
-::ng-deep .campo .mdc-notched-outline__notch,
-::ng-deep .campo .mdc-notched-outline__trailing {
-  border-color: #dbe3ee !important;
+::ng-deep .campo .mdc-line-ripple {
+  display: none !important;
 }
 
-::ng-deep .campo.mat-focused .mdc-notched-outline__leading,
-::ng-deep .campo.mat-focused .mdc-notched-outline__notch,
-::ng-deep .campo.mat-focused .mdc-notched-outline__trailing {
-  border-color: #0cae98 !important;
-  border-width: 2px !important;
-}
-
-::ng-deep .campo.mat-focused mat-label {
+::ng-deep .campo.mat-focused .mdc-floating-label {
   color: #0cae98 !important;
+}
+
+::ng-deep .campo .mat-mdc-form-field-focus-overlay {
+  display: none !important;
 }
 
 .acciones-dialog {
