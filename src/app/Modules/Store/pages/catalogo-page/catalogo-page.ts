@@ -5,15 +5,18 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
+import { ScrollTopButton } from '../../../../Shared/Components/scroll-top-button/scroll-top-button';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
 
 @Component({
+  standalone: true,
   selector: 'app-catalogo-page',
   imports: [
     CommonModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    ScrollTopButton
   ],
   templateUrl: './catalogo-page.html',
   styleUrl: './catalogo-page.css',
@@ -43,7 +46,8 @@ export class CatalogoPage {
     'assets/img/Gloria.png',
     'assets/img/The_Coca-Cola_Company.png',
     'assets/img/P&G_logo.png',
-    'assets/img/Pepsico_logo.png'
+    'assets/img/Pepsico_logo.png',
+    'assets/img/Field-208-logo.png'
   ];
 
   indice = 0;
