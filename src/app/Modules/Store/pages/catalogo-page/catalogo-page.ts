@@ -37,6 +37,7 @@ export class CatalogoPage {
     { nombre: 'Snacks', imagen: 'assets/img/categorias/snacks.png' },
     { nombre: 'Detergentes', imagen: 'assets/img/categorias/detergentes.png' },
     { nombre: 'Bebidas', imagen: 'assets/img/categorias/bebidas.png' },
+    { nombre: 'Lácteos', imagen: 'assets/img/categorias/lacteos.png' },
     { nombre: 'Frutas', imagen: 'assets/img/categorias/frutas.png' },
   ];
 

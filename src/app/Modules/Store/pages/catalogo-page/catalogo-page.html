@@ -124,6 +124,56 @@
   </div>
 </section>
 
+<!-- LÁCTEOS -->
+<section class="categoria-bloque">
+  <h2>Lácteos</h2>
+
+  <div class="categoria-carousel">
+
+    <button class="cat-arrow left"
+            (click)="moverIzquierda(lacteosTrack)">
+      ‹
+    </button>
+
+    <div class="product-grid" #lacteosTrack>
+
+      <mat-card class="product-card"
+                *ngFor="let product of obtenerPorCategoria('Lácteos')">
+
+        <img mat-card-image [src]="product.image">
+
+        <mat-card-title>{{ product.name }}</mat-card-title>
+
+        <mat-card-subtitle>
+          {{ product.description }}
+        </mat-card-subtitle>
+
+        <mat-card-content>
+          <span class="price">S/ {{ product.price }}</span>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="irCategoria('Lácteos')">
+
+            Ver categoría
+
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+
+    </div>
+
+    <button class="cat-arrow right"
+            (click)="moverDerecha(lacteosTrack)">
+      ›
+    </button>
+
+  </div>
+</section>
+
 <!-- LIMPIEZA -->
 <section class="categoria-bloque">
   <h2>Limpieza</h2>

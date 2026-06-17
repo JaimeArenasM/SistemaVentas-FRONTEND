@@ -10,20 +10,45 @@ export class ProductService{
   private readonly DB_PRODUCTS_KEY= 'donPepe_products';
 
   constructor(){
-    this.cargarProductosPorDefecto();
+    const existingData = localStorage.getItem(this.DB_PRODUCTS_KEY);
+
+    if (existingData) {
+      const productos = JSON.parse(existingData) as Product[];
+      const productosNormalizados = this.normalizarCategorias(productos);
+
+      if (JSON.stringify(productosNormalizados) !== JSON.stringify(productos)) {
+        localStorage.setItem(this.DB_PRODUCTS_KEY, JSON.stringify(productosNormalizados));
+      }
+    } else {
+      this.cargarProductosPorDefecto();
+    }
   }
 
   /**METODO PARA QUE EL CATALOGO LEA LOS PRODUCTOS */
   getProductos(): Observable<Product[]>{
 
-    const data= localStorage.getItem(this.DB_PRODUCTS_KEY);
-    const productos= data ? JSON.parse(data):[];
-    return of(productos);
+    const data = localStorage.getItem(this.DB_PRODUCTS_KEY);
+    const productos = data ? JSON.parse(data) : [];
+    return of(this.normalizarCategorias(productos));
   }
 
   /*METODO PARA QUE EL ADMIN GUARDE CAMBIOS */
-  saveProducts(productos: Product[]):void{
+  saveProducts(productos: Product[]): void {
     localStorage.setItem(this.DB_PRODUCTS_KEY, JSON.stringify(productos));
+  }
+
+  private normalizarCategorias(productos: Product[]): Product[] {
+    return productos.map(producto => {
+      if (producto.id === 4 || producto.name === 'Leche Deslactosada Laive') {
+        return { ...producto, category: 'Lácteos' };
+      }
+
+      if (producto.id === 29 || producto.name === 'Yogurt Gloria') {
+        return { ...producto, category: 'Lácteos' };
+      }
+
+      return producto;
+    });
   }
 
   /**DATOS INICIALES */
@@ -37,7 +62,7 @@ export class ProductService{
 
 { id: 3, name: 'Detergente ACE', price: 4.50, image: 'https://aceleralastatic.nyc3.cdn.digitaloceanspaces.com/files/uploads/1499/1771281526-26-1602720046-103-img-8816-ok-png-png.png', description: 'Detergente poderoso contra manchas.', category: 'Detergentes' },
 
-{ id: 4, name: 'Leche Deslactosada Laive', price: 4.20, image: 'https://storage.googleapis.com/web-laive-storage/Media//4.%20Laive%20Leche%20Sin%20Lactosa%20lista%20para%20consumir%20946%20ml%20v2.jpg', description: 'Leche sin lactosa ideal para el desayuno.', category: 'Bebidas' },
+{ id: 4, name: 'Leche Deslactosada Laive', price: 4.20, image: 'https://storage.googleapis.com/web-laive-storage/Media//4.%20Laive%20Leche%20Sin%20Lactosa%20lista%20para%20consumir%20946%20ml%20v2.jpg', description: 'Leche sin lactosa ideal para el desayuno.', category: 'Lácteos' },
 
 { id: 5, name: 'Fresas Frescas', price: 15.00, image: 'https://png.pngtree.com/png-vector/20250227/ourmid/pngtree-box-of-strawberries-tasty-box-vitamines-png-image_15621124.png', description: 'Fresas naturales y jugosas.', category: 'Frutas' },
 
@@ -87,7 +112,7 @@ export class ProductService{
 
 { id: 28, name: 'Frugos Durazno', price: 4.50, image: 'https://www.maryoriperu.com/wp-content/uploads/2019/04/Jugo-Frugos-Durazno-1-lt.jpg', description: 'Jugo refrescante sabor durazno.', category: 'Bebidas' },
 
-{ id: 29, name: 'Yogurt Gloria', price: 5.20, image: 'https://corporacionliderperu.com/53197-large_default/gloria-yogurt-bt-x-946-gr-natural.jpg', description: 'Yogurt cremoso sabor vainilla.', category: 'Bebidas' },
+{ id: 29, name: 'Yogurt Gloria', price: 5.20, image: 'https://corporacionliderperu.com/53197-large_default/gloria-yogurt-bt-x-946-gr-natural.jpg', description: 'Yogurt cremoso sabor vainilla.', category: 'Lácteos' },
 
 { id: 30, name: 'Manzana Roja', price: 4.80, image: 'https://img.magnific.com/psd-gratis/primer-plano-deliciosa-manzana_23-2151868338.jpg', description: 'Manzanas frescas por kilo.', category: 'Frutas' },
 
