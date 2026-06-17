@@ -131,11 +131,13 @@
   cursor: pointer;
 }
 
-/*menu - categoria*/
+/* ===== MENÚ CATEGORÍAS ===== */
+
 .menu-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(20, 30, 45, 0.55);
+  background: rgba(20,30,45,.55);
+  backdrop-filter: blur(2px);
   z-index: 900;
 }
 
@@ -143,13 +145,20 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 285px;
+  width: 310px;
   height: 100vh;
+
   background: #ffffff;
+
   z-index: 1001;
-  padding: 28px 18px;
-  box-shadow: 5px 0 18px rgba(0,0,0,0.18);
+
+  padding: 24px 18px;
+
+  box-shadow: 5px 0 20px rgba(0,0,0,.18);
+
   animation: slideMenu .25s ease;
+
+  overflow-y: auto;
 }
 
 @keyframes slideMenu{
@@ -162,49 +171,99 @@
 }
 
 .side-menu h3{
-  color: #009688;
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 25px;
+  margin: 0 0 24px;
+  text-align: center;
+
+  color: #0cae98;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  letter-spacing: .5px;
 }
+
+/* ===== ITEMS CATEGORÍAS ===== */
 
 .side-menu button{
   width: 100%;
+
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 16px;
-  margin-bottom: 10px;
+
+  padding: 12px;
+
+  margin-bottom: 12px;
 
   border: none;
-  border-radius: 10px;
+  border-radius: 16px;
 
-  background: transparent;
-
-  color: #1e293b; /* MÁS OSCURO */
-  font-size: 1rem;
-  font-weight: 600;
+  background: #fff;
 
   cursor: pointer;
   text-align: left;
 
-  transition: 0.2s ease;
+  transition: all .25s ease;
+}
+
+.side-menu button img{
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 3px solid #f1f5f9;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+
+  transition: all .25s ease;
+}
+
+.side-menu button span{
+  color: #1e293b;
+
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .side-menu button:hover{
-  background: #e9fbf8;
-  color: #009b8b;
+  background: #f8fafc;
+
+  transform: translateX(6px);
 }
 
-.side-menu mat-icon{
-  color: #009688;
+.side-menu button:hover img{
+  transform: scale(1.08);
+
+  border-color: #0cae98;
+
+  box-shadow: 0 8px 18px rgba(12,174,152,.25);
 }
+
+.side-menu button:hover span{
+  color: #0cae98;
+}
+
+/* BOTÓN CONFIGURACIÓN */
 
 .config-btn{
   position: absolute;
   bottom: 25px;
   left: 18px;
   width: calc(100% - 36px) !important;
+}
+
+/* SCROLL */
+
+.side-menu::-webkit-scrollbar{
+  width: 6px;
+}
+
+.side-menu::-webkit-scrollbar-thumb{
+  background: #d1d5db;
+  border-radius: 20px;
 }
 
 .search-box{

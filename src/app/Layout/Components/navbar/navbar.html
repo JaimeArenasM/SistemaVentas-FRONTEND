@@ -4,21 +4,47 @@
   <img src="assets/img/logotipotienda.png" class="logo-store" (click)="irInicio()">
 
   <!-- BOTÓN MENÚ CATEGORÍAS -->
-  <button mat-icon-button (click)="abrirMenuCategorias()">
-    <mat-icon>menu</mat-icon>
+<button class="btn-categorias" (click)="abrirMenuCategorias()">
+  <span class="menu-icon">☰</span>
+  <span>Categorías</span>
+</button>
+
+<div
+  class="menu-overlay"
+  *ngIf="mostrarMenuCategorias"
+  (click)="cerrarMenuCategorias()">
+</div>
+
+<aside class="side-menu" *ngIf="mostrarMenuCategorias">
+
+  <h3>CATEGORÍAS</h3>
+
+  <button (click)="filterByCategory('Cereales')">
+    <img src="assets/categorias/cereales.png" alt="Cereales">
+    <span>Cereales</span>
   </button>
-  <div class="menu-overlay" *ngIf="mostrarMenuCategorias" (click)="cerrarMenuCategorias()"></div>
 
-  <aside class="side-menu" *ngIf="mostrarMenuCategorias">
-    <h3>CATEGORÍAS</h3>
-    <button (click)="filterByCategory('Todos')"><mat-icon>apps</mat-icon> Todos</button>
-    <button (click)="filterByCategory('Cereales')"><mat-icon>inventory_2</mat-icon> Cereales</button>
-    <button (click)="filterByCategory('Snacks')"><mat-icon>fastfood</mat-icon> Snacks</button>
-    <button (click)="filterByCategory('Detergentes')"><mat-icon>cleaning_services</mat-icon> Limpieza</button>
-    <button (click)="filterByCategory('Bebidas')"><mat-icon>local_drink</mat-icon> Bebidas</button>
-    <button (click)="filterByCategory('Frutas')"><mat-icon>bakery_dining</mat-icon> Frutas</button>
-  </aside>
+  <button (click)="filterByCategory('Snacks')">
+    <img src="assets/categorias/Snacks.png" alt="Snacks">
+    <span>Snacks</span>
+  </button>
 
+  <button (click)="filterByCategory('Detergentes')">
+    <img src="assets/categorias/Detergentes.png" alt="Limpieza">
+    <span>Limpieza</span>
+  </button>
+
+  <button (click)="filterByCategory('Bebidas')">
+    <img src="assets/categorias/bebidas.jpg" alt="Bebidas">
+    <span>Bebidas</span>
+  </button>
+
+  <button (click)="filterByCategory('Frutas')">
+    <img src="assets/categorias/frutas.png" alt="Frutas">
+    <span>Frutas</span>
+  </button>
+
+</aside>
   <!-- TÍTULO -->
   <span class="header-title">Tienda de Don Pepe</span>
   <span class="spacer"></span>
