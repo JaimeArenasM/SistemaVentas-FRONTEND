@@ -7,15 +7,19 @@
 </div>
 
 
-<section class="category-banner">
-  <div 
-  class="category-item" 
-  *ngFor="let cat of categorias" 
-  (click)="irCategoria(cat.nombre)"
->
-  <img [src]="cat.imagen" [alt]="cat.nombre">
-  <p>{{ cat.nombre }}</p>
-</div>
+<!-- CARRUSEL DE MARCAS -->
+<section class="brands-carousel-section">
+  <h3>Nuestras Marcas Aliadas</h3>
+  <div class="brands-carousel">
+    <div class="brands-track">
+      <div class="brand-item" *ngFor="let marca of marcas; let i = index">
+        <img [src]="marca" [alt]="'Brand ' + i">
+      </div>
+      <div class="brand-item" *ngFor="let marca of marcas; let i = index">
+        <img [src]="marca" [alt]="'Brand ' + i">
+      </div>
+    </div>
+  </div>
 </section>
 
 

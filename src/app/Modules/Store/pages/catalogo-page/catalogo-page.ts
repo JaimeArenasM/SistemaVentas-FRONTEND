@@ -37,6 +37,15 @@ export class CatalogoPage {
     { nombre: 'Frutas', imagen: 'assets/img/categorias/frutas.png' },
   ];
 
+  marcas = [
+    'assets/img/nestle-logo-png_seeklogo-98337.png',
+    'assets/img/Angel.png',
+    'assets/img/Gloria.png',
+    'assets/img/The_Coca-Cola_Company.png',
+    'assets/img/P&G_logo.png',
+    'assets/img/Pepsico_logo.png'
+  ];
+
   indice = 0;
 
   private productService = inject(ProductService);
