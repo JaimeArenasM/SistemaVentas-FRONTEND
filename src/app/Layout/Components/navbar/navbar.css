@@ -18,6 +18,7 @@
   height: 150px;
   object-fit: contain;
   margin-right: 6px;
+  cursor: pointer;
 }
 
 /* ===== TITULO ===== */
@@ -32,15 +33,35 @@
   flex: 1 1 auto;
 }
 
-/* ===== ICONOS ===== */
+/* ===== ICONOS DEL HEADER ===== */
 .store-header > button{
   color: white !important;
 }
 
+/* Sin animación en hover del header */
 .store-header button:hover{
   background: rgba(255,255,255,0.10);
   border-radius: 8px;
-  transition: 0.2s;
+}
+
+/* ===== BOTÓN CATEGORÍAS — sin hover gris, siempre turquesa ===== */
+.btn-categorias{
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-categorias:hover{
+  background: rgba(255,255,255,0.15) !important;
 }
 
 /* ===== BADGE CARRITO ===== */
@@ -131,11 +152,13 @@
   cursor: pointer;
 }
 
-/*menu - categoria*/
+/* ===== MENÚ CATEGORÍAS LATERAL ===== */
+
 .menu-overlay{
   position: fixed;
   inset: 0;
-  background: rgba(20, 30, 45, 0.55);
+  background: rgba(20,30,45,.55);
+  backdrop-filter: blur(2px);
   z-index: 900;
 }
 
@@ -143,69 +166,82 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 285px;
+  width: 310px;
   height: 100vh;
   background: #ffffff;
   z-index: 1001;
-  padding: 28px 18px;
-  box-shadow: 5px 0 18px rgba(0,0,0,0.18);
-  animation: slideMenu .25s ease;
-}
-
-@keyframes slideMenu{
-  from{
-    transform: translateX(-100%);
-  }
-  to{
-    transform: translateX(0);
-  }
+  padding: 24px 18px;
+  box-shadow: 5px 0 20px rgba(0,0,0,.18);
+  overflow-y: auto;
 }
 
 .side-menu h3{
-  color: #009688;
-  font-size: 1rem;
-  font-weight: bold;
-  margin-bottom: 25px;
+  margin: 0 0 24px;
+  text-align: center;
+  color: #0cae98;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: .5px;
 }
+
+/* ===== ITEMS DEL MENÚ LATERAL ===== */
 
 .side-menu button{
   width: 100%;
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 14px 16px;
-  margin-bottom: 10px;
-
+  padding: 12px;
+  margin-bottom: 12px;
   border: none;
-  border-radius: 10px;
-
-  background: transparent;
-
-  color: #1e293b; /* MÁS OSCURO */
-  font-size: 1rem;
-  font-weight: 600;
-
+  border-radius: 16px;
+  background: #fff;
   cursor: pointer;
   text-align: left;
-
-  transition: 0.2s ease;
+  /* Sin transition — sin animación */
 }
 
+/* Imágenes circulares con borde turquesa */
+.side-menu button img{
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #0cae98;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  /* Sin transition — sin animación */
+}
+
+.side-menu button span{
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Hover turquesa directo, sin animación ni desplazamiento */
 .side-menu button:hover{
-  background: #e9fbf8;
-  color: #009b8b;
+  background: #e1f5ee;
 }
 
-.side-menu mat-icon{
-  color: #009688;
+.side-menu button:hover img{
+  border-color: #0cae98;
 }
 
-.config-btn{
-  position: absolute;
-  bottom: 25px;
-  left: 18px;
-  width: calc(100% - 36px) !important;
+.side-menu button:hover span{
+  color: #0cae98;
 }
+
+/* SCROLL */
+.side-menu::-webkit-scrollbar{
+  width: 6px;
+}
+
+.side-menu::-webkit-scrollbar-thumb{
+  background: #d1d5db;
+  border-radius: 20px;
+}
+
+/* ===== BUSCADOR ===== */
 
 .search-box{
   width: 380px;
@@ -217,6 +253,7 @@
   align-items: center;
   padding: 0 10px;
   gap: 8px;
+  position: relative;
 }
 
 .search-box mat-icon{
@@ -239,41 +276,26 @@
   cursor: pointer;
   font-weight: 600;
 }
-/* IMPORTANTE */
-.search-box{
-  position: relative;
-}
 
-/* DROPDOWN */
+/* DROPDOWN SUGERENCIAS */
 .search-results{
   position: absolute;
-
   top: 52px;
   left: 0;
-
   width: 100%;
-
   background: white;
   border-radius: 12px;
-
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-
   z-index: 9999;
-
   overflow: hidden;
 }
 
-/* ITEM */
 .result-item{
   display: flex;
   align-items: center;
-
   gap: 12px;
-
   padding: 12px;
-
   cursor: pointer;
-
   border-bottom: 1px solid #eee;
 }
 
@@ -284,13 +306,11 @@
 .result-item img{
   width: 45px;
   height: 45px;
-
   object-fit: contain;
 }
 
 .info{
   flex: 1;
-
   display: flex;
   flex-direction: column;
 }
@@ -299,9 +319,8 @@
   color: #777;
   font-size: 12px;
 }
-.logo-store{
-  cursor: pointer;
-}
+
+/* ===== RESPONSIVE ===== */
 
 @media (max-width: 768px){
 
