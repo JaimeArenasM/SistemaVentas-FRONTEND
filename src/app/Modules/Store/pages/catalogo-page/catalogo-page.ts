@@ -5,15 +5,18 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
+import { ScrollTopButton } from '../../../../Shared/Components/scroll-top-button/scroll-top-button';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
 
 @Component({
+  standalone: true,
   selector: 'app-catalogo-page',
   imports: [
     CommonModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    ScrollTopButton
   ],
   templateUrl: './catalogo-page.html',
   styleUrl: './catalogo-page.css',
@@ -34,7 +37,18 @@ export class CatalogoPage {
     { nombre: 'Snacks', imagen: 'assets/img/categorias/snacks.png' },
     { nombre: 'Detergentes', imagen: 'assets/img/categorias/detergentes.png' },
     { nombre: 'Bebidas', imagen: 'assets/img/categorias/bebidas.png' },
+    { nombre: 'Lácteos', imagen: 'assets/img/categorias/lacteos.png' },
     { nombre: 'Frutas', imagen: 'assets/img/categorias/frutas.png' },
+  ];
+
+  marcas = [
+    'assets/img/nestle-logo-png_seeklogo-98337.png',
+    'assets/img/Angel.png',
+    'assets/img/Gloria.png',
+    'assets/img/The_Coca-Cola_Company.png',
+    'assets/img/P&G_logo.png',
+    'assets/img/Pepsico_logo.png',
+    'assets/img/Field-208-logo.png'
   ];
 
   indice = 0;

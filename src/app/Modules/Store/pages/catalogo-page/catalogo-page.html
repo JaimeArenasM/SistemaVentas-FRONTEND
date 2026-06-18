@@ -7,18 +7,22 @@
 </div>
 
 
-<section class="category-banner">
-  <div 
-  class="category-item" 
-  *ngFor="let cat of categorias" 
-  (click)="irCategoria(cat.nombre)"
->
-  <img [src]="cat.imagen" [alt]="cat.nombre">
-  <p>{{ cat.nombre }}</p>
-</div>
+<!-- CARRUSEL DE MARCAS -->
+<section class="brands-carousel-section">
+  <h3>Nuestras Marcas Aliadas</h3>
+  <div class="brands-carousel">
+    <div class="brands-track">
+      <div class="brand-item" *ngFor="let marca of marcas; let i = index">
+        <img [src]="marca" [alt]="'Brand ' + i">
+      </div>
+      <div class="brand-item" *ngFor="let marca of marcas; let i = index">
+        <img [src]="marca" [alt]="'Brand ' + i">
+      </div>
+    </div>
+  </div>
 </section>
 
-
+<app-scroll-top-button></app-scroll-top-button>
 
 <!-- CEREALES -->
 <section class="categoria-bloque">
@@ -114,6 +118,56 @@
 
     <button class="cat-arrow right"
             (click)="moverDerecha(snacksTrack)">
+      ›
+    </button>
+
+  </div>
+</section>
+
+<!-- LÁCTEOS -->
+<section class="categoria-bloque">
+  <h2>Lácteos</h2>
+
+  <div class="categoria-carousel">
+
+    <button class="cat-arrow left"
+            (click)="moverIzquierda(lacteosTrack)">
+      ‹
+    </button>
+
+    <div class="product-grid" #lacteosTrack>
+
+      <mat-card class="product-card"
+                *ngFor="let product of obtenerPorCategoria('Lácteos')">
+
+        <img mat-card-image [src]="product.image">
+
+        <mat-card-title>{{ product.name }}</mat-card-title>
+
+        <mat-card-subtitle>
+          {{ product.description }}
+        </mat-card-subtitle>
+
+        <mat-card-content>
+          <span class="price">S/ {{ product.price }}</span>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="irCategoria('Lácteos')">
+
+            Ver categoría
+
+          </button>
+        </mat-card-actions>
+
+      </mat-card>
+
+    </div>
+
+    <button class="cat-arrow right"
+            (click)="moverDerecha(lacteosTrack)">
       ›
     </button>
 

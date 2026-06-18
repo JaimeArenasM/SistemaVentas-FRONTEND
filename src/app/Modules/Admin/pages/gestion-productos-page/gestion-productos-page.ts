@@ -44,7 +44,7 @@ export class GestionProductosPage implements OnInit {
   textoBusqueda: string = '';
 
   // Lista de categorías de tu tienda
-  categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Frutas'];
+  categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Lácteos', 'Frutas'];
 
   ngOnInit() {
     this.cargarDatos();
