@@ -48,7 +48,9 @@ export class CatalogoPage {
     'assets/img/The_Coca-Cola_Company.png',
     'assets/img/P&G_logo.png',
     'assets/img/Pepsico_logo.png',
-    'assets/img/Field-208-logo.png'
+    'assets/img/Field-208-logo.png',
+    'assets/img/Frito Lay.png',
+    'assets/img/Alicorp.png'
   ];
 
   indice = 0;
