@@ -1,124 +1,69 @@
 import { inject, Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable, of, throwError } from "rxjs";
-import { IAuthenticationRequest, IAuthenticationResponse, IUser } from "../Interfaces/IUser.interface";
+import { Observable, tap } from "rxjs";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../../environments/environment";
 
+// IMPORTAMOS LAS INTERFACES ACTUALIZADAS (Las que creamos según el Swagger)
+import { LoginRequest, LoginResponse, RegistroRequest } from "../Interfaces/IUser.interface";
 
 @Injectable({
-  providedIn:'root'
+  providedIn: 'root'
 })
-export class AuthService{
+export class AuthService {
 
   private router = inject(Router);
-  /* llave para la lista de todos los usuarios y asi funcione el register */
-  private readonly DB_USERS_KEY = 'donPepe_users_db';
-  /* para el usuario logueado actualmente se le simule un token */
+  private http = inject(HttpClient);
+
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
   private readonly SESSION_KEY = 'sistema_ventas_data';
-private readonly APP_VERSION_KEY = 'donPepe_app_version';
-  private readonly CURRENT_VERSION = '1.1';
 
-  constructor(){
-      this.migrarBaseDeDatosLocal();
-    this.crearAdminPorDefecto();
+  constructor() {}
 
+  /** LOGIN REAL A SPRING BOOT */
+  login(carga: LoginRequest): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/iniciarSesion`, carga).pipe(
+      tap(response => {
+        this.saveSession(response);
+      })
+    );
   }
 
-  /**LOGIN */
-  login(carga: IAuthenticationRequest): Observable<IAuthenticationResponse>{
-    const usuarios = this.obtenerTodosLosUsuarios();
-
-    /**buscar si la contraseña y correo coinciden */
-    const usuarioValido = usuarios.find(u => u.vUsuario === carga.vUsuario && u.password===carga.vPassword);
-
-    if (usuarioValido) {
-      const response: IAuthenticationResponse={
-        token: 'eisjaimdsNASDJSA51asd'+ new Date().getTime(), /**token */
-        user: usuarioValido
-      };
-      this.saveSession(response);
-      return of(response);
-    }
-    return throwError(()=> new Error('Credenciales incorrectas'));
+  /** REGISTRO REAL A SPRING BOOT */
+  registrar(nuevoUsuario: RegistroRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/registrar`, nuevoUsuario);
   }
 
-  /**REGISTROOO */
-  registrar(nuevoUsuario: IUser):Observable<boolean>{
-    const usuarios =this.obtenerTodosLosUsuarios();
-
-    if(usuarios.find(u=> u.vUsuario === nuevoUsuario.vUsuario)){
-      return throwError(()=> new Error('El correo ya esta registrado'));
-    }
-
-    usuarios.push(nuevoUsuario);
-    localStorage.setItem(this.DB_USERS_KEY,JSON.stringify(usuarios));
-    return of(true);
+  /** MANEJO DE LA SESION LOCAL */
+  saveSession(data: LoginResponse): void {
+    localStorage.setItem(this.SESSION_KEY, JSON.stringify(data));
   }
 
-/**MANEJO DE LA SESION LOCAL */
-
-saveSession(data: IAuthenticationResponse): void{
-  localStorage.setItem(this.SESSION_KEY,JSON.stringify(data));
-}
-
-getSession(): IAuthenticationResponse | null{
-const data = localStorage.getItem(this.SESSION_KEY);
-
-  if (!data) return null;
-
-  try{
-    const parsedData= JSON.parse(data);
-
-    if (parsedData && parsedData.user && parsedData.user.iIdTipoUsuario) {
-      return parsedData;
+  getSession(): any | null {
+    const data = localStorage.getItem(this.SESSION_KEY);
+    if (data) {
+      const parsedData = JSON.parse(data);
+      // Validamos que el token exista y que el usuario tenga un correo o rol asignado
+      if (parsedData && parsedData.token && parsedData.nombres) {
+        return parsedData;
+      }
     }
-    return null;
-  } catch(error){
+    // Si la data está corrupta, la borramos y fingimos que no hay nadie
+    localStorage.removeItem(this.SESSION_KEY);
     return null;
   }
-}
 
-logout(): void{
-  localStorage.removeItem(this.SESSION_KEY);
-  localStorage.removeItem('carrito');
-  this.router.navigate(['/auth/catalogo']);
-}
-
-  /** METODOS PRIVADOS */
-  private obtenerTodosLosUsuarios():any[]{
-const data = localStorage.getItem(this.DB_USERS_KEY);
-return data ? JSON.parse(data) : [];
+  logout(): void {
+    localStorage.removeItem(this.SESSION_KEY);
+    // Redirigimos al catálogo público en lugar del inexistente '/auth/catalogo'
+    this.router.navigate(['/store/catalogo']);
   }
 
-  private migrarBaseDeDatosLocal(): void {
-    const versionGuardada = localStorage.getItem(this.APP_VERSION_KEY);
-
-    // Si no hay versión, o es una versión vieja (ej. 1.0)
-    if (versionGuardada !== this.CURRENT_VERSION) {
-      console.warn(`Actualizando base de datos local a la versión ${this.CURRENT_VERSION}...`);
-
-      // Borramos los datos conflictivos antiguos
-      localStorage.removeItem(this.DB_USERS_KEY);
-      localStorage.removeItem(this.SESSION_KEY);
-      localStorage.removeItem('donPepe_ventas_db');
-
-      // Guardamos la nueva versión para que no lo vuelva a borrar mañana
-      localStorage.setItem(this.APP_VERSION_KEY, this.CURRENT_VERSION);
-    }
+  solicitarRecuperacion(correo: string): Observable<any>{
+    return this.http.post(`${this.apiUrl}/solicitar-recuperacion`, {correo});
   }
 
-  private crearAdminPorDefecto():void {
-    const usuarios = this.obtenerTodosLosUsuarios();
-    if ( usuarios.length === 0){
-      const admin = {
-        iIdUsuario: 1,
-        vUsuario: 'admin@tienda.com',
-        password: '123456',
-        nombres: 'Isaac',
-        apellidos: 'Livaque',
-        dni: '96587432',
-        iIdTipoUsuario: 1
-      };
-      localStorage.setItem(this.DB_USERS_KEY,JSON.stringify([admin]));
-    }
+  resetPassword(token: string, nuevaPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, nuevaPassword });
   }
 }

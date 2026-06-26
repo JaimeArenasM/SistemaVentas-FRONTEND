@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCard } from "@angular/material/card";
-import { UserFormDialog } from '../../../../Shared/Components/user-form-dialog/user-form-dialog';
 import { ConfirmDialog } from '../../../../Shared/Components/confirm-dialog/confirm-dialog';
+import { UserFormDialog } from '../../../../Shared/Components/user-form-dialog/user-form-dialog';
+import { UsuarioService } from '../../../../Core/Services/usuario.service';
+import { AuthService } from '../../../../Core/Services/auth.service';
+import { UsuarioAdminView } from '../../../../Core/Interfaces/IUser.interface';
 
 @Component({
   selector: 'app-gestion-clientes-page',
@@ -21,70 +24,88 @@ import { ConfirmDialog } from '../../../../Shared/Components/confirm-dialog/conf
   templateUrl: './gestion-clientes-page.html',
   styleUrl: './gestion-clientes-page.css',
 })
-export class GestionClientesPage {
+export class GestionClientesPage implements OnInit {
 
   private dialog = inject(MatDialog);
+  private usuarioService = inject(UsuarioService);
+  private authService = inject(AuthService); // Instanciamos el servicio de autenticación
 
-  // Usamos MatTableDataSource para que se refresque al instante
-  dataSource = new MatTableDataSource<any>([]);
-
-  // ¡AQUÍ ESTÁ EL CAMBIO! Agregamos dni, telefono, y separamos nombres de apellidos
-  displayedColumns: string[] = ['usuario', 'dni', 'nombres', 'apellidos', 'telefono', 'rol', 'acciones'];
+  dataSource = new MatTableDataSource<UsuarioAdminView>([]);
+  displayedColumns: string[] = ['correo', 'nombreCliente', 'tipoUsuario', 'estado', 'acciones'];
 
   ngOnInit() {
     this.cargarDatos();
   }
 
   cargarDatos() {
-    const usuarios = JSON.parse(localStorage.getItem('donPepe_users_db') || '[]');
-    const clientesFiltrados = usuarios.filter((U: any) => U.iIdTipoUsuario === 2);
-    this.dataSource.data = clientesFiltrados;
+    this.usuarioService.obtenerTodosLosUsuarios().subscribe({
+      next: (usuarios: UsuarioAdminView[]) => {
+        this.dataSource.data = usuarios;
+      },
+      error: (err) => console.error('Error al cargar la lista de usuarios:', err)
+    });
   }
 
-  aplicarFiltro(event:Event){
+  aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-
-    this.dataSource.filter= filterValue.trim().toLowerCase();
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  abrirModalUsuario(cliente?: any) {
+  abrirModalUsuario(usuario?: any) {
     const dialogRef = this.dialog.open(UserFormDialog, {
       width: '500px',
-      data: cliente ? { ...cliente } : null
+      // Si recibimos un usuario, lo mandamos al modal para que se llenen los campos
+      data: usuario ? { ...usuario } : null
     });
 
     dialogRef.afterClosed().subscribe(resultado => {
       if (resultado) {
-        let db = JSON.parse(localStorage.getItem('donPepe_users_db') || '[]');
-
-        if (cliente) {
-          const index = db.findIndex((u: any) => u.iIdUsuario === cliente.iIdUsuario);
-          if (index !== -1) db[index] = resultado;
+        if (usuario) {
+          // ESTO ES PARA EDITAR (Necesitas tener el método PUT en Spring Boot)
+          this.usuarioService.actualizarUsuario(usuario.idUsuario, resultado).subscribe({
+            next: () => {
+              alert('Usuario actualizado con éxito.');
+              this.cargarDatos();
+            },
+            error: (err :any) => console.error('Error al actualizar:', err)
+          });
         } else {
-          db.push(resultado);
+          // ESTO ES PARA CREAR NUEVO
+          this.authService.registrar(resultado).subscribe({
+            next: () => {
+              alert('Usuario registrado con éxito.');
+              this.cargarDatos();
+            },
+            error: (err) => console.error('Error al registrar:', err)
+          });
         }
-
-        localStorage.setItem('donPepe_users_db', JSON.stringify(db));
-        this.cargarDatos();
       }
     });
   }
 
-  eliminar(cliente: any) {
+  cambiarEstado(usuario: any) {
+    // AHORA USAMOS LAS PALABRAS EXACTAS QUE ESPERA SPRING BOOT
+    const estadoActual = usuario.estado ? usuario.estado.toLowerCase() : 'activo';
+    const nuevoEstado = estadoActual === 'activo' ? 'bloqueado' : 'activo';
+    const accion = estadoActual === 'activo' ? 'Bloquear' : 'Activar';
+
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
-        title: 'Confirmar Eliminación',
-        message: `¿Desea eliminar al cliente ${cliente.nombres}?`,
-        confirmText: 'Eliminar'
+        title: `Confirmar Acción`,
+        message: `¿Desea ${accion.toLowerCase()} la cuenta de ${usuario.nombre || usuario.correo}?`,
+        confirmText: accion
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let db = JSON.parse(localStorage.getItem('donPepe_users_db') || '[]');
-        db = db.filter((u: any) => u.iIdUsuario !== cliente.iIdUsuario);
-        localStorage.setItem('donPepe_users_db', JSON.stringify(db));
-        this.cargarDatos();
+        // Asegúrate de que tu usuarioService tenga el método apuntando al backend
+        this.usuarioService.cambiarEstadoUsuario(usuario.idUsuario, nuevoEstado).subscribe({
+          next: () => {
+            this.cargarDatos(); // Recargamos la tabla
+          },
+          error: (err) => console.error('Error al cambiar el estado:', err)
+        });
       }
     });
   }

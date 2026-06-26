@@ -1,44 +1,167 @@
 <div class="login-container">
   <mat-card class="login-card">
-
     <div class="login-header">
-      <img src="https://i.postimg.cc/sXKjbG05/logotipo-(1).png" alt="Logo Tienda" class="login-logo">
+      <img src="https://i.postimg.cc/sXKjbG05/logotipo-(1).png" alt="Logo Tienda" class="login-logo" />
       <h1>Bienvenido</h1>
       <p>Inicia Sesión</p>
     </div>
 
     <mat-card-content>
-      <div *ngIf="erroMessage" class="error-box">
+      <div *ngIf="erroMessage" class="error-box" style="
+          color: #d32f2f;
+          text-align: center;
+          margin-bottom: 15px;
+          font-weight: bold;
+          background-color: #fde0e0;
+          padding: 10px;
+          border-radius: 8px;
+        ">
         {{ erroMessage }}
+
+        <div *ngIf="erroMessage" class="error-box" style="
+            color: #d32f2f;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            background-color: #fde0e0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f8b4b4;
+          ">
+          <mat-icon style="vertical-align: middle; margin-right: 5px; margin-bottom: 3px">error_outline</mat-icon>
+          {{ erroMessage }}
+
+          <div *ngIf="cuentaBloqueada" style="
+              margin-top: 12px;
+              font-size: 13px;
+              color: #5e6278;
+              font-weight: normal;
+              line-height: 1.4;
+            ">
+            <p style="margin-bottom: 12px">
+              Comunícate con nuestro equipo para solicitar la revisión
+              y el desbloqueo de tu acceso.
+            </p>
+
+            <div style="display: flex; justify-content: center; gap: 10px">
+              <button mat-button (click)="cerrarError()"
+                style="color: #5e6278; background: #ffffff; border: 1px solid #ddd; height: 36px">
+                Cancelar
+              </button>
+              <button mat-flat-button style="background-color: #d32f2f; color: white; height: 36px"
+                (click)="irAlContacto()">
+                <mat-icon style="margin-right: 4px; font-size: 18px; height: 18px; width: 18px">mail</mat-icon>
+                Ir al contacto
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-
       <form [formGroup]="formLogin" (ngSubmit)="onAuthentication()">
-
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Correo electrónico</mat-label>
-          <input matInput formControlName="vUsuario" placeholder="ejemplo@tienda.com">
+          <input matInput formControlName="correo" placeholder="ejemplo@tienda.com" />
           <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="erroresCampos['correo']">
+            {{ erroresCampos['correo'] }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Contraseña</mat-label>
-          <input matInput type="password" formControlName="vPassword">
+          <input matInput type="password" formControlName="password" />
           <mat-icon matSuffix>lock</mat-icon>
+          <mat-error *ngIf="erroresCampos['password']">
+            {{ erroresCampos['password'] }}
+          </mat-error>
         </mat-form-field>
 
         <button mat-flat-button color="primary" class="btn-login" type="submit">
           Ingresar al Sistema
         </button>
 
-        <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #5e6278;">
-          ¿No tienes cuenta?
-          <a href="javascript:void(0)" (click)="irRegistro()" style="color: #0cae98; font-weight: bold; text-decoration: none; cursor: pointer;">
-            Regístrate
+        <div style="text-align: center; margin-top: 15px">
+          <a href="javascript:void(0)" (click)="abrirModalRecuperacion($event)"
+            style="color: #0cae98; text-decoration: none; font-size: 14px; font-weight: 500">
+            ¿Olvidaste tu contraseña?
           </a>
         </div>
 
+        <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #5e6278">
+          ¿No tienes cuenta?
+          <a href="javascript:void(0)" (click)="irRegistro()"
+            style="color: #0cae98; font-weight: bold; text-decoration: none; cursor: pointer">
+            Regístrate
+          </a>
+        </div>
       </form>
     </mat-card-content>
-
   </mat-card>
+
+  <div class="modal-overlay" *ngIf="mostrarModalRecuperacion">
+    <div class="modal-box">
+      <ng-container *ngIf="pasoRecuperacion === 1">
+        <h3>Recuperar Contraseña</h3>
+        <p style="font-size: 14px; color: #5e6278; margin-bottom: 20px; line-height: 1.4">
+          Ingresa el correo asociado a tu cuenta. Te enviaremos un código de seguridad de 6 dígitos.
+        </p>
+
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput type="email" [(ngModel)]="correoRecuperacion" placeholder="ejemplo@correo.com"
+            [disabled]="cargandoRecuperacion" (keyup.enter)="solicitarCodigo()" />
+        </mat-form-field>
+
+        <p class="status-msg" [ngClass]="{ 'msg-error': tipoMensaje === 'error', 'msg-info': tipoMensaje === 'info' }"
+          *ngIf="mensajeRecuperacion">
+          {{ mensajeRecuperacion }}
+        </p>
+
+        <div class="modal-actions">
+          <button mat-button (click)="cerrarModalRecuperacion()" [disabled]="cargandoRecuperacion">
+            Cancelar
+          </button>
+          <button mat-flat-button style="background-color: #c2185b; color: white" (click)="solicitarCodigo()"
+            [disabled]="cargandoRecuperacion">
+            {{ cargandoRecuperacion ? 'Enviando...' : 'Enviar Código' }}
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="pasoRecuperacion === 2">
+        <h3>Nueva Contraseña</h3>
+        <p style="font-size: 14px; color: #5e6278; margin-bottom: 20px; line-height: 1.4">
+          Ingresa el código que generamos para <strong>{{ correoRecuperacion }}</strong> y asigna tu
+          nueva clave.
+        </p>
+
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Código de 6 dígitos</mat-label>
+          <input matInput type="text" [(ngModel)]="codigoRecuperacion" maxlength="6" placeholder="000000"
+            [disabled]="cargandoRecuperacion" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" style="width: 100%">
+          <mat-label>Nueva Contraseña</mat-label>
+          <input matInput type="password" [(ngModel)]="nuevaContrasena" [disabled]="cargandoRecuperacion"
+            (keyup.enter)="cambiarContrasena()" />
+        </mat-form-field>
+
+        <p class="status-msg" [ngClass]="{ 'msg-error': tipoMensaje === 'error', 'msg-info': tipoMensaje === 'info' }"
+          *ngIf="mensajeRecuperacion">
+          {{ mensajeRecuperacion }}
+        </p>
+
+        <div class="modal-actions">
+          <button mat-button (click)="cerrarModalRecuperacion()" [disabled]="cargandoRecuperacion">
+            Cancelar
+          </button>
+          <button mat-flat-button style="background-color: #c2185b; color: white" (click)="cambiarContrasena()"
+            [disabled]="cargandoRecuperacion">
+            {{ cargandoRecuperacion ? 'Procesando...' : 'Cambiar Contraseña' }}
+          </button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
 </div>

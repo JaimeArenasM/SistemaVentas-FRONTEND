@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card';
@@ -21,7 +21,7 @@ import { ProductService } from '../../../../Core/Services/product.service';
   templateUrl: './catalogo-page.html',
   styleUrl: './catalogo-page.css',
 })
-export class CatalogoPage {
+export class CatalogoPage implements OnInit {
 
   productos: Product[] = [];
   categoriaSeleccionada = '';
@@ -57,8 +57,16 @@ export class CatalogoPage {
   private router = inject(Router);
 
   ngOnInit(): void {
-    this.productService.getProductos().subscribe(data => {
-      this.productos = data;
+    // Escuchamos la respuesta real del backend
+    this.productService.getProductos().subscribe({
+      next: (data: any) => {
+        // Si backend manda paginación (PageProductoResponse), los productos vienen en 'content'
+        // Si manda la lista directa, usamos 'data'
+        this.productos = data.content ? data.content : data;
+      },
+      error: (err) => {
+        console.error('Error al cargar el catálogo desde el servidor:', err);
+      }
     });
 
     setInterval(() => {
@@ -90,12 +98,11 @@ export class CatalogoPage {
   }
 
   obtenerPorCategoria(categoria: string): Product[] {
-    return this.productos.filter(producto => producto.category === categoria);
+    return this.productos.filter(producto => producto.nombreCategoria === categoria);
   }
 
   irCategoria(categoria: string): void {
     this.categoriaSeleccionada = categoria;
-
     this.router.navigate(
       ['/store/productos'],
       { queryParams: { categoria } }

@@ -1,18 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
-
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef
-} from '@angular/material/dialog';
-
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -39,24 +28,42 @@ export class UserFormDialog implements OnInit {
     public dialogRef: MatDialogRef<UserFormDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.dialogRef.updateSize('560px', 'auto');
-
+    // Inicializamos el formulario con la estructura base de datos
     this.userForm = this.fb.group({
-      iIdUsuario: [new Date().getTime()],
-      vUsuario: ['', [Validators.required, Validators.email]],
-      password: ['123456'],
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
-      dni: ['', [Validators.required, Validators.minLength(8)]],
-      telefono: ['', [Validators.required, Validators.minLength(9)]],
-      iIdTipoUsuario: [2, Validators.required]
+      dni: ['', [Validators.required, Validators.maxLength(8)]],
+      telefono: ['', Validators.maxLength(9)],
+      direccion: [''],
+      correo: ['', [Validators.required, Validators.email]],
+      password: ['']
     });
   }
 
-  ngOnInit(): void {
-    if (this.data) {
+  ngOnInit() {
+    // Si recibimos un idUsuario, significa que entramos en modo de modificación de datos
+    if (this.data && this.data.idUsuario) {
       this.esEdicion = true;
-      this.userForm.patchValue(this.data);
+
+      this.userForm.patchValue({
+        nombres: this.data.nombreCliente ? this.data.nombreCliente.split(' ')[0] : '',
+        apellidos: this.data.apellidos || '',
+        dni: this.data.dni || '',
+        telefono: this.data.telefono || '',
+        direccion: this.data.direccion || '',
+        correo: this.data.correo || ''
+      });
+
+      // El correo electrónico actúa como clave única natural; se deshabilita para evitar inconsistencias
+      this.userForm.get('correo')?.disable();
+
+      // Removemos las reglas de validación obligatoria del password en modo edición
+      this.userForm.get('password')?.clearValidators();
+      this.userForm.get('password')?.updateValueAndValidity();
+    } else {
+      // Si el flujo es de creación, la clave vuelve a ser mandatoria para la encriptación
+      this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
+      this.userForm.get('password')?.updateValueAndValidity();
     }
   }
 
@@ -66,10 +73,8 @@ export class UserFormDialog implements OnInit {
 
   onSave(): void {
     if (this.userForm.valid) {
-      this.dialogRef.close(this.userForm.value);
-      return;
+      // getRawValue() extrae tanto los controles activos como los deshabilitados (correo)
+      this.dialogRef.close(this.userForm.getRawValue());
     }
-
-    this.userForm.markAllAsTouched();
   }
 }

@@ -1,13 +1,13 @@
 <div class="product-grid">
   <mat-card class="product-card" *ngFor="let product of filteredProducts">
 
-    <img mat-card-image [src]="product.image">
+    <img mat-card-image [src]="product.imagenUrl || 'https://via.placeholder.com/150'">
 
-    <mat-card-title>{{ product.name }}</mat-card-title>
-    <mat-card-subtitle>{{ product.description }}</mat-card-subtitle>
+    <mat-card-title>{{ product.nombre }}</mat-card-title>
+    <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
 
     <mat-card-content>
-      <span class="price">S/ {{ product.price }}</span>
+      <span class="price">S/ {{ product.precio }}</span>
     </mat-card-content>
 
     <mat-card-actions align="end">

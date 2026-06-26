@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,31 +7,43 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ConfirmDialog } from '../../../../Shared/Components/confirm-dialog/confirm-dialog';
 import { MatCard } from "@angular/material/card";
 
+import { VentaService } from '../../../../Core/Services/venta.service';
+import { ISale } from '../../../../Core/Interfaces/ISale.interface';
+
 @Component({
   selector: 'app-gestion-ventas-page',
+  standalone: true,
   imports: [
     CommonModule,
     MatTableModule,
     MatButtonModule,
     MatIconModule,
     MatCard
-],
+  ],
   templateUrl: './gestion-ventas-page.html',
   styleUrl: './gestion-ventas-page.css',
 })
-export class GestionVentasPage {
+export class GestionVentasPage implements OnInit {
   private dialog = inject(MatDialog);
+  private ventaService = inject(VentaService); // Inyectamos tu servicio
 
-  dataSource = new MatTableDataSource<any>([]);
-  displayColumns: string[] = ['id', 'cliente', 'fecha', 'total', 'estado', 'acciones'];
+  dataSource = new MatTableDataSource<ISale>([]);
+  // Actualizamos las columnas a los nombres lógicos
+  displayColumns: string[] = ['idVenta', 'cliente', 'fechaVenta', 'total', 'estadoPago', 'acciones'];
 
   ngOnInit() {
     this.cargarDatos();
   }
 
   cargarDatos() {
-    const ventas = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
-    this.dataSource.data = ventas;
+    // Llamamos al endpoint del administrador para traer todas las ventas
+    this.ventaService.obtenerTodasLasVentas().subscribe({
+      next: (ventas: ISale[]) => {
+        // Ordenamos para que los pedidos más recientes salgan arriba
+        this.dataSource.data = ventas.sort((a, b) => b.idVenta - a.idVenta);
+      },
+      error: (err) => console.error('Error al cargar el registro de ventas:', err)
+    });
   }
 
   aplicarFiltro(event: Event) {
@@ -39,50 +51,48 @@ export class GestionVentasPage {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  completarVenta(venta: any) {
+  completarVenta(venta: ISale) {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
         title: 'Confirmar Pago',
-        message: `¿Deseas marcar el ticket #000-${venta.iIdVenta} como Pagado/Completado? El monto se sumará al Dashboard.`,
+        message: `¿Deseas marcar el ticket #000-${venta.idVenta} como PAGADO? El monto se sumará a los ingresos.`,
         confirmText: 'Confirmar'
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let db = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
-
-        const index = db.findIndex((v: any) => v.iIdVenta === venta.iIdVenta);
-        if (index !== -1) {
-          db[index].vEstado = 'Completado'; // Cambiamos a Completado
-          localStorage.setItem('donPepe_ventas_db', JSON.stringify(db));
-          this.cargarDatos();
-        }
+        // Llamamos al endpoint PUT para actualizar el estado
+        this.ventaService.cambiarEstadoVenta(venta.idVenta, 'PAGADO').subscribe({
+          next: () => {
+            alert('Venta marcada como completada/pagada.');
+            this.cargarDatos();
+          },
+          error: (err) => console.error('Error al actualizar venta:', err)
+        });
       }
     });
   }
 
-  anularVenta(venta: any) {
+  anularVenta(venta: ISale) {
     const dialogRef = this.dialog.open(ConfirmDialog, {
       data: {
         title: 'Anular Venta',
-        message: `¿Estas seguro de anular el ticket # 000-${venta.iIdVenta} de ${venta.vNombreCliente}? Esta accion descontara el monto del Dashboard.`,
+        message: `¿Estás seguro de anular el ticket #000-${venta.idVenta}? Esta acción cancelará el pedido.`,
         confirmText: 'Anular Venta'
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let db = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
-
-        const index = db.findIndex((v: any) => v.iIdVenta === venta.iIdVenta);
-        if (index !== -1) {
-          db[index].vEstado = 'Anulado';
-          localStorage.setItem('donPepe_ventas_db', JSON.stringify(db));
-          this.cargarDatos();
-        }
+        this.ventaService.cambiarEstadoVenta(venta.idVenta, 'ANULADO').subscribe({
+          next: () => {
+            alert('Venta anulada correctamente.');
+            this.cargarDatos();
+          },
+          error: (err) => console.error('Error al anular venta:', err)
+        });
       }
     });
-
   }
 }

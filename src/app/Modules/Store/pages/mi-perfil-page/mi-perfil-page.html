@@ -1,7 +1,7 @@
 <div class="profile-container">
   <div class="profile-header">
     <h2>Mi Cuenta</h2>
-    <p>Gestiona tu información personal y de seguridad</p>
+    <p>Gestiona tu información personal y de contacto</p>
   </div>
 
   <mat-card class="profile-card">
@@ -15,43 +15,82 @@
     <div class="card-body">
       <div class="form-grid">
 
-        <!-- Nombres -->
         <div class="form-group">
           <label>Nombres</label>
           <input type="text" [(ngModel)]="usuario.nombres" [disabled]="!modoEdicion" class="custom-input">
         </div>
 
-        <!-- Apellidos -->
         <div class="form-group">
           <label>Apellidos</label>
           <input type="text" [(ngModel)]="usuario.apellidos" [disabled]="!modoEdicion" class="custom-input">
         </div>
 
-        <!-- DNI -->
         <div class="form-group">
           <label>DNI</label>
           <input type="text" [(ngModel)]="usuario.dni" [disabled]="!modoEdicion" class="custom-input" maxlength="8">
         </div>
 
-        <!-- Correo (vUsuario) -->
         <div class="form-group">
-          <label>Correo Electrónico (Usuario)</label>
-          <input type="email" [(ngModel)]="usuario.vUsuario" [disabled]="!modoEdicion" class="custom-input">
+          <label>Teléfono</label>
+          <input type="text" [(ngModel)]="usuario.telefono" [disabled]="!modoEdicion" class="custom-input" maxlength="9">
         </div>
 
-        <!-- Contraseña -->
-        <div class="form-group">
-          <label>Contraseña</label>
-          <input type="password" [(ngModel)]="usuario.password" [disabled]="!modoEdicion" class="custom-input">
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Dirección de Envío</label>
+          <input type="text" [(ngModel)]="usuario.direccion" [disabled]="!modoEdicion" class="custom-input">
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1; padding-top: 15px; border-top: 1px solid #eee;">
+          <label style="color: #d32f2f; font-weight: bold;">Configuración de Seguridad</label>
+
+          <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px;">
+            <input type="email" [(ngModel)]="usuario.correo" [disabled]="true" class="custom-input" style="background-color: #f5f5f5; flex: 1; margin: 0;">
+
+            <button mat-stroked-button color="warn" (click)="solicitarCambioContrasena()" [disabled]="modoEdicion || cargandoContrasena">
+              {{ cargandoContrasena ? 'Procesando...' : 'Cambiar Contraseña' }}
+            </button>
+          </div>
+          <small style="color: #777; margin-top: 5px; display: block;">El correo electrónico es tu identificador único y no puede ser modificado.</small>
         </div>
 
       </div>
     </div>
 
-    <!-- Acciones (Solo se muestran en modo edición) -->
     <div class="card-actions" *ngIf="modoEdicion">
       <button mat-button (click)="cancelarEdicion()">Cancelar</button>
       <button mat-raised-button color="primary" (click)="guardarCambios()">Guardar Cambios</button>
     </div>
   </mat-card>
+</div>
+
+<div class="modal-overlay" *ngIf="mostrarModalClave">
+  <div class="modal-box">
+
+    <h3>Verificación de Seguridad</h3>
+    <p style="font-size: 14px; color: #5e6278; margin-bottom: 20px; line-height: 1.4;">
+      Hemos generado un código de 6 dígitos para <strong>{{ usuario.correo }}</strong>. Ingrésalo a continuación junto con tu nueva contraseña.
+    </p>
+
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Código de Autorización</mat-label>
+      <input matInput type="text" [(ngModel)]="codigoVerificacion" maxlength="6" placeholder="000000" [disabled]="cargandoContrasena">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Nueva Contraseña Segura</mat-label>
+      <input matInput type="password" [(ngModel)]="nuevaContrasena" [disabled]="cargandoContrasena" (keyup.enter)="cambiarClaveDefinitiva()">
+    </mat-form-field>
+
+    <p class="status-msg" [ngClass]="{'msg-error': tipoMensaje === 'error', 'msg-info': tipoMensaje === 'info'}" *ngIf="mensajeModal">
+      {{ mensajeModal }}
+    </p>
+
+    <div class="modal-actions">
+      <button mat-button (click)="cerrarModalClave()" [disabled]="cargandoContrasena">Cancelar</button>
+      <button mat-flat-button style="background-color: #c2185b; color: white;" (click)="cambiarClaveDefinitiva()" [disabled]="cargandoContrasena">
+        {{ cargandoContrasena ? 'Verificando...' : 'Confirmar Cambio' }}
+      </button>
+    </div>
+
+  </div>
 </div>

@@ -1,50 +1,35 @@
-import { Injectable } from "@angular/core";
-import { BehaviorSubject } from "rxjs";
-import { CartItem } from "../Interfaces/ICarrito.interface";
-import { Product } from "../Interfaces/IProduct.interface";
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
+@Injectable({ providedIn: 'root' })
+export class CarritoService {
+  private http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/carrito`;
 
-@Injectable({providedIn:'root'})
-export class CarritoService{
-
-private cartItems = new BehaviorSubject<CartItem[]>(this.loadCart());
-  public cartItems$ = this.cartItems.asObservable();
-
-  addToCart(product: Product) {
-    const currentItems = this.cartItems.value;
-    const existing = currentItems.find(item => item.product.id === product.id);
-
-    if (existing) {
-      existing.quantity += 1;
-    } else {
-      currentItems.push({ product, quantity: 1 });
-    }
-    this.updateCart(currentItems);
+  /** GET /api/carrito (Obtener los items actuales del usuario) */
+  obtenerCarrito(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
   }
 
-  removeFromCart(productId: number) {
-  const updatedItems = this.cartItems.value.filter(
-    item => item.product.id !== productId
-  );
-
-  this.updateCart([...updatedItems]);
-}
-
-  clearCart() {
-    this.updateCart([]);
+  /** POST /api/carrito/items (Agregar un producto al carrito) */
+  agregarItem(item: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/items`, item);
   }
 
-  getTotalPrice(): number {
-    return this.cartItems.value.reduce((total, item) => total + (item.product.price * item.quantity), 0);
+  /** PUT /api/carrito/items/{idProducto} (Modificar cantidad desde la tabla) */
+  actualizarCantidad(idProducto: number, cantidadDto: { cantidad: number }): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/items/${idProducto}`, cantidadDto);
   }
 
-  private updateCart(items: CartItem[]) {
-    this.cartItems.next(items);
-    localStorage.setItem('carrito', JSON.stringify(items));
+  /** DELETE /api/carrito/items/{idProducto} (Quitar un producto específico) */
+  eliminarItem(idProducto: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/items/${idProducto}`);
   }
 
-  private loadCart(): CartItem[] {
-    const saved = localStorage.getItem('carrito');
-    return saved ? JSON.parse(saved) : [];
+  /** DELETE /api/carrito/limpiar (Vaciar por completo) */
+  limpiarCarrito(): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/limpiar`);
   }
 }

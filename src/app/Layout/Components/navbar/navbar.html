@@ -1,152 +1,69 @@
 <div class="store-header">
+  <img src="assets/img/logotipotienda.png" class="logo-store" (click)="irInicio()" style="cursor: pointer;" />
 
-  <!-- LOGO -->
-  <img src="assets/img/logotipotienda.png" class="logo-store" (click)="irInicio()">
-
-  <!-- BOTÓN MENÚ CATEGORÍAS -->
-<button class="btn-categorias" (click)="abrirMenuCategorias()">
-  <span class="menu-icon">☰</span>
-  <span>Categorías</span>
-</button>
-
-<div
-  class="menu-overlay"
-  *ngIf="mostrarMenuCategorias"
-  (click)="cerrarMenuCategorias()">
-</div>
-
-<aside class="side-menu" *ngIf="mostrarMenuCategorias">
-
-  <h3>CATEGORÍAS</h3>
-
-  <button (click)="filterByCategory('Cereales')">
- <img src="assets/img/categorias/cereales.png" alt="Cereales">
-    <span>Cereales</span>
+  <button class="btn-categorias" (click)="abrirMenuCategorias()">
+    <span class="menu-icon">☰</span>
+    <span>Categorías</span>
   </button>
 
-  <button (click)="filterByCategory('Snacks')">
-   <img src="assets/img/categorias/Snacks.png" alt="Snacks">
-    <span>Snacks</span>
-  </button>
+  <div class="menu-overlay" *ngIf="mostrarMenuCategorias" (click)="cerrarMenuCategorias()"></div>
 
-  <button (click)="filterByCategory('Detergentes')">
-   <img src="assets/img/categorias/Detergentes.png" alt="Limpieza">
-    <span>Limpieza</span>
-  </button>
+  <aside class="side-menu" *ngIf="mostrarMenuCategorias">
+    <h3>CATEGORÍAS</h3>
+    <button (click)="filterByCategory('Cereales')"><img src="assets/img/categorias/cereales.png" alt="Cereales" /><span>Cereales</span></button>
+    <button (click)="filterByCategory('Snacks')"><img src="assets/img/categorias/Snacks.png" alt="Snacks" /><span>Snacks</span></button>
+    <button (click)="filterByCategory('Detergentes')"><img src="assets/img/categorias/Detergentes.png" alt="Limpieza" /><span>Limpieza</span></button>
+    <button (click)="filterByCategory('Bebidas')"><img src="assets/img/categorias/bebidas.jpg" alt="Bebidas" /><span>Bebidas</span></button>
+    <button (click)="filterByCategory('Lácteos')"><img src="assets/img/categorias/lacteos.png" alt="Lácteos" /><span>Lácteos</span></button>
+    <button (click)="filterByCategory('Frutas')"><img src="assets/img/categorias/frutas.png" alt="Frutas" /><span>Frutas</span></button>
+  </aside>
 
-  <button (click)="filterByCategory('Bebidas')">
-  <img src="assets/img/categorias/bebidas.jpg" alt="Bebidas">
-    <span>Bebidas</span>
-  </button>
-
-  <button (click)="filterByCategory('Lácteos')">
-  <img src="assets/img/categorias/lacteos.png" alt="Lácteos">
-    <span>Lácteos</span>
-  </button>
-
-  <button (click)="filterByCategory('Frutas')">
-  <img src="assets/img/categorias/frutas.png" alt="Frutas">
-    <span>Frutas</span>
-  </button>
-
-</aside>
-  <!-- TÍTULO -->
   <span class="header-title">Tienda de Don Pepe</span>
   <span class="spacer"></span>
 
   <div class="search-box">
+    <mat-icon>search</mat-icon>
+    <input type="text" placeholder="Buscar productos..." [(ngModel)]="textoBusqueda" (input)="filtrarSugerencias()" (keyup.enter)="buscarProducto()" />
+    <button (click)="buscarProducto()">Buscar</button>
 
-  <mat-icon>search</mat-icon>
-
-  <input
-    type="text"
-    placeholder="Buscar productos..."
-    [(ngModel)]="textoBusqueda"
-    (input)="filtrarSugerencias()"
-    (keyup.enter)="buscarProducto()"
-  />
-
-  <button (click)="buscarProducto()">Buscar</button>
-
-  <!-- SUGERENCIAS -->
-  <div class="search-results" *ngIf="sugerencias.length > 0">
-
-    <div
-      class="result-item"
-      *ngFor="let producto of sugerencias"
-      (click)="seleccionarProducto(producto)"
-    >
-
-      <img [src]="producto.image" alt="" />
-
-      <div class="info">
-        <strong>{{ producto.name }}</strong>
-        <small>{{ producto.category }}</small>
+    <div class="search-results" *ngIf="sugerencias.length > 0">
+      <div class="result-item" *ngFor="let producto of sugerencias" (click)="seleccionarProducto(producto)">
+        <img [src]="producto.imagenUrl || 'assets/img/placeholder.png'" alt="" />
+        <div class="info">
+          <strong>{{ producto.nombre }}</strong>
+          <small>{{ producto.nombreCategoria }}</small>
+        </div>
+        <span>S/. {{ producto.precio }}</span>
       </div>
-
-      <span>S/. {{ producto.price }}</span>
-
     </div>
-
   </div>
 
-</div>  
+  <button mat-icon-button color="accent" (click)="abrirCarrito()" [matBadge]="cartCount" [matBadgeHidden]="cartCount === 0" matBadgeColor="warn">
+    <mat-icon>shopping_cart</mat-icon>
+  </button>
 
-<!-- CARRITO -->
-<button mat-icon-button
-        color="accent"
-        (click)="abrirCarrito()"
-        [matBadge]="cartCount"
-        [matBadgeHidden]="cartCount === 0"
-        matBadgeColor="warn">
-
-  <mat-icon>shopping_cart</mat-icon>
-
-</button>
-
-  <!-- PERFIL -->
-  <button mat-icon-button color="accent"
-          [matMenuTriggerFor]="profileMenu"
-          style="margin-left:10px">
+  <button mat-icon-button color="accent" [matMenuTriggerFor]="profileMenu" style="margin-left: 10px">
     <mat-icon>person</mat-icon>
   </button>
 
-  <!-- MENÚ DINÁMICO DE PERFIL -->
   <mat-menu #profileMenu="matMenu">
-
-    <!-- SI EL USUARIO ESTÁ LOGUEADO -->
     <ng-container *ngIf="session">
       <div style="padding: 10px 16px; font-weight: bold; color: #000000; border-bottom: 1px solid #eee; margin-bottom: 5px;">
-        Hola, {{ session.user.nombres }}
+        Hola, {{ session.correo || 'Usuario' }}
       </div>
 
-      <button mat-menu-item (click)="irPerfil()">
-        <mat-icon>account_circle</mat-icon> Mi Perfil
-      </button>
-
-      <button mat-menu-item (click)="irMisCompras()">
-        <mat-icon>shopping_bag</mat-icon> Mis Compras
-      </button>
-
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>logout</mat-icon> Cerrar Sesión
-      </button>
+      <button mat-menu-item (click)="irPerfil()"><mat-icon>account_circle</mat-icon> Mi Perfil</button>
+      <button mat-menu-item (click)="irMisCompras()"><mat-icon>shopping_bag</mat-icon> Mis Compras</button>
+      <button mat-menu-item (click)="logout()"><mat-icon color="warn">logout</mat-icon> Cerrar Sesión</button>
     </ng-container>
 
-    <!-- SI NO HAY NADIE LOGUEADO -->
     <ng-container *ngIf="!session">
-      <button mat-menu-item (click)="irLogin()">
-        <mat-icon>login</mat-icon> Iniciar Sesión
-      </button>
-      <button mat-menu-item (click)="irRegistro()">
-        <mat-icon>person_add</mat-icon> Registrarse
-      </button>
+      <button mat-menu-item (click)="irLogin()"><mat-icon>login</mat-icon> Iniciar Sesión</button>
+      <button mat-menu-item (click)="irRegistro()"><mat-icon>person_add</mat-icon> Registrarse</button>
     </ng-container>
-
   </mat-menu>
 </div>
 
-<!-- MODAL DEL CARRITO -->
 <div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
 
 <div class="cart-modal" *ngIf="mostrarCarrito">
@@ -158,19 +75,14 @@
 
   <div *ngFor="let item of cartItems" class="cart-item">
     <span>
-      {{ item.product.name }} <br />
-      {{ item.quantity }} x S/. {{ item.product.price }}
+      {{ item.producto?.nombre || item.nombre }} <br />
+      {{ item.cantidad }} x S/. {{ item.precioUnitario || item.producto?.precio || 0 }}
     </span>
-    <button class="btn-remove" (click)="remove(item.product.id)">✖</button>
+    <button class="btn-remove" (click)="remove(item.idItemCarrito || item.producto?.idProducto)">✖</button>
   </div>
 
-  <p class="cart-total" *ngIf="cartItems.length > 0">
-  Total: S/. {{ total.toFixed(2) }}
-</p>
-  <button 
-  class="btn-ir-carrito" 
-  *ngIf="cartItems.length > 0"
-  (click)="irAlCarrito()">
-  IR AL CARRITO
-</button>
+  <p class="cart-total" *ngIf="cartItems.length > 0">Total: S/. {{ total | number:'1.2-2' }}</p>
+  <button class="btn-ir-carrito" *ngIf="cartItems.length > 0" (click)="irAlCarrito()">
+    IR AL CARRITO
+  </button>
 </div>

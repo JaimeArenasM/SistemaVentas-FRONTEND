@@ -1,32 +1,43 @@
 <h2 mat-dialog-title class="titulo-dialog">
-  {{ product.id === 0 ? 'Nuevo Producto' : 'Editar Producto' }}
+  {{ product.idProducto === 0 ? 'Nuevo Producto' : 'Editar Producto' }}
 </h2>
 
 <div mat-dialog-content class="contenido-dialog">
 
-  <mat-form-field appearance="fill" class="campo">
+  <mat-form-field appearance="outline" class="campo">
     <mat-label>Nombre del producto</mat-label>
-    <input matInput [(ngModel)]="product.name">
+    <input matInput [(ngModel)]="product.nombre" placeholder="Ej. Avena Integral">
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="campo">
-    <mat-label>Precio</mat-label>
-    <input matInput [(ngModel)]="product.price" type="number">
-  </mat-form-field>
+  <div style="display: flex; gap: 16px;">
+    <mat-form-field appearance="outline" class="campo" style="flex: 1;">
+      <mat-label>Precio (S/)</mat-label>
+      <input matInput [(ngModel)]="product.precio" type="number" step="0.10" min="0">
+    </mat-form-field>
 
-  <mat-form-field appearance="fill" class="campo">
-    <mat-label>URL de imagen</mat-label>
-    <input matInput [(ngModel)]="product.image">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="campo" style="flex: 1;">
+      <mat-label>Stock inicial</mat-label>
+      <input matInput [(ngModel)]="product.stock" type="number" min="0">
+    </mat-form-field>
+  </div>
 
-  <mat-form-field appearance="fill" class="campo">
-    <mat-label>Descripción</mat-label>
-    <textarea matInput rows="3" [(ngModel)]="product.description"></textarea>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="campo">
+  <mat-form-field appearance="outline" class="campo">
     <mat-label>Categoría</mat-label>
-    <input matInput [(ngModel)]="product.category">
+    <mat-select [(ngModel)]="product.idCategoria">
+      <mat-option *ngFor="let cat of categorias" [value]="cat.id">
+        {{ cat.nombre }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>URL de imagen</mat-label>
+    <input matInput [(ngModel)]="product.imagenUrl" placeholder="https://ejemplo.com/imagen.jpg">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="campo">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput rows="3" [(ngModel)]="product.descripcion"></textarea>
   </mat-form-field>
 
 </div>
@@ -36,7 +47,7 @@
     Cancelar
   </button>
 
-  <button mat-raised-button class="btn-guardar" (click)="onSave()">
+  <button mat-raised-button color="primary" class="btn-guardar" (click)="onSave()">
     Guardar
   </button>
 </div>

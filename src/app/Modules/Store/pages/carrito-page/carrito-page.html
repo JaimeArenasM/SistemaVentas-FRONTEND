@@ -11,11 +11,7 @@
     <mat-icon>shopping_cart</mat-icon>
     <p>El carrito está vacío</p>
 
-    <button 
-      mat-raised-button 
-      color="primary"
-      [routerLink]="['/store/productos']"
-      [queryParams]="{ categoria: 'Todos' }">
+    <button mat-raised-button color="primary" [routerLink]="['/store/productos']" [queryParams]="{ categoria: 'Todos' }">
       Ir a la tienda
     </button>
   </div>
@@ -25,20 +21,22 @@
     <div class="cart-items-list">
       <div *ngFor="let item of cartItems" class="cart-item">
 
-        <img [src]="item.product.image" [alt]="item.product.name" class="item-image">
+        <img [src]="item.imagenUrl || 'https://via.placeholder.com/150?text=Sin+Imagen'"
+             [alt]="item.nombreProducto"
+             class="item-image">
 
         <div class="item-details">
-          <h3>{{ item.product.name }}</h3>
-          <p class="item-price">S/ {{ item.product.price }}</p>
-          <p class="item-quantity">Cantidad: {{ item.quantity }}</p>
+          <h3>{{ item.nombreProducto }}</h3>
+          <p class="item-price">S/ {{ item.precioUnitario }}</p>
+          <p class="item-quantity">Cantidad: {{ item.cantidad }}</p>
         </div>
 
         <div class="item-actions">
           <span class="item-subtotal">
-            S/ {{ item.product.price * item.quantity }}
+            S/ {{ item.subtotal }}
           </span>
 
-          <button mat-icon-button color="warn" (click)="remove(item.product.id)">
+          <button mat-icon-button color="warn" (click)="remove(item.idProducto)">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -47,7 +45,7 @@
     </div>
 
     <div class="cart-summary">
-      <h2>Total: S/ {{ total }}</h2>
+      <h2>Total: S/ {{ totalCarrito }}</h2>
 
       <button mat-raised-button color="primary" class="btn-pagar" (click)="irAPagar()">
         <mat-icon>payment</mat-icon> Pagar

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -26,7 +26,7 @@ import { ProductService } from '../../../Core/Services/product.service';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class Navbar {
+export class Navbar implements OnInit {
 
   productos: any[] = [];
   sugerencias: any[] = [];
@@ -43,59 +43,45 @@ export class Navbar {
   private authService = inject(AuthService);
   private cartService = inject(CarritoService);
   private productService = inject(ProductService);
-  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
-    this.cartService.cartItems$.subscribe(items => {
-      this.cartItems = [...items];
-
-      this.cartCount = items.reduce(
-        (total, item) => total + item.quantity,
-        0
-      );
-
-      this.total = Math.round(
-        items.reduce(
-          (sum, item) => sum + Number(item.product.price) * item.quantity,
-          0
-        ) * 100
-      ) / 100;
-
-      this.cdr.detectChanges();
+    // Solo cargamos la lista de productos para el buscador
+    this.productService.getProductos().subscribe((data: any) => {
+      this.productos = data.content ? data.content : data;
     });
 
-    this.productService.getProductos().subscribe(data => {
-      this.productos = data;
+    // Validamos si hay sesión para cargar el conteo inicial del carrito
+    if (this.session) {
+      this.cargarCarritoEnVivo();
+    }
+  }
+
+  // MÉTODO NUEVO: Consulta a PostgreSQL el estado del carrito
+  cargarCarritoEnVivo() {
+    this.cartService.obtenerCarrito().subscribe({
+      next: (carritoBackend) => {
+        if (carritoBackend && carritoBackend.items) {
+          this.cartItems = carritoBackend.items;
+          this.cartCount = this.cartItems.reduce((total, item) => total + item.cantidad, 0);
+          this.total = carritoBackend.total || 0;
+        } else {
+          this.cartItems = [];
+          this.cartCount = 0;
+          this.total = 0;
+        }
+      },
+      error: () => console.error("Error cargando carrito en Navbar")
     });
   }
 
-  irInicio(): void {
-    this.router.navigate(['/store/catalogo']);
-  }
+  irInicio(): void { this.router.navigate(['/store/catalogo']); }
+  irPerfil(): void { this.router.navigate(['/store/perfil']); }
+  irMisCompras(): void { this.router.navigate(['/store/mis-compras']); }
+  irLogin(): void { this.router.navigate(['/auth/login']); }
+  irRegistro(): void { this.router.navigate(['/auth/register']); }
 
-  irPerfil(): void {
-    this.router.navigate(['/store/perfil']);
-  }
-
-  irMisCompras(): void {
-    this.router.navigate(['/store/mis-compras']);
-  }
-
-  irLogin(): void {
-    this.router.navigate(['/auth/login']);
-  }
-
-  irRegistro(): void {
-    this.router.navigate(['/auth/register']);
-  }
-
-  abrirMenuCategorias(): void {
-    this.mostrarMenuCategorias = true;
-  }
-
-  cerrarMenuCategorias(): void {
-    this.mostrarMenuCategorias = false;
-  }
+  abrirMenuCategorias(): void { this.mostrarMenuCategorias = true; }
+  cerrarMenuCategorias(): void { this.mostrarMenuCategorias = false; }
 
   filterByCategory(categoria: string): void {
     this.router.navigate(['/store/productos'], { queryParams: { categoria } });
@@ -104,25 +90,27 @@ export class Navbar {
 
   buscarProducto(): void {
     if (this.textoBusqueda.trim()) {
-      this.router.navigate(['/store/productos'], {
-        queryParams: { search: this.textoBusqueda }
-      });
-
+      this.router.navigate(['/store/productos'], { queryParams: { search: this.textoBusqueda } });
       this.textoBusqueda = '';
       this.sugerencias = [];
     }
   }
 
   abrirCarrito(): void {
+    if (this.session) {
+      this.cargarCarritoEnVivo(); // Refrescamos los datos al abrir el mini-panel
+    }
     this.mostrarCarrito = true;
   }
 
-  cerrarCarrito(): void {
-    this.mostrarCarrito = false;
-  }
+  cerrarCarrito(): void { this.mostrarCarrito = false; }
 
-  remove(id: number): void {
-    this.cartService.removeFromCart(id);
+  remove(idItem: number): void {
+    this.cartService.eliminarItem(idItem).subscribe({
+      next: () => {
+        this.cargarCarritoEnVivo(); // Recargamos para reflejar que se borró
+      }
+    });
   }
 
   irAlCarrito(): void {
@@ -136,8 +124,11 @@ export class Navbar {
 
   logout(): void {
     this.authService.logout();
+    this.cartCount = 0; // Reseteamos contador visual
+    this.cartItems = [];
   }
 
+  // Corregido: Usamos p.nombre en vez de p.name
   filtrarSugerencias(): void {
     const texto = this.textoBusqueda.toLowerCase().trim();
 
@@ -147,16 +138,17 @@ export class Navbar {
     }
 
     this.sugerencias = this.productos
-      .filter(p => p.name.toLowerCase().includes(texto))
+      .filter(p => p.nombre.toLowerCase().includes(texto))
       .slice(0, 5);
   }
 
+  // Corregido: Usamos producto.nombre
   seleccionarProducto(producto: any): void {
-    this.textoBusqueda = producto.name;
+    this.textoBusqueda = producto.nombre;
     this.sugerencias = [];
 
     this.router.navigate(['/store/productos'], {
-      queryParams: { search: producto.name }
+      queryParams: { search: producto.nombre }
     });
   }
 }

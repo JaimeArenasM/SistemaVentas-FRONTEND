@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,8 @@ import { FormsModule } from '@angular/forms';
 
 import { PagoTarjetaComponent } from '../pago-tarjeta-page/pago-tarjeta';
 import { CarritoService } from '../../../../Core/Services/carrito.service';
-import { AuthService } from '../../../../Core/Services/auth.service';
+import { VentaService } from '../../../../Core/Services/venta.service'; // NUEVO SERVICIO
+import { CartItem, ICarrito } from '../../../../Core/Interfaces/ICarrito.interface';
 
 @Component({
   selector: 'app-checkout',
@@ -27,23 +28,27 @@ import { AuthService } from '../../../../Core/Services/auth.service';
   templateUrl: './checkout-page.html',
   styleUrls: ['./checkout-page.css']
 })
-export class CheckoutPage {
+export class CheckoutPage implements OnInit {
 
- cartItems: any[] = [];
+  cartItems: CartItem[] = [];
+  totalCarrito: number = 0;
   metodoPago: string = '';
 
   private router = inject(Router);
   private cartService = inject(CarritoService);
-  private authService = inject(AuthService);
+  private ventaService = inject(VentaService);
 
   ngOnInit(): void {
-    this.cartService.cartItems$.subscribe(items => {
-      this.cartItems = items;
+    // Obtenemos el carrito real desde el servidor para mostrar el resumen
+    this.cartService.obtenerCarrito().subscribe({
+      next: (res: ICarrito) => {
+        if (res && res.items) {
+          this.cartItems = res.items;
+          this.totalCarrito = res.totalCarrito;
+        }
+      },
+      error: (err) => console.error('Error al cargar el resumen del carrito:', err)
     });
-  }
-
-  get total(): number {
-    return this.cartService.getTotalPrice();
   }
 
   volverAlCarrito(): void {
@@ -51,41 +56,32 @@ export class CheckoutPage {
   }
 
   private procesarVenta(): void {
-    const session = this.authService.getSession();
-
-    // 1. Validamos que el usuario esté logueado
-    if (!session) {
-      alert('Error: Debes iniciar sesión para finalizar tu compra.');
-      this.router.navigate(['/auth/login']);
-      return;
-    }
-
     if (this.cartItems.length === 0) {
       alert('Tu carrito está vacío.');
       return;
     }
 
-    // 2. Armamos el ticket
-    const nuevaVenta = {
-      iIdVenta: Math.floor(Math.random() * 8000) + 1000,
-      iIdCliente: session.user.iIdUsuario,
-      vNombreCliente: session.user.nombres + ' ' + (session.user.apellidos || ''),
-      dTotal: this.total,
-      vFechaEmision: new Date().toISOString().split('T')[0],
-      vEstado: 'Pendiente', // Pendiente para que el admin lo confirme
-      aDetalle: this.cartItems
+    // Armamos el JSON exactamente como lo exige CrearVentaRequest en Swagger
+    const requestVenta = {
+      metodoPago: this.metodoPago.toUpperCase(), // Ej: "TARJETA", "YAPE"
+      detalles: this.cartItems.map(item => ({
+        idProducto: item.idProducto,
+        cantidad: item.cantidad
+      }))
     };
 
-    // 3. Guardamos en el LocalStorage
-    let ventasDB = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
-    ventasDB.push(nuevaVenta);
-    localStorage.setItem('donPepe_ventas_db', JSON.stringify(ventasDB));
-
-    // 4. Limpiamos y redirigimos a Mis Compras
-    this.cartService.clearCart();
-    alert('¡Pago registrado con éxito! Tu pedido está en camino.');
-
-    this.router.navigate(['/store/mis-compras']);
+    // Enviamos la petición a Render
+    this.ventaService.procesarCheckout(requestVenta).subscribe({
+      next: () => {
+        alert('¡Pago registrado con éxito! Tu pedido está en camino.');
+        // Tu backend debería limpiar el carrito automáticamente al procesar la venta.
+        this.router.navigate(['/store/mis-compras']);
+      },
+      error: (err) => {
+        console.error('Error al procesar el pago:', err);
+        alert('Hubo un problema al procesar tu pago. Revisa los datos e intenta de nuevo.');
+      }
+    });
   }
 
   // --- BOTONES DEL HTML ---

@@ -5,17 +5,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatCardModule } from "@angular/material/card";
-
-import { ProductConfirmDialog } from '../../../../Shared/Components/product-confirm-dialog/product-confirm-dialog';
-import { ProductFormDialog } from '../../../../Shared/Components/product-form-dialog/product-form-dialog';
 import { FormsModule } from '@angular/forms';
-
-// IMPORTAMOS SELECT Y FORM FIELD PARA EL FILTRO
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
+import { ProductConfirmDialog } from '../../../../Shared/Components/product-confirm-dialog/product-confirm-dialog';
+import { ProductFormDialog } from '../../../../Shared/Components/product-form-dialog/product-form-dialog';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
+import { ProductService } from '../../../../Core/Services/product.service'; // Inyectamos el servicio real
 
 @Component({
   selector: 'app-gestion-productos-page',
@@ -37,67 +35,80 @@ import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 export class GestionProductosPage implements OnInit {
 
   private dialog = inject(MatDialog);
+  private productService = inject(ProductService);
 
   dataSource = new MatTableDataSource<Product>([]);
-  displayedColumns: string[] = ['id', 'name', 'price', 'image', 'description', 'category', 'acciones'];
+
+  // Actualizamos a las columnas útiles usando los nombres en español
+  displayedColumns: string[] = ['idProducto', 'imagen', 'nombre', 'categoria', 'precio', 'stock', 'acciones'];
+
   categoriaSeleccionada: string = 'Todos';
   textoBusqueda: string = '';
 
-  // Lista de categorías de tu tienda
   categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Lácteos', 'Frutas'];
 
   ngOnInit() {
-    this.cargarDatos();
-
-    this.dataSource.filterPredicate = (data: Product, filter: string) => {
+    // Configuramos el filtro para leer las nuevas variables: nombre y nombreCategoria
+    this.dataSource.filterPredicate = (data: Product, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
-      const coincideTexto = data.name.toLowerCase().includes(searchTerms.texto) ||
-                            data.description.toLowerCase().includes(searchTerms.texto);
+      const coincideTexto = data.nombre.toLowerCase().includes(searchTerms.texto) ||
+                            (data.descripcion ? data.descripcion.toLowerCase().includes(searchTerms.texto) : false);
 
-      const coincideCategoria = searchTerms.categoria === 'Todos' || data.category === searchTerms.categoria;
+      const coincideCategoria = searchTerms.categoria === 'Todos' || data.nombreCategoria === searchTerms.categoria;
 
       return coincideTexto && coincideCategoria;
     };
+
     this.cargarDatos();
   }
 
   cargarDatos() {
-    const productos = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
-    this.dataSource.data = productos;
-    this.aplicarFiltroCompuesto();
+    this.productService.getProductos().subscribe({
+      next: (data: any) => {
+        // Soporte por si tu backend manda el paginador o la lista directa
+        this.dataSource.data = data.content ? data.content : data;
+        this.aplicarFiltroCompuesto();
+      },
+      error: (err) => console.error('Error al cargar productos:', err)
+    });
   }
 
-  // MÉTODO PARA FILTRAR
   aplicarFiltroCompuesto() {
     const filtros = {
       texto: this.textoBusqueda.trim().toLowerCase(),
       categoria: this.categoriaSeleccionada
     };
-
     this.dataSource.filter = JSON.stringify(filtros);
   }
 
   abrirModalProducto(producto?: Product) {
     const dialogRef = this.dialog.open(ProductFormDialog, {
-      width: '500px',
+      width: '600px',
       data: producto ? { ...producto } : null
     });
 
     dialogRef.afterClosed().subscribe(resultado => {
-    if (resultado) {
-      let db = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
-
-      if (producto) {
-        const index = db.findIndex((p: Product) => p.id === producto.id);
-        if (index !== -1) db[index] = resultado;
-      } else {
-        resultado.id = db.length > 0 ? Math.max(...db.map((p:any) => p.id)) + 1 : 1;
-        db.push(resultado);
+      if (resultado) {
+        if (producto) {
+          // Si estamos editando
+          this.productService.actualizarProducto(producto.idProducto, resultado).subscribe({
+            next: () => {
+              alert('Producto actualizado con éxito');
+              this.cargarDatos();
+            },
+            error: (err) => console.error('Error al actualizar:', err)
+          });
+        } else {
+          // Si estamos creando uno nuevo
+          this.productService.saveProducts(resultado).subscribe({
+            next: () => {
+              alert('Nuevo producto agregado a la tienda');
+              this.cargarDatos();
+            },
+            error: (err) => console.error('Error al crear:', err)
+          });
+        }
       }
-
-      localStorage.setItem('donPepe_products', JSON.stringify(db));
-      this.cargarDatos();
-    }
     });
   }
 
@@ -105,17 +116,19 @@ export class GestionProductosPage implements OnInit {
     const dialogRef = this.dialog.open(ProductConfirmDialog, {
       data: {
         title: 'Confirmar Eliminación',
-        message: `¿Desea eliminar el producto ${producto.name}?`,
+        message: `¿Desea eliminar definitivamente el producto "${producto.nombre}" del catálogo?`,
         confirmText: 'Eliminar'
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        let db = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
-        db = db.filter((p: Product) => p.id !== producto.id);
-        localStorage.setItem('donPepe_products', JSON.stringify(db));
-        this.cargarDatos();
+        this.productService.eliminarProducto(producto.idProducto).subscribe({
+          next: () => {
+            this.cargarDatos();
+          },
+          error: (err) => console.error('Error al eliminar:', err)
+        });
       }
     });
   }

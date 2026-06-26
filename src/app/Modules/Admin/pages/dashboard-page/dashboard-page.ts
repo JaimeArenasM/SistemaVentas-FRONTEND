@@ -1,10 +1,15 @@
 import { DecimalPipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core'; // <-- Importamos ChangeDetectorRef
 import { Router } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+
+// Importamos los servicios reales
+import { ProductService } from '../../../../Core/Services/product.service';
+import { UsuarioService } from '../../../../Core/Services/usuario.service';
+import { VentaService } from '../../../../Core/Services/venta.service';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -24,23 +29,44 @@ export class DashboardPage implements OnInit {
   totalClientes: number = 0;
   ingresosMensuales: number = 0;
 
-  constructor(private router: Router) {}
+  private router = inject(Router);
+  private productService = inject(ProductService);
+  private usuarioService = inject(UsuarioService);
+  private ventaService = inject(VentaService);
+  private cdr = inject(ChangeDetectorRef); // <-- Inyectamos el salvavidas
 
   ngOnInit() {
     this.calcularEstadisticas();
   }
 
   calcularEstadisticas() {
-    const productos = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
-    this.totalProductos = productos.length;
+    // 1. Obtener total de productos (A prueba de paginación)
+    this.productService.getProductos().subscribe({
+      next: (data: any) => {
+        const productos = Array.isArray(data) ? data : (data.content || data.data || []);
+        this.totalProductos = productos.length;
 
-    const usuarios = JSON.parse(localStorage.getItem('donPepe_users_db') || '[]');
-    this.totalClientes = usuarios.filter((u: any) => u.iIdTipoUsuario === 2).length;
+        this.cdr.detectChanges(); // <-- OBLIGAMOS A PINTAR EL NÚMERO DE PRODUCTOS
+      },
+      error: (err) => console.error('Error al cargar productos:', err)
+    });
 
-    const ventas = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
-    this.ingresosMensuales = ventas
-      .filter((v: any) => v.vEstado === 'Completado')
-      .reduce((acum: number, ventaActual: any) => acum + ventaActual.dTotal, 0);
+    // 2. Obtener total de clientes
+    this.usuarioService.obtenerTodosLosUsuarios().subscribe({
+      next: (res: any) => {
+        const usuarios = Array.isArray(res) ? res : (res.content || res.data || []);
+
+        console.log("Usuarios recibidos para contar:", usuarios);
+
+        this.totalClientes = usuarios.filter((u: any) => {
+          const rol = String(u.tipoUsuario || '').toUpperCase();
+          return rol !== 'ADMIN';
+        }).length;
+
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => console.error('Error al cargar usuarios:', err)
+    });
   }
 
   irVentas() {
@@ -54,5 +80,4 @@ export class DashboardPage implements OnInit {
   irClientes() {
     this.router.navigate(['/admin/clientes']);
   }
-
 }

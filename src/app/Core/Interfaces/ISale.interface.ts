@@ -1,11 +1,16 @@
+export interface DetalleVenta {
+  nombreProducto: string;
+  cantidad: number;
+  precioUnitario: number;
+  subtotal: number;
+}
 
-
-export interface ISale{
-  iIdVenta: number;
-  iIdCliente: number;
-  vNombreCliente: string;
-  dTotal: number;
-  vFechaEmision: string;
-  vEstado: 'Pendiente' |'Completado'|'Anulado',
-  aDetalle:any[]
+export interface ISale {
+  idVenta: number;
+  nombreCliente: string;
+  fechaVenta: string;
+  total: number;
+  metodoPago: string;
+  estadoPago: string;
+  detalles: DetalleVenta[];
 }

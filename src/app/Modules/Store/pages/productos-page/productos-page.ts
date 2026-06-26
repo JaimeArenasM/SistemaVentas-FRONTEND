@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,8 +9,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
 import { CarritoService } from '../../../../Core/Services/carrito.service';
-import { AuthService } from '../../../../Core/Services/auth.service';
-
 import { ProductDetailModalComponent } from '../../product-detail-modal/product-detail-modal';
 
 @Component({
@@ -26,7 +24,7 @@ import { ProductDetailModalComponent } from '../../product-detail-modal/product-
   templateUrl: './productos-page.html',
   styleUrl: './productos-page.css',
 })
-export class ProductosPage {
+export class ProductosPage implements OnInit {
 
   product: Product[] = [];
   filteredProducts: Product[] = [];
@@ -35,12 +33,12 @@ export class ProductosPage {
   private cartService = inject(CarritoService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private authService = inject(AuthService);
   private dialog = inject(MatDialog);
 
   ngOnInit(): void {
-    this.productService.getProductos().subscribe((data) => {
-      this.product = data;
+    // Escuchamos la data del backend y validamos si viene paginada
+    this.productService.getProductos().subscribe((data: any) => {
+      this.product = data.content ? data.content : data;
       this.aplicarFiltros();
     });
 
@@ -58,7 +56,8 @@ export class ProductosPage {
 
     if (category && category !== 'Todos') {
       productosFiltrados = productosFiltrados.filter(
-        (p) => p.category === category
+        // Actualizado al nuevo nombre de la interfaz
+        (p) => p.nombreCategoria === category
       );
     }
 
@@ -74,11 +73,12 @@ export class ProductosPage {
         .split(' ')
         .filter((p: string) => p !== '');
 
-      productosFiltrados = productosFiltrados.filter((product) => {
+      productosFiltrados = productosFiltrados.filter((prod) => {
+        // Actualizado a las nuevas propiedades
         const textoProducto = normalizarTexto(`
-          ${product.name}
-          ${product.description}
-          ${product.category}
+          ${prod.nombre}
+          ${prod.descripcion}
+          ${prod.nombreCategoria}
         `);
 
         return palabras.every((palabra: string) =>
@@ -90,11 +90,11 @@ export class ProductosPage {
     this.filteredProducts = productosFiltrados;
   }
 
-  abrirModal(product: Product): void {
+  abrirModal(prod: Product): void {
     const dialogRef = this.dialog.open(ProductDetailModalComponent, {
       width: '900px',
       maxWidth: '95vw',
-      data: product
+      data: prod
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -104,19 +104,21 @@ export class ProductosPage {
     });
   }
 
-  addToCart(product: Product, cantidad: number = 1): void {
-    const session = this.authService.getSession();
+  addToCart(prod: Product, cantidad: number = 1): void {
+    // Armamos el request exacto que espera tu Swagger (CarritoRequest)
+    const itemRequest = {
+      idProducto: prod.idProducto,
+      cantidad: cantidad
+    };
 
-    if (!session) {
-      alert('¡Debes iniciar sesión para agregar productos al carrito!');
-      this.router.navigate(['/auth/login']);
-      return;
-    }
-
-    for (let i = 0; i < cantidad; i++) {
-      this.cartService.addToCart(product);
-    }
-
-    alert(`${cantidad} ${product.name} agregado(s) al carrito 🛒`);
+    // Disparamos la petición HTTP real para persistir el carrito
+    this.cartService.agregarItem(itemRequest).subscribe({
+      next: () => {
+        alert(`${cantidad} ${prod.nombre} agregado(s) al carrito 🛒`);
+      },
+      error: (err) => {
+        console.error('Error al agregar producto:', err);
+      }
+    });
   }
 }

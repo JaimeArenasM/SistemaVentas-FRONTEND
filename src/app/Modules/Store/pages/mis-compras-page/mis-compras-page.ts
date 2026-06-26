@@ -2,17 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-// Angular Material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthService } from '../../../../Core/Services/auth.service';
+import { VentaService } from '../../../../Core/Services/venta.service';
+import { ISale } from '../../../../Core/Interfaces/ISale.interface';
 
 @Component({
   selector: 'app-mis-compras',
   standalone: true,
-
-  // Importamos módulos necesarios
   imports: [
     CommonModule,
     MatCardModule,
@@ -20,46 +18,29 @@ import { AuthService } from '../../../../Core/Services/auth.service';
     MatIconModule,
     RouterModule
   ],
-
   templateUrl: './mis-compras-page.html',
   styleUrls: ['./mis-compras-page.css']
 })
 export class MisComprasPage implements OnInit {
 
-private authService = inject(AuthService);
-
-  misHistorial: any[] = [];
+  private ventaService = inject(VentaService);
+  misHistorial: ISale[] = [];
 
   ngOnInit() {
     this.cargarMisCompras();
   }
 
   cargarMisCompras() {
-    const session = this.authService.getSession();
-    if (!session) {
-      console.log('🔴 No hay sesión activa.');
-      return;
-    }
-
-    const todasLasVentas = JSON.parse(localStorage.getItem('donPepe_ventas_db') || '[]');
-
-    // --- MODO DETECTIVE ACTIVADO ---
-    console.log('=== DEBUG: MIS COMPRAS ===');
-    console.log('1. Mi ID de usuario actual es:', session.user.iIdUsuario);
-    console.log('2. Total de ventas en la base de datos:', todasLasVentas.length);
-
-    this.misHistorial = todasLasVentas.filter((venta: any) => {
-      const idTicket = Number(venta.iIdCliente);
-      const miId = Number(session.user.iIdUsuario);
-
-      console.log(`-> Revisando Ticket #${venta.iIdVenta} | iIdCliente del ticket: ${idTicket} | ¿Coincide?: ${idTicket === miId}`);
-
-      return idTicket === miId;
+    // Ya no necesitamos sacar el ID del usuario ni filtrar a mano.
+    // El Token viaja solo y el backend nos da solo nuestras compras.
+    this.ventaService.obtenerMisCompras().subscribe({
+      next: (ventas: ISale[]) => {
+        // Ordenamos para que la compra más reciente (ID más alto) salga primero
+        this.misHistorial = ventas.sort((a, b) => b.idVenta - a.idVenta);
+      },
+      error: (err) => {
+        console.error('Error al cargar el historial de compras:', err);
+      }
     });
-
-    console.log('3. Ventas finales encontradas para mí:', this.misHistorial.length);
-    // ---------------------------------
-
-    this.misHistorial.sort((a, b) => b.iIdVenta - a.iIdVenta);
   }
 }

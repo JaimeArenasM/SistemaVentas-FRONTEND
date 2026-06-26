@@ -1,9 +1,7 @@
 <div class="dialog-header">
   <div>
     <span class="dialog-eyebrow">Cliente</span>
-    <h2 mat-dialog-title>
-      {{ esEdicion ? 'Editar usuario' : 'Nuevo usuario' }}
-    </h2>
+    <h2 mat-dialog-title>{{ esEdicion ? 'Editar usuario' : 'Nuevo usuario' }}</h2>
   </div>
 
   <button mat-icon-button (click)="onCancel()" class="close-btn">
@@ -29,26 +27,30 @@
     <div class="form-row">
       <div class="form-group">
         <label>DNI</label>
-        <input type="text" formControlName="dni" placeholder="Número de documento">
+        <input type="text" formControlName="dni" placeholder="8 dígitos" maxlength="8">
       </div>
 
       <div class="form-group">
         <label>Teléfono</label>
-        <input type="text" formControlName="telefono" placeholder="Celular">
+        <input type="text" formControlName="telefono" placeholder="9 dígitos" maxlength="9">
       </div>
     </div>
 
     <div class="form-group">
-      <label>Correo electrónico</label>
-      <input type="email" formControlName="vUsuario" placeholder="ejemplo@correo.com">
+      <label>Dirección</label>
+      <input type="text" formControlName="direccion" placeholder="Ej. Av. Principal 123">
     </div>
 
-    <div class="form-group">
-      <label>Rol del sistema</label>
-      <select formControlName="iIdTipoUsuario">
-        <option [ngValue]="2">Cliente</option>
-        <option [ngValue]="1">Administrador</option>
-      </select>
+    <div class="form-row">
+      <div class="form-group" [style.grid-column]="esEdicion ? '1 / -1' : 'auto'">
+        <label>Correo electrónico</label>
+        <input type="email" formControlName="correo" placeholder="ejemplo@correo.com">
+      </div>
+
+      <div class="form-group" *ngIf="!esEdicion">
+        <label>Contraseña</label>
+        <input type="password" formControlName="password" placeholder="Mínimo 6 caracteres">
+      </div>
     </div>
 
   </form>
@@ -59,7 +61,7 @@
     Cancelar
   </button>
 
-  <button mat-raised-button (click)="onSave()" class="btn-save">
-    {{ esEdicion ? 'Guardar cambios' : 'Crear usuario' }}
+  <button mat-raised-button (click)="onSave()" class="btn-save" [disabled]="userForm.invalid">
+    {{ esEdicion ? 'Guardar cambios' : 'Guardar usuario' }}
   </button>
 </mat-dialog-actions>

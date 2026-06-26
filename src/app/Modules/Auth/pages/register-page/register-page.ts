@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../Core/Services/auth.service';
-import { IUser } from '../../../../Core/Interfaces/IUser.interface';
 
 @Component({
   selector: 'app-register-page',
@@ -29,6 +28,7 @@ import { IUser } from '../../../../Core/Interfaces/IUser.interface';
 export class RegisterPage {
   formRegister: FormGroup;
   erroMessage: string | null = null;
+  erroresCampos: any = {}; // Para capturar errores específicos de Spring Boot
 
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
@@ -38,42 +38,41 @@ export class RegisterPage {
     this.formRegister = this.fb.group({
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]*$')]], // Solo números
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{9}$')]], // Ajustado a 9 dígitos exactos
       dni: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
-      vUsuario: ['', [Validators.required, Validators.email]],
-      vPassword: ['', [Validators.required, Validators.minLength(6)]],
+      direccion: ['', Validators.required], // Agregamos la dirección que pide el backend
+      correo: ['', [Validators.required, Validators.email]], // Renombrado
+      password: ['', [Validators.required, Validators.minLength(6)]], // Renombrado
     });
   }
 
   onRegister() {
     this.erroMessage = null;
+    this.erroresCampos = {};
 
     if (this.formRegister.valid) {
-      const formValues = this.formRegister.value;
-      // Armamos el objeto IUser
-      const newUser: IUser = {
-        iIdUsuario: new Date().getTime(),
-        iIdTipoUsuario: 2, // 2 = CLIENTE
-        iIdPersona: Math.floor(Math.random() * 1000),
-        vUsuario: formValues.vUsuario,
-        password: formValues.vPassword,
-        nombres: formValues.nombres,
-        apellidos: formValues.apellidos,
-        telefono: formValues.telefono,
-        dni: formValues.dni,
-      };
+      // El formulario ahora tiene exactamente los mismos nombres que RegistroRequest
+      const newUserPayload = this.formRegister.value;
 
-      this.authService.registrar(newUser).subscribe({
+      this.authService.registrar(newUserPayload).subscribe({
         next: () => {
           alert('¡Cuenta creada con éxito! Ahora inicia sesión.');
-          this.router.navigate(['/auth/login']); // Lo mandamos a loguearse
+          this.router.navigate(['/auth/login']);
         },
         error: (err) => {
-          this.erroMessage = err.message;
+          console.error('Error al registrar:', err);
+
+          if (err.status === 400) {
+            // Si el backend rechaza por validaciones (ej. correo ya existe)
+            this.erroresCampos = err.error;
+            this.erroMessage = 'Revisa los datos ingresados.';
+          } else {
+            this.erroMessage = 'Error del servidor al intentar registrar la cuenta.';
+          }
         },
       });
     } else {
-      this.erroMessage = 'Por favor, llena los campos correctamente.';
+      this.erroMessage = 'Por favor, llena todos los campos obligatorios correctamente.';
     }
   }
 }
