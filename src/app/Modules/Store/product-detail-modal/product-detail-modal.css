@@ -117,3 +117,56 @@
 .add-btn:hover mat-icon {
   transform: scale(1.2);
 }
+
+/* Responsive: apilar contenido en móviles */
+@media (max-width: 768px){
+  .modal-product{
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 22px;
+    min-height: auto;
+  }
+
+  .modal-image img{
+    width: 100%;
+    height: auto;
+    max-width: 420px;
+  }
+
+  .modal-info h2{
+    font-size: 22px;
+  }
+
+  .price{
+    font-size: 22px;
+  }
+
+  .quantity-control{
+    width: 120px;
+    height: 42px;
+  }
+
+  .add-btn{
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px){
+  .modal-product{
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .modal-image img{
+    max-width: 100%;
+    height: auto;
+  }
+
+  .modal-info h2{
+    font-size: 18px;
+  }
+
+  .price{
+    font-size: 18px;
+  }
+}
