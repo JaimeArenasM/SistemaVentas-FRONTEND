@@ -84,6 +84,36 @@
   color: white;
   border: none;
   border-radius: 8px;
-  font-weight: 800;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background 0.3s, transform 0.15s, box-shadow 0.3s;
+  box-shadow: 0 4px 15px rgba(12, 174, 152, 0.35);
+  letter-spacing: 0.3px;
+}
+
+.add-btn:hover {
+  background: #0a9682;
+  box-shadow: 0 6px 20px rgba(12, 174, 152, 0.5);
+  transform: translateY(-2px);
+}
+
+.add-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 8px rgba(12, 174, 152, 0.3);
+}
+
+.add-btn mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+}
+
+.add-btn:hover mat-icon {
+  transform: scale(1.2);
 }
