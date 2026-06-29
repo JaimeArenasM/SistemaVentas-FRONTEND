@@ -14,10 +14,34 @@
     <input matInput [(ngModel)]="product.price" type="number">
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="campo">
-    <mat-label>URL de imagen</mat-label>
-    <input matInput [(ngModel)]="product.image">
-  </mat-form-field>
+<div class="upload-container">
+
+  <label class="upload-label">Imagen del producto</label>
+
+  <input
+    type="file"
+    accept="image/*"
+    (change)="onFileSelected($event)">
+
+  <button
+    mat-raised-button
+    class="btn-upload"
+    (click)="uploadImage()"
+    [disabled]="!selectedFile || uploading">
+
+    {{ uploading ? 'Subiendo...' : 'Subir Imagen' }}
+
+  </button>
+
+  <div class="preview-container" *ngIf="previewUrl">
+    <img [src]="previewUrl">
+  </div>
+
+  <div class="success" *ngIf="product.image">
+    ✓ Imagen subida correctamente
+  </div>
+
+</div>
 
   <mat-form-field appearance="fill" class="campo">
     <mat-label>Descripción</mat-label>

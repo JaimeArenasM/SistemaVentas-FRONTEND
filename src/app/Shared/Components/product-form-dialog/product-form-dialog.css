@@ -1,6 +1,6 @@
 :host {
   display: block;
-  width: 460px;
+  width: 100%;
 }
 
 .titulo-dialog {
@@ -65,4 +65,75 @@
   color: white !important;
   font-weight: 800;
   padding: 0 22px !important;
+}
+/* ---------- CLOUDINARY ---------- */
+
+.upload-container{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.upload-label{
+  font-weight:700;
+  color:#444;
+}
+
+.upload-container input[type=file]{
+  padding:10px;
+  border:2px dashed #b8d8d2;
+  border-radius:12px;
+  background:#fafafa;
+  cursor:pointer;
+}
+
+.upload-container input[type=file]:hover{
+  border-color:#0cae98;
+}
+
+.btn-upload{
+  width:100%;
+  height:45px;
+  border-radius:12px !important;
+  background:#0cae98 !important;
+  color:white !important;
+  font-weight:700;
+}
+
+.preview-container{
+  display:flex;
+  justify-content:center;
+}
+
+:host ::ng-deep .preview-container img {
+  width: 200px !important;
+  height: 200px !important;
+  max-width: 200px !important;
+  max-height: 200px !important;
+  object-fit: cover !important;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  display: block;
+}
+
+.success{
+  text-align:center;
+  color:#16a34a;
+  font-weight:700;
+}
+.contenido-dialog {
+  flex: 1;
+  overflow-y: auto;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.acciones-dialog {
+  margin-top: auto;
+  background: white;
 }
