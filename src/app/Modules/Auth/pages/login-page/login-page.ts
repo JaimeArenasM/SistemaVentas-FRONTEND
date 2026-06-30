@@ -64,7 +64,8 @@ export class LoginPage implements OnInit {
       return;
     }
 
-  const payload = this.formLogin.value;
+    const payload = this.formLogin.value;
+
     this.authService.login(payload).subscribe({
       next: (response) => {
         if (response.tipoUsuario === 'admin') {
@@ -74,17 +75,31 @@ export class LoginPage implements OnInit {
         }
       },
       error: (err: any) => {
-        const mensajeBackend = err.error?.mensaje || '';
+        console.error('Error de autenticación:', err);
 
-        if (err.status === 403 || mensajeBackend === 'CUENTA_BLOQUEADA') {
+        const status = err.status;
+        const mensajeBackend = err.error?.mensaje || err.error?.message || err.error?.error || '';
+        const codigoError = err.error?.codigo || '';
+        const mensajeString = String(mensajeBackend).toUpperCase();
+
+        // 👇 SOLUCIÓN: Agregamos "status === 500" a la condición de cuenta bloqueada
+        if (status === 500 || codigoError === 'CUENTA_SUSPENDIDA' || mensajeString.includes('BLOQUEAD') || mensajeString.includes('SUSPEND')) {
+
           this.erroMessage = 'Por motivos de seguridad, esta cuenta ha sido suspendida.';
           this.cuentaBloqueada = true;
-        } else {
-          this.erroMessage = mensajeBackend || 'Credenciales incorrectas. Intente nuevamente.';
+
+        }
+        else if (codigoError === 'CREDENCIALES_INVALIDAS' || status === 401 || status === 403 || mensajeString.includes('BAD CREDENTIALS') || mensajeString.includes('INCORRECT')) {
+
+          this.erroMessage = 'Credenciales incorrectas. Verifica tu correo y contraseña.';
+          this.cuentaBloqueada = false;
+
+        }
+        else {
+          this.erroMessage = 'Ocurrió un error inesperado al iniciar sesión. Verifica tu conexión.';
           this.cuentaBloqueada = false;
         }
 
-        // Obligamos a Angular a mostrar el mensaje ROJO instantáneamente
         this.cdr.detectChanges();
       }
     });
@@ -96,7 +111,6 @@ export class LoginPage implements OnInit {
   }
 
   irAlContacto(): void {
-    // Opción PRO: Abre el gestor de correos del cliente (Outlook, Gmail) listo para enviar a tu equipo
     window.location.href = 'mailto:contacto@tiendadonpepe.com?subject=Solicitud de Desbloqueo de Cuenta - Tienda Don Pepe';
     this.router.navigate(['/store/catalogo']);
   }
@@ -106,7 +120,6 @@ export class LoginPage implements OnInit {
   }
 
   // === LÓGICA DEFENSIVA DEL MODAL ===
-
   abrirModalRecuperacion(event: Event): void {
     event.preventDefault();
     this.mostrarModalRecuperacion = true;
@@ -119,7 +132,6 @@ export class LoginPage implements OnInit {
   }
 
   cerrarModalRecuperacion(): void {
-    // Solo permitimos cerrar si no está procesando una petición crítica
     if (!this.cargandoRecuperacion) {
       this.mostrarModalRecuperacion = false;
     }
@@ -141,7 +153,7 @@ export class LoginPage implements OnInit {
         this.cargandoRecuperacion = false;
         this.tipoMensaje = 'info';
         this.mensajeRecuperacion = '';
-        this.pasoRecuperacion = 2; // Avanzamos fluidamente al paso 2
+        this.pasoRecuperacion = 2;
       },
       error: (err: any) => {
         this.cargandoRecuperacion = false;
@@ -167,8 +179,6 @@ export class LoginPage implements OnInit {
         this.cargandoRecuperacion = false;
         this.mostrarModalRecuperacion = false;
         alert('¡Operación Exitosa! Su contraseña ha sido actualizada. Ya puede iniciar sesión.');
-
-        // Limpiamos el formulario principal para que inicie de cero
         this.formLogin.reset();
         this.formLogin.patchValue({ correo: this.correoRecuperacion });
       },

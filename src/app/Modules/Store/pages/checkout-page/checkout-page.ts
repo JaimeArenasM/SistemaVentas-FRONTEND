@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 
 import { PagoTarjetaComponent } from '../pago-tarjeta-page/pago-tarjeta';
 import { CarritoService } from '../../../../Core/Services/carrito.service';
-import { VentaService } from '../../../../Core/Services/venta.service'; // NUEVO SERVICIO
+import { VentaService } from '../../../../Core/Services/venta.service';
 import { CartItem, ICarrito } from '../../../../Core/Interfaces/ICarrito.interface';
 
 @Component({
@@ -42,13 +42,12 @@ export class CheckoutPage implements OnInit {
     this.cargarDatosCheckout();
   }
 
-  // 1. Método separado para poder llamarlo cuando queramos
   cargarDatosCheckout() {
     this.cartService.obtenerCarrito().subscribe({
       next: (res: ICarrito) => {
         if (res && res.items) {
           this.cartItems = res?.items || [];
-      this.totalCarrito = res?.totalCarrito || 0;
+          this.totalCarrito = res?.totalCarrito || 0;
         }
       }
     });
@@ -64,21 +63,30 @@ export class CheckoutPage implements OnInit {
       return;
     }
 
-    // Armamos el JSON exactamente como lo exige CrearVentaRequest en Swagger
     const requestVenta = {
-      metodoPago: this.metodoPago.toUpperCase(), // Ej: "TARJETA", "YAPE"
+      metodoPago: this.metodoPago.toUpperCase(),
       detalles: this.cartItems.map(item => ({
         idProducto: item.idProducto,
         cantidad: item.cantidad
       }))
     };
 
-    // Enviamos la petición a Render
     this.ventaService.procesarCheckout(requestVenta).subscribe({
       next: () => {
         alert('¡Pago registrado con éxito! Tu pedido está en camino.');
-        // Tu backend debería limpiar el carrito automáticamente al procesar la venta.
-        this.router.navigate(['/store/mis-compras']);
+
+        // 🔥 SOLUCIÓN: Limpiar el carrito visualmente 🔥
+        this.cartItems = [];
+        this.totalCarrito = 0;
+
+        // Si tu CarritoService tiene un método para vaciar el carrito en el backend, llámalo aquí.
+        // Ej: this.cartService.vaciarCarrito().subscribe();
+
+        this.router.navigate(['/store/mis-compras']).then(() => {
+          // Truco de seguridad: Si el modal superior (navbar) usa un Subject y no se actualiza,
+          // forzamos una recarga limpia para asegurarnos de que traiga la BD limpia.
+          window.location.reload();
+        });
       },
       error: (err) => {
         console.error('Error al procesar el pago:', err);
@@ -87,19 +95,15 @@ export class CheckoutPage implements OnInit {
     });
   }
 
-  // --- BOTONES DEL HTML ---
-
   confirmarPago(): void {
     if (!this.metodoPago) {
       alert('Por favor selecciona un método de pago');
       return;
     }
-    // Si es Yape o Plin, llamamos al método maestro
     this.procesarVenta();
   }
 
   onPagoExitoso(): void {
-    // Si el componente de Tarjeta avisa que el pago pasó, llamamos al método maestro
     this.procesarVenta();
   }
 }
