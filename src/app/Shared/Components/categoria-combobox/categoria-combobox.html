@@ -1,0 +1,28 @@
+<div class="combobox-wrapper">
+  <input
+    type="text"
+    class="combobox-input"
+    [value]="searchText"
+    placeholder="Selecciona una categoría"
+    (focus)="onFocus()"
+    (input)="onInput($event)"
+  >
+
+  <div class="combobox-dropdown" *ngIf="isOpen">
+    <button
+      type="button"
+      class="combobox-option"
+      *ngFor="let option of filteredOptions"
+      (mousedown)="selectOption(option)">
+      {{ option }}
+    </button>
+
+    <button
+      type="button"
+      class="combobox-create"
+      *ngIf="showCreateButton"
+      (mousedown)="createCategory()">
+      + ¿No encuentras la categoría? Crear "{{ searchText.trim() }}"
+    </button>
+  </div>
+</div>
