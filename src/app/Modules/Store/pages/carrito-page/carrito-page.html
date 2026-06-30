@@ -19,30 +19,27 @@
   <div *ngIf="cartItems && cartItems.length > 0" class="carrito-content">
 
     <div class="cart-items-list">
-      <div *ngFor="let item of cartItems" class="cart-item">
+  <div *ngFor="let item of cartItems" class="cart-item">
 
-        <img [src]="item.imagenUrl || 'https://via.placeholder.com/150?text=Sin+Imagen'"
-             [alt]="item.nombreProducto"
-             class="item-image">
+    <img [src]="item.imagenUrl || 'https://placehold.co/150?text=Sin+Imagen'"
+         [alt]="item.nombreProducto" class="item-image">
 
-        <div class="item-details">
-          <h3>{{ item.nombreProducto }}</h3>
-          <p class="item-price">S/ {{ item.precioUnitario }}</p>
-          <p class="item-quantity">Cantidad: {{ item.cantidad }}</p>
-        </div>
-
-        <div class="item-actions">
-          <span class="item-subtotal">
-            S/ {{ item.subtotal }}
-          </span>
-
-          <button mat-icon-button color="warn" (click)="remove(item.idProducto)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-
-      </div>
+    <div class="item-details">
+      <h3>{{ item.nombreProducto }}</h3>
+      <p>Precio: S/ {{ item.precioUnitario }}</p>
+      <p>Cantidad: {{ item.cantidad }}</p>
     </div>
+
+    <div class="item-actions">
+      <span class="item-subtotal">S/ {{ item.subtotal | number:'1.2-2' }}</span>
+
+      <button mat-icon-button color="warn" (click)="remove(item)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+  </div>
+</div>
 
     <div class="cart-summary">
       <h2>Total: S/ {{ totalCarrito }}</h2>

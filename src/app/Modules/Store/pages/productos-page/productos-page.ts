@@ -1,15 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
 import { CarritoService } from '../../../../Core/Services/carrito.service';
 import { ProductDetailModalComponent } from '../../product-detail-modal/product-detail-modal';
+import { AuthService } from '../../../../Core/Services/auth.service';
 
 @Component({
   selector: 'app-productos-page',
@@ -19,7 +20,8 @@ import { ProductDetailModalComponent } from '../../product-detail-modal/product-
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    RouterModule
   ],
   templateUrl: './productos-page.html',
   styleUrl: './productos-page.css',
@@ -28,66 +30,62 @@ export class ProductosPage implements OnInit {
 
   product: Product[] = [];
   filteredProducts: Product[] = [];
+  categoriaActual: string = '';
+  busquedaActual: string = '';
 
   private productService = inject(ProductService);
   private cartService = inject(CarritoService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private authService = inject(AuthService);
+  private cdr = inject(ChangeDetectorRef); // Inyección del Detector de Cambios
 
   ngOnInit(): void {
-    // Escuchamos la data del backend y validamos si viene paginada
+    // 1. Cargar productos
     this.productService.getProductos().subscribe((data: any) => {
       this.product = data.content ? data.content : data;
       this.aplicarFiltros();
     });
 
-    this.route.queryParams.subscribe(() => {
+    // 2. Escuchar cambios de URL
+    this.route.queryParams.subscribe((params) => {
+      this.categoriaActual = params['categoria'] || '';
+      this.busquedaActual = params['search'] || '';
       this.aplicarFiltros();
     });
   }
 
   aplicarFiltros(): void {
-    const params = this.route.snapshot.queryParams;
-    const category = params['categoria'];
-    const search = params['search']?.toLowerCase() || '';
-
-    let productosFiltrados = this.product;
-
-    if (category && category !== 'Todos') {
-      productosFiltrados = productosFiltrados.filter(
-        // Actualizado al nuevo nombre de la interfaz
-        (p) => p.nombreCategoria === category
-      );
+    if (!this.product || this.product.length === 0) {
+      this.filteredProducts = [];
+      this.cdr.detectChanges();
+      return;
     }
 
-    if (search) {
-      const normalizarTexto = (texto: string) =>
-        texto
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '');
+    const catFiltro = this.categoriaActual.toLowerCase().trim();
+    const busqFiltro = this.busquedaActual.toLowerCase().trim();
 
-      const palabras = normalizarTexto(search)
-        .trim()
-        .split(' ')
-        .filter((p: string) => p !== '');
+    let productosFiltrados = [...this.product];
 
-      productosFiltrados = productosFiltrados.filter((prod) => {
-        // Actualizado a las nuevas propiedades
-        const textoProducto = normalizarTexto(`
-          ${prod.nombre}
-          ${prod.descripcion}
-          ${prod.nombreCategoria}
-        `);
-
-        return palabras.every((palabra: string) =>
-          textoProducto.includes(palabra)
-        );
+    if (catFiltro && catFiltro !== 'todos') {
+      productosFiltrados = productosFiltrados.filter((p) => {
+        const catProd = p.nombreCategoria ? p.nombreCategoria.toLowerCase().trim() : '';
+        return catProd === catFiltro;
       });
     }
 
+    if (busqFiltro) {
+        const normalizar = (t: string) => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        productosFiltrados = productosFiltrados.filter(p =>
+            normalizar(p.nombre || '').includes(normalizar(busqFiltro)) ||
+            normalizar(p.descripcion || '').includes(normalizar(busqFiltro))
+        );
+    }
+
     this.filteredProducts = productosFiltrados;
+
+    this.cdr.detectChanges();
   }
 
   abrirModal(prod: Product): void {
@@ -105,20 +103,22 @@ export class ProductosPage implements OnInit {
   }
 
   addToCart(prod: Product, cantidad: number = 1): void {
-    // Armamos el request exacto que espera tu Swagger (CarritoRequest)
-    const itemRequest = {
-      idProducto: prod.idProducto,
-      cantidad: cantidad
-    };
+    if (!this.authService.getSession()) {
+      alert('⚠️ Para agregar productos, primero debes iniciar sesión.');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
 
-    // Disparamos la petición HTTP real para persistir el carrito
+    if (prod.stock <= 0) {
+      alert('🚫 Lo sentimos, este producto está agotado actualmente.');
+      return;
+    }
+
+    const itemRequest = { idProducto: prod.idProducto, cantidad: cantidad };
+
     this.cartService.agregarItem(itemRequest).subscribe({
-      next: () => {
-        alert(`${cantidad} ${prod.nombre} agregado(s) al carrito 🛒`);
-      },
-      error: (err) => {
-        console.error('Error al agregar producto:', err);
-      }
+      next: () => alert('✅ Producto agregado al carrito'),
+      error: (err) => alert('Error: ' + (err.error?.message || 'No se pudo agregar al carrito'))
     });
   }
 }

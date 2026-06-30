@@ -15,24 +15,35 @@
     <div class="form-row">
       <div class="form-group">
         <label>Nombres</label>
-        <input type="text" formControlName="nombres" placeholder="Ej. Juan">
+        <input type="text" formControlName="nombres" placeholder="Ej. Juan" (keypress)="soloLetras($event)"
+               [class.input-error]="userForm.get('nombres')?.invalid && userForm.get('nombres')?.touched">
+        <span class="error-text" *ngIf="userForm.get('nombres')?.hasError('required') && userForm.get('nombres')?.touched">El nombre es requerido</span>
+        <span class="error-text" *ngIf="userForm.get('nombres')?.hasError('pattern') && userForm.get('nombres')?.touched">Solo se permiten letras</span>
       </div>
 
       <div class="form-group">
         <label>Apellidos</label>
-        <input type="text" formControlName="apellidos" placeholder="Ej. Pérez">
+        <input type="text" formControlName="apellidos" placeholder="Ej. Pérez" (keypress)="soloLetras($event)"
+               [class.input-error]="userForm.get('apellidos')?.invalid && userForm.get('apellidos')?.touched">
+        <span class="error-text" *ngIf="userForm.get('apellidos')?.hasError('required') && userForm.get('apellidos')?.touched">El apellido es requerido</span>
+        <span class="error-text" *ngIf="userForm.get('apellidos')?.hasError('pattern') && userForm.get('apellidos')?.touched">Solo se permiten letras</span>
       </div>
     </div>
 
     <div class="form-row">
       <div class="form-group">
         <label>DNI</label>
-        <input type="text" formControlName="dni" placeholder="8 dígitos" maxlength="8">
+        <input type="text" formControlName="dni" placeholder="8 dígitos" maxlength="8" (keypress)="soloNumeros($event)"
+               [class.input-error]="userForm.get('dni')?.invalid && userForm.get('dni')?.touched">
+        <span class="error-text" *ngIf="userForm.get('dni')?.hasError('required') && userForm.get('dni')?.touched">El DNI es requerido</span>
+        <span class="error-text" *ngIf="userForm.get('dni')?.hasError('pattern') && userForm.get('dni')?.touched">Debe contener exactamente 8 números</span>
       </div>
 
       <div class="form-group">
         <label>Teléfono</label>
-        <input type="text" formControlName="telefono" placeholder="9 dígitos" maxlength="9">
+        <input type="text" formControlName="telefono" placeholder="9 dígitos" maxlength="9" (keypress)="soloNumeros($event)"
+               [class.input-error]="userForm.get('telefono')?.invalid && userForm.get('telefono')?.touched">
+        <span class="error-text" *ngIf="userForm.get('telefono')?.hasError('pattern') && userForm.get('telefono')?.touched">Debe contener exactamente 9 números</span>
       </div>
     </div>
 
@@ -44,12 +55,17 @@
     <div class="form-row">
       <div class="form-group" [style.grid-column]="esEdicion ? '1 / -1' : 'auto'">
         <label>Correo electrónico</label>
-        <input type="email" formControlName="correo" placeholder="ejemplo@correo.com">
+        <input type="email" formControlName="correo" placeholder="ejemplo@correo.com"
+               [class.input-error]="userForm.get('correo')?.invalid && userForm.get('correo')?.touched">
+        <span class="error-text" *ngIf="userForm.get('correo')?.hasError('required') && userForm.get('correo')?.touched">El correo es requerido</span>
+        <span class="error-text" *ngIf="userForm.get('correo')?.hasError('email') && userForm.get('correo')?.touched">Formato de correo incorrecto</span>
       </div>
 
       <div class="form-group" *ngIf="!esEdicion">
         <label>Contraseña</label>
-        <input type="password" formControlName="password" placeholder="Mínimo 6 caracteres">
+        <input type="password" formControlName="password" placeholder="Mínimo 6 caracteres"
+               [class.input-error]="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+        <span class="error-text" *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched">Mínimo 6 caracteres requeridos</span>
       </div>
     </div>
 
@@ -61,7 +77,7 @@
     Cancelar
   </button>
 
-  <button mat-raised-button (click)="onSave()" class="btn-save" [disabled]="userForm.invalid">
+  <button mat-raised-button color="primary" (click)="onSave()" class="btn-save" [disabled]="userForm.invalid">
     {{ esEdicion ? 'Guardar cambios' : 'Guardar usuario' }}
   </button>
 </mat-dialog-actions>

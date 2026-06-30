@@ -28,12 +28,18 @@ export class UserFormDialog implements OnInit {
     public dialogRef: MatDialogRef<UserFormDialog>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    // Inicializamos el formulario con la estructura base de datos
+    // REGLAS ESTRICTAS DE VALIDACIÓN CON REGEX
     this.userForm = this.fb.group({
-      nombres: ['', Validators.required],
-      apellidos: ['', Validators.required],
-      dni: ['', [Validators.required, Validators.maxLength(8)]],
-      telefono: ['', Validators.maxLength(9)],
+      // Nombres y apellidos: Solo letras, espacios y tildes/eñes
+      nombres: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
+      apellidos: ['', [Validators.required, Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)]],
+
+      // DNI: Exactamente 8 números (del 0 al 9)
+      dni: ['', [Validators.required, Validators.pattern(/^[0-9]{8}$/)]],
+
+      // Teléfono: Exactamente 9 números (opcional, pero si pone, deben ser 9)
+      telefono: ['', [Validators.pattern(/^[0-9]{9}$/)]],
+
       direccion: [''],
       correo: ['', [Validators.required, Validators.email]],
       password: ['']
@@ -41,7 +47,6 @@ export class UserFormDialog implements OnInit {
   }
 
   ngOnInit() {
-    // Si recibimos un idUsuario, significa que entramos en modo de modificación de datos
     if (this.data && this.data.idUsuario) {
       this.esEdicion = true;
 
@@ -54,16 +59,32 @@ export class UserFormDialog implements OnInit {
         correo: this.data.correo || ''
       });
 
-      // El correo electrónico actúa como clave única natural; se deshabilita para evitar inconsistencias
       this.userForm.get('correo')?.disable();
-
-      // Removemos las reglas de validación obligatoria del password en modo edición
       this.userForm.get('password')?.clearValidators();
       this.userForm.get('password')?.updateValueAndValidity();
     } else {
-      // Si el flujo es de creación, la clave vuelve a ser mandatoria para la encriptación
       this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
       this.userForm.get('password')?.updateValueAndValidity();
+    }
+  }
+
+  // --- BLOQUEADORES DE TECLADO ---
+
+  // Evita que se escriban letras donde van números
+  soloNumeros(event: KeyboardEvent) {
+    const charCode = event.key.charCodeAt(0);
+    // Si no es un número (códigos ASCII del 48 al 57), bloquea la tecla
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
+  // Evita que se escriban números donde van letras
+  soloLetras(event: KeyboardEvent) {
+    const regex = new RegExp("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$");
+    // Si la tecla presionada no es una letra, la bloquea
+    if (!regex.test(event.key)) {
+      event.preventDefault();
     }
   }
 
@@ -73,7 +94,6 @@ export class UserFormDialog implements OnInit {
 
   onSave(): void {
     if (this.userForm.valid) {
-      // getRawValue() extrae tanto los controles activos como los deshabilitados (correo)
       this.dialogRef.close(this.userForm.getRawValue());
     }
   }

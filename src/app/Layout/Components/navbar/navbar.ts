@@ -45,25 +45,28 @@ export class Navbar implements OnInit {
   private productService = inject(ProductService);
 
   ngOnInit(): void {
-    // Solo cargamos la lista de productos para el buscador
     this.productService.getProductos().subscribe((data: any) => {
       this.productos = data.content ? data.content : data;
     });
 
-    // Validamos si hay sesión para cargar el conteo inicial del carrito
+    this.cartService.carritoActualizado$.subscribe(() => {
+      this.cargarCarritoEnVivo();
+    });
+
     if (this.session) {
       this.cargarCarritoEnVivo();
     }
   }
 
-  // MÉTODO NUEVO: Consulta a PostgreSQL el estado del carrito
   cargarCarritoEnVivo() {
     this.cartService.obtenerCarrito().subscribe({
       next: (carritoBackend) => {
+
         if (carritoBackend && carritoBackend.items) {
           this.cartItems = carritoBackend.items;
           this.cartCount = this.cartItems.reduce((total, item) => total + item.cantidad, 0);
-          this.total = carritoBackend.total || 0;
+
+          this.total = carritoBackend.totalCarrito || this.cartItems.reduce((acc, item) => acc + item.subtotal, 0);
         } else {
           this.cartItems = [];
           this.cartCount = 0;

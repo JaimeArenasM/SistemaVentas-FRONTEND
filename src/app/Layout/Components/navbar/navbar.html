@@ -66,6 +66,8 @@
 
 <div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
 
+<div class="overlay" *ngIf="mostrarCarrito" (click)="cerrarCarrito()"></div>
+
 <div class="cart-modal" *ngIf="mostrarCarrito">
   <h2>Carrito</h2>
 
@@ -75,10 +77,11 @@
 
   <div *ngFor="let item of cartItems" class="cart-item">
     <span>
-      {{ item.producto?.nombre || item.nombre }} <br />
-      {{ item.cantidad }} x S/. {{ item.precioUnitario || item.producto?.precio || 0 }}
+      <strong>{{ item.producto?.nombre || item.nombreProducto }}</strong> <br />
+      {{ item.cantidad }} x S/. {{ item.precioUnitario | number:'1.2-2' }}
     </span>
-    <button class="btn-remove" (click)="remove(item.idItemCarrito || item.producto?.idProducto)">✖</button>
+
+    <button class="btn-remove" (click)="remove(item.producto?.idProducto || item.idProducto)">✖</button>
   </div>
 
   <p class="cart-total" *ngIf="cartItems.length > 0">Total: S/. {{ total | number:'1.2-2' }}</p>

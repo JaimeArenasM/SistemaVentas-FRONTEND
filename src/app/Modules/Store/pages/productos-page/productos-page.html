@@ -1,20 +1,30 @@
-<div class="product-grid">
-  <mat-card class="product-card" *ngFor="let product of filteredProducts">
+<div class="product-container">
 
-    <img mat-card-image [src]="product.imagenUrl || 'https://via.placeholder.com/150'">
+  <div *ngIf="filteredProducts.length === 0" class="no-products-msg">
+    <h3>No se encontraron productos en esta categoría.</h3>
+    <button mat-button color="primary" routerLink="/store/productos" [queryParams]="{categoria: 'Todos'}">
+      Ver todos los productos
+    </button>
+  </div>
 
-    <mat-card-title>{{ product.nombre }}</mat-card-title>
-    <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
+  <div class="product-grid" *ngIf="filteredProducts.length > 0">
+    <mat-card class="product-card" *ngFor="let product of filteredProducts">
 
-    <mat-card-content>
-      <span class="price">S/ {{ product.precio }}</span>
-    </mat-card-content>
+      <img mat-card-image [src]="product.imagenUrl || 'https://placehold.co/150x150?text=Sin+Imagen'">
 
-    <mat-card-actions align="end">
-      <button mat-raised-button color="primary" (click)="abrirModal(product)">
-        <mat-icon>add_shopping_cart</mat-icon> Agregar
-      </button>
-    </mat-card-actions>
+      <mat-card-title>{{ product.nombre }}</mat-card-title>
+      <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
 
-  </mat-card>
+      <mat-card-content>
+        <span class="price">S/ {{ product.precio }}</span>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-raised-button color="primary" (click)="abrirModal(product)">
+          <mat-icon>add_shopping_cart</mat-icon> Agregar
+        </button>
+      </mat-card-actions>
+
+    </mat-card>
+  </div>
 </div>

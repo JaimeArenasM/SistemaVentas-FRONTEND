@@ -1,75 +1,77 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-
-/* Angular Material */
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
-
-/* Interfaces y Service */
+import { Subscription } from 'rxjs';
 import { CarritoService } from '../../../../Core/Services/carrito.service';
 import { ICarrito, CartItem } from '../../../../Core/Interfaces/ICarrito.interface';
 
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    RouterModule
-  ],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatToolbarModule, RouterModule],
   templateUrl: './carrito-page.html',
   styleUrls: ['./carrito-page.css']
 })
-export class CarritoPage implements OnInit {
 
+export class CarritoPage implements OnInit, OnDestroy {
   cartItems: CartItem[] = [];
   totalCarrito: number = 0;
+  private carritoSub?: Subscription;
 
   private router = inject(Router);
   private cartService = inject(CarritoService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit() {
     this.cargarCarrito();
+    this.carritoSub = this.cartService.carritoActualizado$.subscribe(() => {
+      this.cargarCarrito();
+    });
   }
 
-  // Método centralizado para traer la información fresca desde PostgreSQL
+  ngOnDestroy() {
+    this.carritoSub?.unsubscribe();
+  }
+
   cargarCarrito() {
     this.cartService.obtenerCarrito().subscribe({
       next: (res: ICarrito) => {
-        if (res && res.items) {
-          this.cartItems = res.items;
-          this.totalCarrito = res.totalCarrito;
-        } else {
-          this.cartItems = [];
-          this.totalCarrito = 0;
-        }
+        // Aseguramos la actualización
+        this.cartItems = res?.items ? [...res.items] : [];
+        this.totalCarrito = res?.totalCarrito || 0;
+
+        this.cdr.detectChanges();
+        console.log("🔥 Items cargados en vista:", this.cartItems);
       },
       error: (err) => {
         console.error('Error al cargar el carrito:', err);
         this.cartItems = [];
         this.totalCarrito = 0;
+        this.cdr.detectChanges();
       }
     });
   }
 
-  remove(idProducto?: number): void {
-    if (!idProducto) {
-      console.warn('Cuidado: El backend no está devolviendo el idProducto en el JSON.');
+  remove(item: CartItem): void {
+    // Usamos el ID que viene en el JSON que me mostraste: "idProducto"
+    const id = item.idProducto;
+
+    if (!id) {
+      console.error('No se pudo eliminar: ID no encontrado en:', item);
       return;
     }
 
-    // Llamamos al DELETE y si sale bien, recargamos la tabla visual
-    this.cartService.eliminarItem(idProducto).subscribe({
+    this.cartService.eliminarItem(id).subscribe({
       next: () => {
-        this.cargarCarrito();
+        // No hace falta llamar a cargarCarrito aquí,
+        // porque el Subject en el servicio ya dispara la carga en el ngOnInit
+        console.log("Producto eliminado correctamente");
       },
-      error: (err) => console.error('Error al eliminar ítem:', err)
+      error: (err) => console.error('Error al eliminar:', err)
     });
   }
 
@@ -79,9 +81,5 @@ export class CarritoPage implements OnInit {
       return;
     }
     this.router.navigate(['/store/checkout']);
-  }
-
-  volverAlDashboard(): void {
-    this.router.navigate(['/store/catalogo']);
   }
 }

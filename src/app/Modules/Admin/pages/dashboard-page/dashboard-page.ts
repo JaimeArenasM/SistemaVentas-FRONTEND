@@ -46,7 +46,7 @@ export class DashboardPage implements OnInit {
         const productos = Array.isArray(data) ? data : (data.content || data.data || []);
         this.totalProductos = productos.length;
 
-        this.cdr.detectChanges(); // <-- OBLIGAMOS A PINTAR EL NÚMERO DE PRODUCTOS
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Error al cargar productos:', err)
     });
@@ -56,7 +56,7 @@ export class DashboardPage implements OnInit {
       next: (res: any) => {
         const usuarios = Array.isArray(res) ? res : (res.content || res.data || []);
 
-        console.log("Usuarios recibidos para contar:", usuarios);
+        //console.log("Usuarios recibidos para contar:", usuarios);
 
         this.totalClientes = usuarios.filter((u: any) => {
           const rol = String(u.tipoUsuario || '').toUpperCase();
@@ -67,7 +67,24 @@ export class DashboardPage implements OnInit {
       },
       error: (err: any) => console.error('Error al cargar usuarios:', err)
     });
-  }
+
+    // 3. Obtener y sumar las ventas reales
+    this.ventaService.obtenerTodasLasVentas().subscribe({
+      next: (ventas: any) => {
+        const listaVentas = Array.isArray(ventas) ? ventas : (ventas?.content || ventas?.data || []);
+
+        this.ingresosMensuales = listaVentas
+          .filter((v: any) => {
+            // Buscamos el estado usando el nombre correcto (estadoPago o estado)
+            const estadoReal = v.estado || v.estadoPago || '';
+            return estadoReal.toUpperCase() === 'PAGADO';
+          })
+          .reduce((suma: number, ventaActual: any) => suma + (ventaActual.total || 0), 0);
+
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => console.error('Error al cargar ventas:', err)
+    });}
 
   irVentas() {
     this.router.navigate(['/admin/ventas']);

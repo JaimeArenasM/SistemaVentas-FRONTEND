@@ -101,11 +101,10 @@ export class CatalogoPage implements OnInit {
     return this.productos.filter(producto => producto.nombreCategoria === categoria);
   }
 
-  irCategoria(categoria: string): void {
-    this.categoriaSeleccionada = categoria;
-    this.router.navigate(
-      ['/store/productos'],
-      { queryParams: { categoria } }
-    );
-  }
+irCategoria(nombreCategoria: string): void {
+  this.router.navigate(['/store/productos'], {
+    queryParams: { categoria: nombreCategoria },
+    queryParamsHandling: 'merge'
+  });
+}
 }

@@ -39,15 +39,18 @@ export class CheckoutPage implements OnInit {
   private ventaService = inject(VentaService);
 
   ngOnInit(): void {
-    // Obtenemos el carrito real desde el servidor para mostrar el resumen
+    this.cargarDatosCheckout();
+  }
+
+  // 1. Método separado para poder llamarlo cuando queramos
+  cargarDatosCheckout() {
     this.cartService.obtenerCarrito().subscribe({
       next: (res: ICarrito) => {
         if (res && res.items) {
-          this.cartItems = res.items;
-          this.totalCarrito = res.totalCarrito;
+          this.cartItems = res?.items || [];
+      this.totalCarrito = res?.totalCarrito || 0;
         }
-      },
-      error: (err) => console.error('Error al cargar el resumen del carrito:', err)
+      }
     });
   }
 

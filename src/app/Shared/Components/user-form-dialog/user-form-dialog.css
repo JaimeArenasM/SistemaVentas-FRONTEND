@@ -132,3 +132,14 @@ select:focus {
     grid-template-columns: 1fr;
   }
 }
+
+.input-error {
+  border-color: #f44336 !important;
+}
+
+.error-text {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
