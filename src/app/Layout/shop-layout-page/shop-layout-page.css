@@ -1,23 +1,16 @@
 
-.main-layout{
-  display: flex;
-  gap:24px;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
-}
-
-.store-container {
-  display: flex;
-  flex-direction: column;
+:host {
+  display: block;
   min-height: 100vh;
 }
 
-.main-layout {
+.shop-page-shell {
+  min-height: 100vh;
   display: flex;
-  gap: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 24px;
+  flex-direction: column;
+}
+
+.shop-main-content {
+  flex: 1;
   width: 100%;
 }

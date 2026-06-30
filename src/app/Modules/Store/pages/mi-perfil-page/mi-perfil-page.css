@@ -95,9 +95,49 @@
   border-top: 1px solid #eef0f4;
   border-radius: 0 0 12px 12px;
 }
+
+/* BOTONES CON ng-deep para pisar Angular Material */
+::ng-deep .card-actions .cancelar {
+  background: transparent !important;
+  border: 1.5px solid #d1d5db !important;
+  color: #6b7280 !important;
+  border-radius: 8px !important;
+  padding: 8px 20px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  min-width: unset !important;
+  line-height: unset !important;
+  letter-spacing: unset !important;
+}
+
+::ng-deep .card-actions .cancelar:hover {
+  background: #f9fafb !important;
+  border-color: #9ca3af !important;
+}
+
+::ng-deep .card-actions .guardar {
+  background: #be185d !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 8px !important;
+  padding: 8px 20px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  min-width: unset !important;
+  line-height: unset !important;
+  letter-spacing: unset !important;
+}
+
+::ng-deep .card-actions .guardar:hover {
+  background: #9d174d !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-
   .profile-container {
     margin: 20px auto;
     padding: 0 14px;
@@ -136,7 +176,7 @@
     padding: 18px;
   }
 
-  .card-actions button {
-    width: 100%;
+  ::ng-deep .card-actions button {
+    width: 100% !important;
   }
 }
