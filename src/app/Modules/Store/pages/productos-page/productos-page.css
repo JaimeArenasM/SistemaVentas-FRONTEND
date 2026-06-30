@@ -135,3 +135,46 @@ img[mat-card-image]{
     font-size: 1.4rem;
   }
 }
+
+/* Mejoras para pantallas muy pequeñas */
+@media (max-width: 480px){
+  .product-grid{
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .product-card{
+    min-height: auto;
+    padding-bottom: 12px;
+    text-align: left;
+  }
+
+  img[mat-card-image]{
+    height: 120px;
+    object-fit: contain;
+    padding: 8px;
+  }
+
+  .product-card mat-card-title{
+    font-size: 0.95rem;
+    min-height: 42px;
+    padding: 6px 8px;
+  }
+
+  .product-card mat-card-subtitle{
+    font-size: 0.82rem;
+    padding: 0 8px 8px;
+  }
+
+  .price{
+    font-size: 1.2rem;
+    display: inline-block;
+    margin: 8px;
+  }
+
+  .product-card button{
+    height: 44px;
+    font-size: 14px;
+  }
+}

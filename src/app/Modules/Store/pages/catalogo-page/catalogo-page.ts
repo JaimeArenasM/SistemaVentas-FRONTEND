@@ -4,10 +4,14 @@ import { Router } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { ScrollTopButton } from '../../../../Shared/Components/scroll-top-button/scroll-top-button';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
+import { CarritoService } from '../../../../Core/Services/carrito.service';
+import { AuthService } from '../../../../Core/Services/auth.service';
+import { ProductDetailModalComponent } from '../../product-detail-modal/product-detail-modal';
 
 @Component({
   standalone: true,
@@ -16,6 +20,7 @@ import { ProductService } from '../../../../Core/Services/product.service';
     CommonModule,
     MatCardModule,
     MatButtonModule,
+    MatDialogModule,
     ScrollTopButton
   ],
   templateUrl: './catalogo-page.html',
@@ -57,6 +62,9 @@ export class CatalogoPage {
 
   private productService = inject(ProductService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private cartService = inject(CarritoService);
+  private authService = inject(AuthService);
 
   ngOnInit(): void {
     this.productService.getProductos().subscribe(data => {
@@ -102,5 +110,35 @@ export class CatalogoPage {
       ['/store/productos'],
       { queryParams: { categoria } }
     );
+  }
+
+  abrirModal(producto: Product): void {
+    const dialogRef = this.dialog.open(ProductDetailModalComponent, {
+      width: '900px',
+      maxWidth: '95vw',
+      data: producto
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.addToCart(result.product, result.cantidad);
+      }
+    });
+  }
+
+  addToCart(producto: Product, cantidad: number = 1): void {
+    const session = this.authService.getSession();
+
+    if (!session) {
+      alert('¡Debes iniciar sesión para agregar productos al carrito!');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+
+    for (let i = 0; i < cantidad; i++) {
+      this.cartService.addToCart(producto);
+    }
+
+    alert(`${cantidad} ${producto.name} agregado(s) al carrito 🛒`);
   }
 }

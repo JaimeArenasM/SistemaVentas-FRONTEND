@@ -386,3 +386,35 @@
     height: 40px;
   }
 }
+
+/* Ajustes adicionales para pantallas muy pequeñas */
+@media (max-width: 480px){
+  .store-header{
+    padding: 8px 8px;
+    gap: 6px;
+  }
+
+  .logo-store{
+    width: 56px;
+    height: 56px;
+  }
+
+  .header-title{
+    font-size: 0.95rem;
+    white-space: normal;
+  }
+
+  .search-box{
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .search-box input{
+    font-size: 13px;
+  }
+
+  .btn-categorias{
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
