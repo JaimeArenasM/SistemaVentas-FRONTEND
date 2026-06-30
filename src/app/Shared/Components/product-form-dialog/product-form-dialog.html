@@ -48,10 +48,14 @@
     <textarea matInput rows="3" [(ngModel)]="product.description"></textarea>
   </mat-form-field>
 
-  <mat-form-field appearance="fill" class="campo">
-    <mat-label>Categoría</mat-label>
-    <input matInput [(ngModel)]="product.category">
-  </mat-form-field>
+  <div class="campo">
+    <label class="mat-label" style="display:block; margin-bottom:8px; font-weight:600;">Categoría</label>
+    <app-categoria-combobox
+      [options]="opcionesCategorias"
+      [(value)]="product.category"
+      (categoryCreated)="crearNuevaCategoria($event)">
+    </app-categoria-combobox>
+  </div>
 
 </div>
 

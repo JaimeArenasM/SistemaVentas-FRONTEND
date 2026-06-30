@@ -44,7 +44,7 @@ export class GestionProductosPage implements OnInit {
   textoBusqueda: string = '';
 
   // Lista de categorías de tu tienda
-  categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Lácteos', 'Frutas'];
+  categorias: string[] = ['Todos'];
 
   ngOnInit() {
     this.cargarDatos();
@@ -62,8 +62,14 @@ export class GestionProductosPage implements OnInit {
   }
 
   cargarDatos() {
-    const productos = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
+    const productos = JSON.parse(localStorage.getItem('donPepe_products') || '[]') as Product[];
     this.dataSource.data = productos;
+
+    const categoriasUnicas = Array.from(
+      new Set(productos.map((producto: Product) => producto.category).filter((categoria): categoria is string => Boolean(categoria)))
+    ).sort();
+
+    this.categorias = ['Todos', ...categoriasUnicas];
     this.aplicarFiltroCompuesto();
   }
 
@@ -80,18 +86,20 @@ export class GestionProductosPage implements OnInit {
   abrirModalProducto(producto?: Product) {
     const dialogRef = this.dialog.open(ProductFormDialog, {
       width: '500px',
-      data: producto ? { ...producto } : null
+      data: producto
+        ? { product: { ...producto }, categorias: this.categorias }
+        : { categorias: this.categorias }
     });
 
     dialogRef.afterClosed().subscribe(resultado => {
     if (resultado) {
-      let db = JSON.parse(localStorage.getItem('donPepe_products') || '[]');
+      let db: Product[] = JSON.parse(localStorage.getItem('donPepe_products') || '[]') as Product[];
 
       if (producto) {
         const index = db.findIndex((p: Product) => p.id === producto.id);
         if (index !== -1) db[index] = resultado;
       } else {
-        resultado.id = db.length > 0 ? Math.max(...db.map((p:any) => p.id)) + 1 : 1;
+        resultado.id = db.length > 0 ? Math.max(...db.map((p: Product) => p.id)) + 1 : 1;
         db.push(resultado);
       }
 
