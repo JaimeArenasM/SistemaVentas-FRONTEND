@@ -4,6 +4,8 @@
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 14px;
   color: #d1d5db;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 .footer-container {
@@ -170,4 +172,5 @@
     width: 40px;
     height: 40px;
   }
+  
 }

@@ -7,38 +7,52 @@
 
     <mat-form-field appearance="outline" class="campo">
       <mat-label>Nombre del producto</mat-label>
-      <input matInput [(ngModel)]="product.nombre" name="nombre" required #nombre="ngModel" placeholder="Ej. Avena Integral">
-      <mat-error *ngIf="nombre.invalid && nombre.touched">El nombre es <strong>obligatorio</strong></mat-error>
+      <input matInput [(ngModel)]="product.nombre" name="nombre" required #nombre="ngModel">
+      <mat-error *ngIf="nombre.invalid && nombre.touched">Obligatorio</mat-error>
     </mat-form-field>
 
-   <div style="display: flex; gap: 16px;">
+    <div style="display: flex; gap: 16px;">
       <mat-form-field appearance="outline" class="campo" style="flex: 1;">
         <mat-label>Precio (S/)</mat-label>
-        <input matInput [(ngModel)]="product.precio" name="precio" type="number" step="0.10" min="0" required #precio="ngModel" (keypress)="soloNumerosYDecimales($event)">
-        <mat-error *ngIf="precio.invalid && precio.touched">Ingresa el <strong>precio</strong></mat-error>
+        <input matInput [(ngModel)]="product.precio" name="precio" type="number" required (keypress)="soloNumerosYDecimales($event)">
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="campo" style="flex: 1;">
-        <mat-label>Stock inicial</mat-label>
-        <input matInput [(ngModel)]="product.stock" name="stock" type="number" min="0" required #stock="ngModel" (keypress)="soloNumerosEnteros($event)">
-        <mat-error *ngIf="stock.invalid && stock.touched">Ingresa un <strong>stock válido</strong></mat-error>
+        <mat-label>Stock</mat-label>
+        <input matInput [(ngModel)]="product.stock" name="stock" type="number" required (keypress)="soloNumerosEnteros($event)">
       </mat-form-field>
     </div>
 
     <mat-form-field appearance="outline" class="campo">
       <mat-label>Categoría</mat-label>
-      <mat-select [(ngModel)]="product.idCategoria" name="idCategoria" required #categoria="ngModel">
+      <mat-select [(ngModel)]="product.idCategoria" name="idCategoria" required>
         <mat-option *ngFor="let cat of categorias" [value]="cat.id">
           {{ cat.nombre }}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="categoria.invalid && categoria.touched">La categoría es <strong>obligatoria</strong></mat-error>
     </mat-form-field>
 
-    <mat-form-field appearance="outline" class="campo">
-      <mat-label>URL de imagen</mat-label>
-      <input matInput [(ngModel)]="product.imagenUrl" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg">
-    </mat-form-field>
+    <div class="campo" style="margin-bottom: 20px; border: 2px dashed #e0e0e0; padding: 15px; border-radius: 8px; text-align: center; background-color: #fafafa;">
+      <label style="display: block; margin-bottom: 15px; color: #555; font-weight: 500;">
+        Fotografía del Producto
+      </label>
+
+      <input type="file" accept="image/*" (change)="onFileSelected($event)" #fileInput style="display: none;">
+
+      <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+        <button mat-stroked-button type="button" (click)="fileInput.click()">
+          <mat-icon>folder_open</mat-icon> Examinar
+        </button>
+
+        <button mat-flat-button color="accent" type="button" (click)="uploadImage()" [disabled]="!selectedFile || uploading">
+          <mat-icon>cloud_upload</mat-icon> {{ uploading ? 'Subiendo...' : 'Subir a Cloudinary' }}
+        </button>
+      </div>
+
+      <div *ngIf="previewUrl || product.imagenUrl" style="margin-top: 15px;">
+        <img [src]="previewUrl || product.imagenUrl" style="max-height: 120px; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      </div>
+    </div>
 
     <mat-form-field appearance="outline" class="campo">
       <mat-label>Descripción</mat-label>
@@ -47,12 +61,8 @@
 
   </div>
 
-  <div mat-dialog-actions class="acciones-dialog">
-    <button mat-stroked-button type="button" class="btn-cancelar" (click)="onCancel()">
-      Cancelar
-    </button>
-    <button mat-raised-button color="primary" type="button" class="btn-guardar" [disabled]="productForm.invalid" (click)="onSave()">
-      Guardar
-    </button>
+  <div mat-dialog-actions class="acciones-dialog" style="justify-content: flex-end; padding-bottom: 15px;">
+    <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" [disabled]="productForm.invalid" (click)="onSave()">Guardar Producto</button>
   </div>
 </form>

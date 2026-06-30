@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 import { ScrollTopButton } from '../../../../Shared/Components/scroll-top-button/scroll-top-button';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
@@ -16,6 +17,7 @@ import { ProductService } from '../../../../Core/Services/product.service';
     CommonModule,
     MatCardModule,
     MatButtonModule,
+    MatDialogModule,
     ScrollTopButton
   ],
   templateUrl: './catalogo-page.html',
@@ -24,7 +26,6 @@ import { ProductService } from '../../../../Core/Services/product.service';
 export class CatalogoPage implements OnInit {
 
   productos: Product[] = [];
-  categoriaSeleccionada = '';
 
   imagenes = [
     'assets/img/portadalimpieza.png',
@@ -48,7 +49,9 @@ export class CatalogoPage implements OnInit {
     'assets/img/The_Coca-Cola_Company.png',
     'assets/img/P&G_logo.png',
     'assets/img/Pepsico_logo.png',
-    'assets/img/Field-208-logo.png'
+    'assets/img/Field-208-logo.png',
+    'assets/img/Frito Lay.png',
+    'assets/img/Alicorp.png'
   ];
 
   indice = 0;
@@ -57,15 +60,13 @@ export class CatalogoPage implements OnInit {
   private router = inject(Router);
 
   ngOnInit(): void {
-    // Escuchamos la respuesta real del backend
+    // Cargamos los productos para que el filtro por categoría funcione en el catálogo
     this.productService.getProductos().subscribe({
       next: (data: any) => {
-        // Si backend manda paginación (PageProductoResponse), los productos vienen en 'content'
-        // Si manda la lista directa, usamos 'data'
         this.productos = data.content ? data.content : data;
       },
       error: (err) => {
-        console.error('Error al cargar el catálogo desde el servidor:', err);
+        console.error('Error al cargar el catálogo:', err);
       }
     });
 
@@ -79,32 +80,38 @@ export class CatalogoPage implements OnInit {
   }
 
   anterior(): void {
-    this.indice =
-      (this.indice - 1 + this.imagenes.length) % this.imagenes.length;
+    this.indice = (this.indice - 1 + this.imagenes.length) % this.imagenes.length;
   }
 
-  moverDerecha(track: HTMLElement): void {
-    track.scrollBy({
-      left: 320,
-      behavior: 'smooth'
-    });
+  moverDerecha(index: number): void {
+    const track = document.getElementById('track-' + index);
+    if (track) {
+      track.scrollBy({ left: 320, behavior: 'smooth' });
+    }
   }
 
-  moverIzquierda(track: HTMLElement): void {
-    track.scrollBy({
-      left: -320,
-      behavior: 'smooth'
-    });
+  moverIzquierda(index: number): void {
+    const track = document.getElementById('track-' + index);
+    if (track) {
+      track.scrollBy({ left: -320, behavior: 'smooth' });
+    }
   }
 
   obtenerPorCategoria(categoria: string): Product[] {
-    return this.productos.filter(producto => producto.nombreCategoria === categoria);
+    return this.productos.filter(p => {
+      const catProducto = (p.nombreCategoria || '').trim().toLowerCase();
+      const catFiltro = categoria.trim().toLowerCase();
+      return catProducto === catFiltro;
+    });
   }
 
-irCategoria(nombreCategoria: string): void {
-  this.router.navigate(['/store/productos'], {
-    queryParams: { categoria: nombreCategoria },
-    queryParamsHandling: 'merge'
-  });
-}
+  // Navegación profesional que filtra automáticamente la página de productos
+  irCategoria(nombreCategoria: string): void {
+    this.router.navigate(['/store/productos'], {
+      queryParams: { categoria: nombreCategoria },
+      queryParamsHandling: 'merge'
+    });
+  }
+
+
 }

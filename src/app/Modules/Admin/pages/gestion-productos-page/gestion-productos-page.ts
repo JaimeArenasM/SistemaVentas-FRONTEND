@@ -13,7 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ProductConfirmDialog } from '../../../../Shared/Components/product-confirm-dialog/product-confirm-dialog';
 import { ProductFormDialog } from '../../../../Shared/Components/product-form-dialog/product-form-dialog';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
-import { ProductService } from '../../../../Core/Services/product.service'; // Inyectamos el servicio real
+import { ProductService } from '../../../../Core/Services/product.service';
 
 @Component({
   selector: 'app-gestion-productos-page',
@@ -38,17 +38,14 @@ export class GestionProductosPage implements OnInit {
   private productService = inject(ProductService);
 
   dataSource = new MatTableDataSource<Product>([]);
-
-  // Actualizamos a las columnas útiles usando los nombres en español
   displayedColumns: string[] = ['idProducto', 'imagen', 'nombre', 'categoria', 'precio', 'stock', 'acciones'];
 
   categoriaSeleccionada: string = 'Todos';
   textoBusqueda: string = '';
-
+  // Categorías fijas según tu diseño real de base de datos
   categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Lácteos', 'Frutas'];
 
   ngOnInit() {
-    // Configuramos el filtro para leer las nuevas variables: nombre y nombreCategoria
     this.dataSource.filterPredicate = (data: Product, filter: string): boolean => {
       const searchTerms = JSON.parse(filter);
       const coincideTexto = data.nombre.toLowerCase().includes(searchTerms.texto) ||
@@ -65,7 +62,6 @@ export class GestionProductosPage implements OnInit {
   cargarDatos() {
     this.productService.getProductos().subscribe({
       next: (data: any) => {
-        // Soporte por si tu backend manda el paginador o la lista directa
         this.dataSource.data = data.content ? data.content : data;
         this.aplicarFiltroCompuesto();
       },
@@ -90,19 +86,19 @@ export class GestionProductosPage implements OnInit {
     dialogRef.afterClosed().subscribe(resultado => {
       if (resultado) {
         if (producto) {
-          // Si estamos editando
+          // EDITAR usando Servicio Real
           this.productService.actualizarProducto(producto.idProducto, resultado).subscribe({
             next: () => {
-              alert('Producto actualizado con éxito');
+              alert('✅ Producto actualizado con éxito');
               this.cargarDatos();
             },
             error: (err) => console.error('Error al actualizar:', err)
           });
         } else {
-          // Si estamos creando uno nuevo
+          // CREAR usando Servicio Real
           this.productService.saveProducts(resultado).subscribe({
             next: () => {
-              alert('Nuevo producto agregado a la tienda');
+              alert('✅ Nuevo producto agregado a la tienda');
               this.cargarDatos();
             },
             error: (err) => console.error('Error al crear:', err)

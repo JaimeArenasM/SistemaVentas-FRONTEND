@@ -6,24 +6,26 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon'; // <- Importante para los íconos
+import { CloudinaryService } from '../../../Core/Services/cloudinary.service';
 
 @Component({
   selector: 'app-product-form-dialog',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule
+    CommonModule, FormsModule, MatFormFieldModule, MatInputModule,
+    MatButtonModule, MatSelectModule, MatIconModule
   ],
   templateUrl: './product-form-dialog.html',
   styleUrls: ['./product-form-dialog.css']
 })
 export class ProductFormDialog {
   product: any;
+  selectedFile: File | null = null;
+  previewUrl: string | null = null;
+  uploading = false;
 
+  // Restauramos las categorías con ID que tu backend exige
   categorias = [
     { id: 1, nombre: 'Cereales' },
     { id: 2, nombre: 'Snacks' },
@@ -35,46 +37,46 @@ export class ProductFormDialog {
 
   constructor(
     private dialogRef: MatDialogRef<ProductFormDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private cloudinaryService: CloudinaryService
   ) {
     this.product = data ? { ...data } : {
-      nombre: '',
-      precio: null,
-      imagenUrl: '',
-      descripcion: '',
-      stock: null,
-      idCategoria: null
+      nombre: '', precio: null, imagenUrl: '', descripcion: '', stock: null, idCategoria: null
     };
   }
 
-  // --- BLOQUEADORES DE TECLADO ---
-
-  // Para el Stock: Estrictamente números del 0 al 9
   soloNumerosEnteros(event: KeyboardEvent) {
-    const charCode = event.key.charCodeAt(0);
-    // Si no es un número (48 al 57), lo bloquea instantáneamente
-    if (charCode < 48 || charCode > 57) {
-      event.preventDefault();
-    }
+    if (event.key < '0' || event.key > '9') event.preventDefault();
   }
 
-  // Para el Precio: Números y un punto decimal
   soloNumerosYDecimales(event: KeyboardEvent) {
-    const charCode = event.key.charCodeAt(0);
-    // Permite números (48-57) y el punto (46)
-    if (charCode !== 46 && (charCode < 48 || charCode > 57)) {
-      event.preventDefault();
+    if (event.key !== '.' && (event.key < '0' || event.key > '9')) event.preventDefault();
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+      this.previewUrl = URL.createObjectURL(file);
     }
   }
 
-  // Nota: Para el nombre del producto NO bloqueamos números,
-  // porque puedes tener un producto que se llame "Coca Cola 3 Litros".
-
-  onSave() {
-    this.dialogRef.close(this.product);
+  uploadImage() {
+    if (!this.selectedFile) return;
+    this.uploading = true;
+    this.cloudinaryService.uploadImage(this.selectedFile).subscribe({
+      next: (response: any) => {
+        this.product.imagenUrl = response.secure_url;
+        this.uploading = false;
+        alert('✅ Imagen subida con éxito a la nube');
+      },
+      error: () => {
+        this.uploading = false;
+        alert('❌ Error al subir la imagen');
+      }
+    });
   }
 
-  onCancel() {
-    this.dialogRef.close(null);
-  }
+  onSave() { this.dialogRef.close(this.product); }
+  onCancel() { this.dialogRef.close(null); }
 }

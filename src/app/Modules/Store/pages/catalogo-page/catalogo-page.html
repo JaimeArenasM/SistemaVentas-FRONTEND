@@ -1,6 +1,5 @@
 <div class="promo-carousel">
   <img [src]="imagenes[indice]" class="banner">
-
   <button class="btn prev" (click)="anterior()">❮</button>
   <button class="btn next" (click)="siguiente()">❯</button>
 </div>
@@ -21,128 +20,27 @@
 
 <app-scroll-top-button></app-scroll-top-button>
 
-<section class="categoria-bloque">
-  <h2>Cereales</h2>
+<section class="categoria-bloque" *ngFor="let cat of ['Cereales', 'Snacks', 'Lácteos', 'Detergentes', 'Bebidas', 'Frutas']; let i = index">
+  <h2>{{ cat }}</h2>
   <div class="categoria-carousel">
-    <button class="cat-arrow left" (click)="moverIzquierda(cerealesTrack)">‹</button>
-    <div class="product-grid" #cerealesTrack>
-      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria('Cereales')">
-        <img mat-card-image [src]="product.imagenUrl">
-        <mat-card-title>{{ product.nombre }}</mat-card-title>
-        <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
-        <mat-card-content>
-          <span class="price">S/ {{ product.precio }}</span>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria('Cereales')">Ver categoría</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <button class="cat-arrow right" (click)="moverDerecha(cerealesTrack)">›</button>
-  </div>
-</section>
+    <button class="cat-arrow left" (click)="moverIzquierda(i)">‹</button>
 
-<section class="categoria-bloque">
-  <h2>Aperitivos</h2>
-  <div class="categoria-carousel">
-    <button class="cat-arrow left" (click)="moverIzquierda(snacksTrack)">‹</button>
-    <div class="product-grid" #snacksTrack>
-      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria('Snacks')">
-        <img mat-card-image [src]="product.imagenUrl">
+    <div class="product-grid" [id]="'track-' + i">
+      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria(cat)">
+        <img mat-card-image [src]="product.imagenUrl || 'https://placehold.co/150'">
         <mat-card-title>{{ product.nombre }}</mat-card-title>
         <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
         <mat-card-content>
-          <span class="price">S/ {{ product.precio }}</span>
+          <span class="price">S/ {{ product.precio | number:'1.2-2' }}</span>
         </mat-card-content>
         <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria('Snacks')">Ver categoría</button>
+          <button mat-raised-button color="primary" (click)="irCategoria(cat)">
+            Ver categoría
+          </button>
         </mat-card-actions>
       </mat-card>
     </div>
-    <button class="cat-arrow right" (click)="moverDerecha(snacksTrack)">›</button>
-  </div>
-</section>
 
-<section class="categoria-bloque">
-  <h2>Lácteos</h2>
-  <div class="categoria-carousel">
-    <button class="cat-arrow left" (click)="moverIzquierda(lacteosTrack)">‹</button>
-    <div class="product-grid" #lacteosTrack>
-      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria('Lácteos')">
-        <img mat-card-image [src]="product.imagenUrl">
-        <mat-card-title>{{ product.nombre }}</mat-card-title>
-        <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
-        <mat-card-content>
-          <span class="price">S/ {{ product.precio }}</span>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria('Lácteos')">Ver categoría</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <button class="cat-arrow right" (click)="moverDerecha(lacteosTrack)">›</button>
-  </div>
-</section>
-
-<section class="categoria-bloque">
-  <h2>Limpieza</h2>
-  <div class="categoria-carousel">
-    <button class="cat-arrow left" (click)="moverIzquierda(limpiezaTrack)">‹</button>
-    <div class="product-grid" #limpiezaTrack>
-      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria('Detergentes')">
-        <img mat-card-image [src]="product.imagenUrl">
-        <mat-card-title>{{ product.nombre }}</mat-card-title>
-        <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
-        <mat-card-content>
-          <span class="price">S/ {{ product.precio }}</span>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria('Detergentes')">Ver categoría</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <button class="cat-arrow right" (click)="moverDerecha(limpiezaTrack)">›</button>
-  </div>
-</section>
-
-<section class="categoria-bloque">
-  <h2>Bebidas</h2>
-  <div class="categoria-carousel">
-    <button class="cat-arrow left" (click)="moverIzquierda(bebidasTrack)">‹</button>
-    <div class="product-grid" #bebidasTrack>
-      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria('Bebidas')">
-        <img mat-card-image [src]="product.imagenUrl">
-        <mat-card-title>{{ product.nombre }}</mat-card-title>
-        <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
-        <mat-card-content>
-          <span class="price">S/ {{ product.precio }}</span>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria('Bebidas')">Ver categoría</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <button class="cat-arrow right" (click)="moverDerecha(bebidasTrack)">›</button>
-  </div>
-</section>
-
-<section class="categoria-bloque">
-  <h2>Frutas</h2>
-  <div class="categoria-carousel">
-    <button class="cat-arrow left" (click)="moverIzquierda(frutasTrack)">‹</button>
-    <div class="product-grid" #frutasTrack>
-      <mat-card class="product-card" *ngFor="let product of obtenerPorCategoria('Frutas')">
-        <img mat-card-image [src]="product.imagenUrl">
-        <mat-card-title>{{ product.nombre }}</mat-card-title>
-        <mat-card-subtitle>{{ product.descripcion }}</mat-card-subtitle>
-        <mat-card-content>
-          <span class="price">S/ {{ product.precio }}</span>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria('Frutas')">Ver categoría</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
-    <button class="cat-arrow right" (click)="moverDerecha(frutasTrack)">›</button>
+    <button class="cat-arrow right" (click)="moverDerecha(i)">›</button>
   </div>
 </section>

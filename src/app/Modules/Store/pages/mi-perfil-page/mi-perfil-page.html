@@ -14,7 +14,6 @@
 
     <div class="card-body">
       <div class="form-grid">
-
         <div class="form-group">
           <label>Nombres</label>
           <input type="text" [(ngModel)]="usuario.nombres" [disabled]="!modoEdicion" class="custom-input">
@@ -52,20 +51,18 @@
           </div>
           <small style="color: #777; margin-top: 5px; display: block;">El correo electrónico es tu identificador único y no puede ser modificado.</small>
         </div>
-
       </div>
     </div>
 
     <div class="card-actions" *ngIf="modoEdicion">
-      <button mat-button (click)="cancelarEdicion()">Cancelar</button>
-      <button mat-raised-button color="primary" (click)="guardarCambios()">Guardar Cambios</button>
+      <button class="cancelar" (click)="cancelarEdicion()">Cancelar</button>
+      <button class="guardar" (click)="guardarCambios()">Guardar Cambios</button>
     </div>
   </mat-card>
 </div>
 
 <div class="modal-overlay" *ngIf="mostrarModalClave">
   <div class="modal-box">
-
     <h3>Verificación de Seguridad</h3>
     <p style="font-size: 14px; color: #5e6278; margin-bottom: 20px; line-height: 1.4;">
       Hemos generado un código de 6 dígitos para <strong>{{ usuario.correo }}</strong>. Ingrésalo a continuación junto con tu nueva contraseña.
@@ -91,6 +88,5 @@
         {{ cargandoContrasena ? 'Verificando...' : 'Confirmar Cambio' }}
       </button>
     </div>
-
   </div>
 </div>
