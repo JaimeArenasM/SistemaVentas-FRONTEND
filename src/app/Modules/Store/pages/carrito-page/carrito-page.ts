@@ -56,8 +56,7 @@ export class CarritoPage implements OnInit, OnDestroy {
     });
   }
 
-  remove(item: CartItem): void {
-    // Usamos el ID que viene en el JSON que me mostraste: "idProducto"
+remove(item: CartItem): void {
     const id = item.idProducto;
 
     if (!id) {
@@ -67,9 +66,8 @@ export class CarritoPage implements OnInit, OnDestroy {
 
     this.cartService.eliminarItem(id).subscribe({
       next: () => {
-        // No hace falta llamar a cargarCarrito aquí,
-        // porque el Subject en el servicio ya dispara la carga en el ngOnInit
         console.log("Producto eliminado correctamente");
+        this.cargarCarrito();
       },
       error: (err) => console.error('Error al eliminar:', err)
     });

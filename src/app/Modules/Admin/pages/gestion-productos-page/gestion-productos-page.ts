@@ -38,11 +38,11 @@ export class GestionProductosPage implements OnInit {
   private productService = inject(ProductService);
 
   dataSource = new MatTableDataSource<Product>([]);
-  displayedColumns: string[] = ['idProducto', 'imagen', 'nombre', 'categoria', 'precio', 'stock', 'acciones'];
+  // Columnas actualizadas incluyendo 'estado'
+  displayedColumns: string[] = ['producto', 'categoria', 'precio', 'stock', 'estado', 'acciones'];
 
   categoriaSeleccionada: string = 'Todos';
   textoBusqueda: string = '';
-  // Categorías fijas según tu diseño real de base de datos
   categorias: string[] = ['Todos', 'Cereales', 'Snacks', 'Detergentes', 'Bebidas', 'Lácteos', 'Frutas'];
 
   ngOnInit() {
@@ -86,7 +86,6 @@ export class GestionProductosPage implements OnInit {
     dialogRef.afterClosed().subscribe(resultado => {
       if (resultado) {
         if (producto) {
-          // EDITAR usando Servicio Real
           this.productService.actualizarProducto(producto.idProducto, resultado).subscribe({
             next: () => {
               alert('✅ Producto actualizado con éxito');
@@ -95,7 +94,6 @@ export class GestionProductosPage implements OnInit {
             error: (err) => console.error('Error al actualizar:', err)
           });
         } else {
-          // CREAR usando Servicio Real
           this.productService.saveProducts(resultado).subscribe({
             next: () => {
               alert('✅ Nuevo producto agregado a la tienda');
@@ -111,9 +109,9 @@ export class GestionProductosPage implements OnInit {
   eliminar(producto: Product) {
     const dialogRef = this.dialog.open(ProductConfirmDialog, {
       data: {
-        title: 'Confirmar Eliminación',
-        message: `¿Desea eliminar definitivamente el producto "${producto.nombre}" del catálogo?`,
-        confirmText: 'Eliminar'
+        title: 'Desactivar Producto',
+        message: `¿Desea desactivar el producto "${producto.nombre}"? Ya no aparecerá en la tienda para los clientes.`,
+        confirmText: 'Desactivar'
       }
     });
 
@@ -123,7 +121,29 @@ export class GestionProductosPage implements OnInit {
           next: () => {
             this.cargarDatos();
           },
-          error: (err) => console.error('Error al eliminar:', err)
+          error: (err) => console.error('Error al desactivar:', err)
+        });
+      }
+    });
+  }
+
+  // NUEVA FUNCIÓN: Reactivar el producto inactivo
+  reactivar(producto: Product) {
+    const dialogRef = this.dialog.open(ProductConfirmDialog, {
+      data: {
+        title: 'Reactivar Producto',
+        message: `¿Desea volver a activar el producto "${producto.nombre}"? Volverá a estar disponible para la venta.`,
+        confirmText: 'Reactivar'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.productService.reactivarProducto(producto.idProducto).subscribe({
+          next: () => {
+            this.cargarDatos();
+          },
+          error: (err) => console.error('Error al reactivar:', err)
         });
       }
     });

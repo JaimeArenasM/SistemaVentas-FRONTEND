@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -24,6 +24,7 @@ import { ISale } from '../../../../Core/Interfaces/ISale.interface';
 export class MisComprasPage implements OnInit {
 
   private ventaService = inject(VentaService);
+  private cdr = inject(ChangeDetectorRef); // 🔥 INYECTAMOS EL DETECTOR DE CAMBIOS
   misHistorial: ISale[] = [];
 
   ngOnInit() {
@@ -31,12 +32,10 @@ export class MisComprasPage implements OnInit {
   }
 
   cargarMisCompras() {
-    // Ya no necesitamos sacar el ID del usuario ni filtrar a mano.
-    // El Token viaja solo y el backend nos da solo nuestras compras.
     this.ventaService.obtenerMisCompras().subscribe({
       next: (ventas: ISale[]) => {
-        // Ordenamos para que la compra más reciente (ID más alto) salga primero
         this.misHistorial = ventas.sort((a, b) => b.idVenta - a.idVenta);
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar el historial de compras:', err);

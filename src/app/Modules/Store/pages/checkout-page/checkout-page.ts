@@ -75,7 +75,6 @@ export class CheckoutPage implements OnInit {
       next: () => {
         alert('¡Pago registrado con éxito! Tu pedido está en camino.');
 
-        // 🔥 SOLUCIÓN: Limpiar el carrito visualmente 🔥
         this.cartItems = [];
         this.totalCarrito = 0;
 

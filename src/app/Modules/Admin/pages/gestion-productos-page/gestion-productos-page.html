@@ -1,7 +1,7 @@
 <div class="productos-wrapper">
   <div class="productos-header">
     <div>
-      <span class="eyebrow">Catálogo</span>
+      <span class="eyebrow">CATÁLOGO</span>
       <h2>Gestión de Productos</h2>
       <p>Administra el inventario de la Tienda de Don Pepe.</p>
     </div>
@@ -32,61 +32,80 @@
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" class="productos-table">
 
-        <ng-container matColumnDef="idProducto">
-          <th mat-header-cell *matHeaderCellDef> ID </th>
-          <td mat-cell *matCellDef="let p"> #{{ p.idProducto }} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="imagen">
-          <th mat-header-cell *matHeaderCellDef> Imagen </th>
+        <ng-container matColumnDef="producto">
+          <th mat-header-cell *matHeaderCellDef> PRODUCTO </th>
           <td mat-cell *matCellDef="let p">
-            <img [src]="p.imagenUrl || 'https://via.placeholder.com/50'" alt="img" class="prod-thumbnail" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px; padding: 8px 0;">
+              <span style="font-weight: bold; color: #64748b; font-size: 13px;">#{{ p.idProducto }}</span>
+              <img [src]="p.imagenUrl || 'https://placehold.co/100x100?text=Sin+Foto'"
+                   alt="img"
+                   style="width: 45px; height: 45px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <span style="font-weight: 600; color: #1e293b;">{{ p.nombre }}</span>
+            </div>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="nombre">
-          <th mat-header-cell *matHeaderCellDef> Nombre </th>
-          <td mat-cell *matCellDef="let p" style="font-weight: 500;"> {{ p.nombre }} </td>
-        </ng-container>
-
         <ng-container matColumnDef="categoria">
-          <th mat-header-cell *matHeaderCellDef> Categoría </th>
+          <th mat-header-cell *matHeaderCellDef> CATEGORÍA </th>
           <td mat-cell *matCellDef="let p">
-            <span class="badge-status" style="background-color: #f0f4f8; color: #475569;">{{ p.nombreCategoria }}</span>
+            <span style="background-color: #f1f5f9; color: #3b82f6; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+              {{ p.nombreCategoria }}
+            </span>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="precio">
-          <th mat-header-cell *matHeaderCellDef> Precio </th>
-          <td mat-cell *matCellDef="let p"> S/ {{ p.precio | number:'1.2-2' }} </td>
+          <th mat-header-cell *matHeaderCellDef> PRECIO </th>
+          <td mat-cell *matCellDef="let p" style="color: #0f172a; font-weight: 500;">
+            S/ {{ p.precio | number:'1.2-2' }}
+          </td>
         </ng-container>
 
         <ng-container matColumnDef="stock">
-          <th mat-header-cell *matHeaderCellDef> Stock </th>
-          <td mat-cell *matCellDef="let p" [ngStyle]="{'color': p.stock <= 5 ? '#d32f2f' : 'inherit', 'font-weight': p.stock <= 5 ? 'bold' : 'normal'}">
+          <th mat-header-cell *matHeaderCellDef> STOCK </th>
+          <td mat-cell *matCellDef="let p"
+              [ngStyle]="{'color': p.stock <= 5 ? '#ef4444' : '#10b981', 'font-weight': 600}">
             {{ p.stock }} und.
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="acciones">
-          <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef> ESTADO </th>
           <td mat-cell *matCellDef="let p">
-            <button mat-icon-button color="primary" (click)="abrirModalProducto(p)" title="Editar">
+            <span style="padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase;"
+                  [ngStyle]="{'background-color': p.estado === 'activo' ? '#dcfce3' : '#fee2e2',
+                              'color': p.estado === 'activo' ? '#166534' : '#991b1b'}">
+              {{ p.estado }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
+          <td mat-cell *matCellDef="let p">
+
+            <button mat-icon-button color="primary" *ngIf="p.estado === 'activo'" (click)="abrirModalProducto(p)" title="Editar">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="eliminar(p)" title="Eliminar">
-              <mat-icon>delete</mat-icon>
+
+            <button mat-icon-button color="warn" *ngIf="p.estado === 'activo'" (click)="eliminar(p)" title="Desactivar">
+              <mat-icon>delete_outline</mat-icon>
             </button>
+
+            <button mat-icon-button style="color: #10b981;" *ngIf="p.estado === 'inactivo'" (click)="reactivar(p)" title="Reactivar">
+              <mat-icon>restore</mat-icon>
+            </button>
+
           </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="hover-row"></tr>
       </table>
 
-      <div *ngIf="dataSource.data.length === 0" class="no-data-msg">
-        <mat-icon>inventory_2</mat-icon>
-        <h3>No hay productos</h3>
+      <div *ngIf="dataSource.data.length === 0" class="no-data-msg" style="text-align: center; padding: 40px; color: #94a3b8;">
+        <mat-icon style="font-size: 48px; width: 48px; height: 48px; opacity: 0.5;">inventory_2</mat-icon>
+        <h3 style="margin-top: 16px; color: #475569;">No hay productos</h3>
         <p>Aún no hay productos registrados en el catálogo.</p>
       </div>
     </div>

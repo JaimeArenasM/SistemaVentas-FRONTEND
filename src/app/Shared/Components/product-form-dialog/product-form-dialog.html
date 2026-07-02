@@ -63,6 +63,10 @@
 
   <div mat-dialog-actions class="acciones-dialog" style="justify-content: flex-end; padding-bottom: 15px;">
     <button mat-button type="button" (click)="onCancel()">Cancelar</button>
-    <button mat-raised-button color="primary" [disabled]="productForm.invalid" (click)="onSave()">Guardar Producto</button>
+    <button mat-raised-button color="primary"
+        [disabled]="productForm.invalid || uploading"
+        (click)="onSave()">
+  Guardar Producto
+</button>
   </div>
 </form>

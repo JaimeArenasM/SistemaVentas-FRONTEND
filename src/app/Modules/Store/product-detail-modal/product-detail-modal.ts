@@ -18,14 +18,12 @@ export class ProductDetailModalComponent {
     @Inject(MAT_DIALOG_DATA) public product: Product,
     private dialogRef: MatDialogRef<ProductDetailModalComponent>
   ) {
-    // Protección adicional: Si un producto llega con stock 0, inicializamos en 0
     if (this.product.stock === 0) {
       this.cantidad = 0;
     }
   }
 
   aumentar(): void {
-    // Validamos que el cliente no pida más de lo que hay en inventario
     if (this.cantidad < this.product.stock) {
       this.cantidad = this.cantidad + 1;
     }

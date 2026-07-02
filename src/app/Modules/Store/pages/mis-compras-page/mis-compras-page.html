@@ -1,7 +1,12 @@
 <div class="compras-container">
-  <div class="header-section">
-    <h2>Mi Historial de Compras</h2>
-    <p>Revisa el estado de tus pedidos en la Tienda de Don Pepe</p>
+  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+      <h2>Mi Historial de Compras</h2>
+      <p>Revisa el estado de tus pedidos en la Tienda de Don Pepe</p>
+    </div>
+    <button mat-stroked-button color="primary" (click)="cargarMisCompras()">
+      <mat-icon>refresh</mat-icon> Actualizar
+    </button>
   </div>
 
   <div class="empty-state" *ngIf="misHistorial.length === 0">

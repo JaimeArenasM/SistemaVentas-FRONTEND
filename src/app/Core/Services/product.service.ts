@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, inject } from "@angular/core";
 import { Observable } from "rxjs";
 import { Product } from "../Interfaces/IProduct.interface";
@@ -10,8 +10,9 @@ export class ProductService {
   private readonly apiUrl = `${environment.apiUrl}/productos`;
 
   /** GET /api/productos (Listar todo el catálogo) */
-  getProductos(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.apiUrl);
+  getProductos(): Observable<any> {
+    const params = new HttpParams().set('size', '100');
+    return this.http.get<any>(this.apiUrl, { params });
   }
 
   /** GET /api/productos/{id} (Buscar un producto específico) */
@@ -29,8 +30,15 @@ export class ProductService {
     return this.http.put<Product>(`${this.apiUrl}/${id}`, producto);
   }
 
-  /** DELETE /api/productos/{id} (Eliminar producto del sistema - Solo Admin) */
-  eliminarProducto(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  /** DELETE /api/productos/{id} (Desactivar lógicamente) */
+  eliminarProducto(id: number): Observable<any> {
+    // responseType: 'text' evita que Angular colapse buscando un JSON
+    return this.http.delete(`${this.apiUrl}/${id}`, { responseType: 'text' });
+  }
+
+  /** PUT /api/productos/{id}/reactivar (Volver a activar el producto) */
+  reactivarProducto(id: number): Observable<any> {
+    // Enviamos un cuerpo vacío {} porque es un PUT que solo cambia estado
+    return this.http.put(`${this.apiUrl}/${id}/reactivar`, {}, { responseType: 'text' });
   }
 }

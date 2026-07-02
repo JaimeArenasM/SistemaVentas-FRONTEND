@@ -2,7 +2,8 @@
   <button class="close-btn" (click)="cerrar()">×</button>
 
   <div class="modal-image">
-    <img [src]="product.imagenUrl || 'https://via.placeholder.com/400'" [alt]="product.nombre">
+    <!-- Reemplazado por placehold.co que no da error 500 ni se desconecta -->
+    <img [src]="product.imagenUrl || 'https://placehold.co/400x400?text=Sin+Foto'" [alt]="product.nombre">
   </div>
 
   <div class="modal-info">

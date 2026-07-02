@@ -1,13 +1,15 @@
+/* Wrapper principal */
 .productos-wrapper {
   padding: 28px 32px;
   background: #f5f7fb;
   min-height: calc(100vh - 70px);
 }
 
+/* Cabecera */
 .productos-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 24px;
 }
 
@@ -18,58 +20,48 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .productos-header h2 {
-  font-size: 38px;
+  font-size: 34px;
   font-weight: 900;
   color: #111827;
-  margin: 0 0 14px 0;
+  margin: 0 0 10px;
   line-height: 1.1;
 }
 
 .productos-header p {
-  color: #6b7280;
   font-size: 15px;
+  color: #6b7280;
   margin: 0;
-  line-height: 1.8;
-  max-width: 650px;
 }
 
-.btn-add {
-  background: #0cae98 !important;
-  color: white !important;
-  border-radius: 14px;
-  height: 46px;
-  padding: 0 20px;
-  font-weight: 800;
-}
-
-.productos-card {
-  background: #ffffff !important;
-  border-radius: 24px;
-  padding: 22px;
-  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06) !important;
-  border: 1px solid #eef1f6;
-}
-
-.acciones {
+/* Contenedor de acciones (buscadores, botones) */
+.header-actions {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-bottom: 22px;
 }
 
+/* Select de categoría */
+.filtro-categoria {
+  width: 170px;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #dbe3ee; /* Borde unificado con el buscador */
+}
+
+/* Buscador unificado al estilo clientes */
 .search-box {
-  width: 320px;
-  height: 44px;
+  width: 330px;
+  height: 46px;
   border: 1px solid #dbe3ee;
   border-radius: 14px;
+  background: #ffffff;
   display: flex;
   align-items: center;
   padding: 0 14px;
-  background: #f9fafb;
 }
 
 .search-box mat-icon {
@@ -80,34 +72,50 @@
 .search-box input {
   border: none;
   outline: none;
-  background: transparent;
   width: 100%;
+  background: transparent;
 }
 
-.select-category {
-  height: 44px;
-  min-width: 170px;
+/* Botón principal */
+.btn-primary-crm {
+  height: 46px;
+  background: #0cae98 !important;
+  color: white !important;
+  border: none;
+  padding: 0 18px;
   border-radius: 14px;
-  border: 1px solid #dbe3ee;
-  padding: 0 14px;
-  background: #f9fafb;
-  outline: none;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
 }
 
+/* Tarjeta principal */
+.productos-card {
+  background: white !important;
+  border-radius: 24px;
+  padding: 22px;
+  border: 1px solid #eef1f6;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Contenedor de la tabla */
 .table-container {
   overflow-x: auto;
   border-radius: 18px;
   border: 1px solid #eef1f6;
+  background: white;
 }
 
-.tabla-productos {
+/* Estilos de la tabla unificados */
+.productos-table {
   width: 100%;
-  background: #ffffff;
+  background: white;
   border-collapse: collapse;
 }
 
-.tabla-productos th {
+.productos-table th {
   background: #f8fafc;
   color: #64748b;
   font-size: 12px;
@@ -115,70 +123,71 @@
   text-transform: uppercase;
 }
 
-.tabla-productos td,
-.tabla-productos th {
-  padding: 16px;
+.productos-table td,
+.productos-table th {
+  padding: 18px 16px;
   text-align: center;
   border-bottom: 1px solid #eef1f6;
 }
 
-.tabla-productos tr:hover td {
+.hover-row:hover td {
   background: #f9fafb;
 }
 
-.imagen {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
-  border-radius: 12px;
-  border: 1px solid #dbe3ee;
-  background: white;
+/* Estados sin datos */
+.no-data-msg {
+  text-align: center;
+  padding: 70px 20px;
+  color: #94a3b8;
 }
 
-.product-name {
-  font-weight: 800;
+.no-data-msg mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+}
+
+.no-data-msg h3 {
+  margin: 0 0 10px;
   color: #111827;
+  font-size: 26px;
+  font-weight: 900;
 }
 
-.price {
-  font-weight: 800;
-  color: #0cae98;
+.no-data-msg p {
+  margin: 0;
+  font-size: 15px;
 }
 
-.description {
-  color: #64748b;
-}
-
-.category-badge {
-  background: #dcfff7;
-  color: #0cae98;
-  padding: 7px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.btn-edit {
-  color: #2563eb !important;
-}
-
-.btn-delete {
-  color: #ef4444 !important;
-}
-
+/* Media Query para responsividad */
 @media (max-width: 900px) {
   .productos-header {
     flex-direction: column;
-    align-items: flex-start;
     gap: 16px;
   }
 
-  .acciones {
+  .header-actions {
+    width: 100%;
     flex-direction: column;
     align-items: stretch;
   }
 
-  .search-box {
+  .search-box, .filtro-categoria {
     width: auto;
   }
+}
+
+/* --- Ajustes específicos de Angular Material --- */
+
+/* Quitar el padding extra feo que Angular Material le pone al Select */
+::ng-deep .filtro-categoria .mat-mdc-text-field-wrapper {
+  background-color: transparent;
+  padding: 0 10px;
+}
+
+::ng-deep .filtro-categoria .mdc-notched-outline__leading,
+::ng-deep .filtro-categoria .mdc-notched-outline__notch,
+::ng-deep .filtro-categoria .mdc-notched-outline__trailing {
+  border: none;
 }
