@@ -113,23 +113,25 @@
 
 </button>
 
-  <!-- PERFIL -->
+  <!-- PERFIL: saludo visible junto al ícono -->
+  <div class="header-profile" *ngIf="session">
+    <div class="header-profile-text">
+      <strong>Hola, {{ session.user.nombres || 'cliente' }}</strong>
+      <small>Bienvenido a Don Pepe</small>
+    </div>
+  </div>
+
   <button mat-icon-button color="accent"
           [matMenuTriggerFor]="profileMenu"
-          style="margin-left:10px">
+          class="profile-trigger">
     <mat-icon>person</mat-icon>
   </button>
 
   <!-- MENÚ DINÁMICO DE PERFIL -->
   <mat-menu #profileMenu="matMenu">
 
-    <!-- SI EL USUARIO ESTÁ LOGUEADO -->
+    <!-- SI EL USUARIO ESTÁ LOGUEADO: opciones sin saludo en el menú -->
     <ng-container *ngIf="session">
-      <div class="profile-greeting">
-        <strong>Hola, {{ session.user.nombres || 'cliente' }}</strong>
-        <small>Bienvenido a Don Pepe</small>
-      </div>
-
       <button mat-menu-item (click)="irPerfil()">
         <mat-icon>account_circle</mat-icon> Mi Perfil
       </button>
