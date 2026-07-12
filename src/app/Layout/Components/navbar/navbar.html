@@ -6,7 +6,7 @@
   <!-- BOTÓN MENÚ CATEGORÍAS -->
 <button class="btn-categorias" (click)="abrirMenuCategorias()">
   <span class="menu-icon">☰</span>
-  <span>Categorías</span>
+  <span>Explorar</span>
 </button>
 
 <div
@@ -16,36 +16,45 @@
 </div>
 
 <aside class="side-menu" *ngIf="mostrarMenuCategorias">
+  <div class="side-menu-header">
+    <h3>Categorías</h3>
+    <button class="btn-close-categories" type="button" (click)="cerrarMenuCategorias()">✕</button>
+  </div>
 
-  <h3>CATEGORÍAS</h3>
+  <p class="side-menu-subtitle">Explora nuestros productos por categoría.</p>
 
-  <button (click)="filterByCategory('Cereales')">
- <img src="assets/img/categorias/cereales.png" alt="Cereales">
+  <button class="category-item" (click)="filterByCategory('Todos')">
+    <span class="category-icon">🛍️</span>
+    <span>Ver todos</span>
+  </button>
+
+  <button class="category-item" (click)="filterByCategory('Cereales')">
+    <img src="assets/img/categorias/cereales.png" alt="Cereales">
     <span>Cereales</span>
   </button>
 
-  <button (click)="filterByCategory('Snacks')">
-   <img src="assets/img/categorias/Snacks.png" alt="Snacks">
+  <button class="category-item" (click)="filterByCategory('Snacks')">
+    <img src="assets/img/categorias/Snacks.png" alt="Snacks">
     <span>Snacks</span>
   </button>
 
-  <button (click)="filterByCategory('Detergentes')">
-   <img src="assets/img/categorias/Detergentes.png" alt="Limpieza">
+  <button class="category-item" (click)="filterByCategory('Detergentes')">
+    <img src="assets/img/categorias/Detergentes.png" alt="Limpieza">
     <span>Limpieza</span>
   </button>
 
-  <button (click)="filterByCategory('Bebidas')">
-  <img src="assets/img/categorias/bebidas.jpg" alt="Bebidas">
+  <button class="category-item" (click)="filterByCategory('Bebidas')">
+    <img src="assets/img/categorias/bebidas.jpg" alt="Bebidas">
     <span>Bebidas</span>
   </button>
 
-  <button (click)="filterByCategory('Lácteos')">
-  <img src="assets/img/categorias/lacteos.png" alt="Lácteos">
+  <button class="category-item" (click)="filterByCategory('Lácteos')">
+    <img src="assets/img/categorias/lacteos.png" alt="Lácteos">
     <span>Lácteos</span>
   </button>
 
-  <button (click)="filterByCategory('Frutas')">
-  <img src="assets/img/categorias/frutas.png" alt="Frutas">
+  <button class="category-item" (click)="filterByCategory('Frutas')">
+    <img src="assets/img/categorias/frutas.png" alt="Frutas">
     <span>Frutas</span>
   </button>
 
@@ -116,8 +125,9 @@
 
     <!-- SI EL USUARIO ESTÁ LOGUEADO -->
     <ng-container *ngIf="session">
-      <div style="padding: 10px 16px; font-weight: bold; color: #000000; border-bottom: 1px solid #eee; margin-bottom: 5px;">
-        Hola, {{ session.user.nombres }}
+      <div class="profile-greeting">
+        <strong>Hola, {{ session.user.nombres || 'cliente' }}</strong>
+        <small>Bienvenido a Don Pepe</small>
       </div>
 
       <button mat-menu-item (click)="irPerfil()">

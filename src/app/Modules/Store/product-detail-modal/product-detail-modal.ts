@@ -14,15 +14,28 @@ import { Product } from '../../../Core/Interfaces/IProduct.interface';
 export class ProductDetailModalComponent {
   cantidad = 1;
 
-aumentar(): void {
-  this.cantidad = this.cantidad + 1;
-}
-
-disminuir(): void {
-  if (this.cantidad > 1) {
-    this.cantidad = this.cantidad - 1;
+  aumentar(): void {
+    this.cantidad += 1;
   }
-}
+
+  disminuir(): void {
+    if (this.cantidad > 1) {
+      this.cantidad -= 1;
+    }
+  }
+
+  onCantidadInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const valor = Number(input.value);
+
+    if (!Number.isFinite(valor) || valor < 1) {
+      this.cantidad = 1;
+      return;
+    }
+
+    this.cantidad = Math.floor(valor);
+  }
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public product: Product,
     private dialogRef: MatDialogRef<ProductDetailModalComponent>

@@ -20,10 +20,18 @@
       <label>CANTIDAD</label>
 
       <div class="quantity-control">
-  <button type="button" (click)="disminuir()">−</button>
-  <span>{{ cantidad }}</span>
-  <button type="button" (click)="aumentar()">+</button>
-</div>
+        <button type="button" class="qty-btn" (click)="disminuir()">−</button>
+        <input
+          type="number"
+          min="1"
+          [value]="cantidad"
+          (input)="onCantidadInput($event)"
+          aria-label="Cantidad de compra"
+        />
+        <button type="button" class="qty-btn" (click)="aumentar()">+</button>
+      </div>
+
+      <small class="quantity-help">Escribe o ajusta la cantidad que deseas comprar.</small>
     </div>
 
     <button class="add-btn" (click)="agregar()">
