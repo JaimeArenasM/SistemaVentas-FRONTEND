@@ -14,8 +14,22 @@ import { Product } from '../../../Core/Interfaces/IProduct.interface';
 export class ProductDetailModalComponent {
   cantidad = 1;
 
+  get stockDisponible(): number {
+    return Math.max(1, this.product?.stock ?? 10);
+  }
+
+  get puedeDisminuir(): boolean {
+    return this.cantidad > 1;
+  }
+
+  get puedeAumentar(): boolean {
+    return this.cantidad < this.stockDisponible;
+  }
+
   aumentar(): void {
-    this.cantidad += 1;
+    if (this.cantidad < this.stockDisponible) {
+      this.cantidad += 1;
+    }
   }
 
   disminuir(): void {
@@ -30,10 +44,13 @@ export class ProductDetailModalComponent {
 
     if (!Number.isFinite(valor) || valor < 1) {
       this.cantidad = 1;
+      input.value = '1';
       return;
     }
 
-    this.cantidad = Math.floor(valor);
+    const cantidadLimitada = Math.min(Math.floor(valor), this.stockDisponible);
+    this.cantidad = cantidadLimitada;
+    input.value = String(this.cantidad);
   }
 
   constructor(
@@ -41,8 +58,8 @@ export class ProductDetailModalComponent {
     private dialogRef: MatDialogRef<ProductDetailModalComponent>
   ) {}
 
-
   agregar(): void {
+    this.cantidad = Math.min(this.cantidad, this.stockDisponible);
     this.dialogRef.close({
       product: this.product,
       cantidad: this.cantidad

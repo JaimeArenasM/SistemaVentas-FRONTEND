@@ -14,24 +14,25 @@
 
     <p class="description">{{ product.description }}</p>
 
-    <p class="stock">✔ Stock disponible en tienda</p>
+    <p class="stock">✔ Stock disponible: {{ stockDisponible }} unidades</p>
 
     <div class="quantity-section">
       <label>CANTIDAD</label>
 
       <div class="quantity-control">
-        <button type="button" class="qty-btn" (click)="disminuir()">−</button>
+        <button type="button" class="qty-btn" (click)="disminuir()" [disabled]="!puedeDisminuir">−</button>
         <input
           type="number"
           min="1"
+          [max]="stockDisponible"
           [value]="cantidad"
           (input)="onCantidadInput($event)"
           aria-label="Cantidad de compra"
         />
-        <button type="button" class="qty-btn" (click)="aumentar()">+</button>
+        <button type="button" class="qty-btn" (click)="aumentar()" [disabled]="!puedeAumentar">+</button>
       </div>
 
-      <small class="quantity-help">Escribe o ajusta la cantidad que deseas comprar.</small>
+      <small class="quantity-help">Escribe o ajusta la cantidad que deseas comprar, sin superar el stock disponible.</small>
     </div>
 
     <button class="add-btn" (click)="agregar()">
