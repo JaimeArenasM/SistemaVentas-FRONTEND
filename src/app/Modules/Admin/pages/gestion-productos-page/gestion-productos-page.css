@@ -179,15 +179,33 @@
 }
 
 /* --- Ajustes específicos de Angular Material --- */
+.filtro-categoria {
+  width: 170px;
+  height: 46px; /* Altura estricta para alinear con el buscador */
+}
 
-/* Quitar el padding extra feo que Angular Material le pone al Select */
 ::ng-deep .filtro-categoria .mat-mdc-text-field-wrapper {
-  background-color: transparent;
-  padding: 0 10px;
+  height: 46px !important;
+  padding: 0 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  background-color: #ffffff;
+}
+
+::ng-deep .filtro-categoria .mat-mdc-form-field-flex {
+  height: 100% !important;
+  align-items: center !important;
+}
+
+::ng-deep .filtro-categoria .mat-mdc-form-field-infix {
+  padding: 0 !important;
+  min-height: auto !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 ::ng-deep .filtro-categoria .mdc-notched-outline__leading,
 ::ng-deep .filtro-categoria .mdc-notched-outline__notch,
 ::ng-deep .filtro-categoria .mdc-notched-outline__trailing {
-  border: none;
+  border-color: #dbe3ee !important;
 }

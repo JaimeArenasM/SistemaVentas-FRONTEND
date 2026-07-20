@@ -11,25 +11,39 @@
 
     <h2>{{ product.nombre }}</h2>
 
-    <p class="price">S/ {{ product.precio }}</p>
+    <p class="price">S/ {{ product.precio | number:'1.2-2' }}</p>
 
     <p class="description">{{ product.descripcion }}</p>
 
+    <!-- Mantenemos tu lógica HEAD porque maneja el "Agotado" perfectamente -->
     <p class="stock" [ngStyle]="{'color': product.stock > 0 ? '#4CAF50' : '#f44336'}">
       <mat-icon style="font-size: 16px; height: 16px; width: 16px; vertical-align: middle;">
         {{ product.stock > 0 ? 'check_circle' : 'cancel' }}
       </mat-icon>
-      {{ product.stock > 0 ? product.stock + ' disponibles en tienda' : 'Agotado' }}
+      {{ product.stock > 0 ? product.stock + ' unidades disponibles' : 'Agotado' }}
     </p>
 
     <div class="quantity-section">
       <label>CANTIDAD</label>
 
+      <!-- Fusión: Diseño de feature-landing pero con validaciones seguras de HEAD -->
       <div class="quantity-control">
-        <button type="button" (click)="disminuir()" [disabled]="product.stock === 0">−</button>
-        <span>{{ cantidad }}</span>
-        <button type="button" (click)="aumentar()" [disabled]="product.stock === 0">+</button>
+        <button type="button" class="qty-btn" (click)="disminuir()" [disabled]="cantidad <= 1 || product.stock === 0">−</button>
+
+        <!-- Usamos el input de la nueva rama pero en modo 'readonly' para que los botones controlen la variable segura -->
+        <input
+          type="number"
+          min="1"
+          [max]="product.stock"
+          [value]="cantidad"
+          readonly
+          aria-label="Cantidad de compra"
+        />
+
+        <button type="button" class="qty-btn" (click)="aumentar()" [disabled]="cantidad >= product.stock || product.stock === 0">+</button>
       </div>
+
+      <small class="quantity-help">Ajusta la cantidad que deseas comprar, sin superar el stock disponible.</small>
     </div>
 
     <button class="add-btn" (click)="agregar()" [disabled]="product.stock === 0">
