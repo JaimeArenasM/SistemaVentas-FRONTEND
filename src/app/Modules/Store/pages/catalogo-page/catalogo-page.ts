@@ -10,6 +10,7 @@ import { ScrollTopButton } from '../../../../Shared/Components/scroll-top-button
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
 import { CarritoService } from '../../../../Core/Services/carrito.service';
+import { AuthService } from '../../../../Core/Services/auth.service'; // 🔥 Importamos el servicio de auth
 import { ProductDetailModalComponent } from '../../product-detail-modal/product-detail-modal';
 
 @Component({
@@ -61,14 +62,21 @@ export class CatalogoPage implements OnInit {
   private productService = inject(ProductService);
   private router = inject(Router);
 
-  // 🔥 INYECTAMOS EL DIÁLOGO Y EL SERVICIO DEL CARRITO
+  // Inyectamos diálogos, carrito y autenticación
   private dialog = inject(MatDialog);
   private cartService = inject(CarritoService);
+  private authService = inject(AuthService); // 🔥 Inyección del AuthService
 
-  ngOnInit(): void {
+ngOnInit(): void {
     this.productService.getProductos().subscribe({
       next: (data: any) => {
-        this.productos = data.content ? data.content : data;
+        const listaCompleta = data.content ? data.content : data;
+
+        this.productos = listaCompleta.filter((p: Product) => {
+          const estado = String(p.estado || '').trim().toUpperCase();
+          return estado === 'ACTIVO';
+        });
+
       },
       error: (err) => {
         console.error('Error al cargar el catálogo:', err);
@@ -117,24 +125,49 @@ export class CatalogoPage implements OnInit {
     });
   }
 
-  // Función para abrir el modal desde el catálogo
+  // Función para abrir el modal y validar la sesión antes de guardar
+ // Función para abrir el modal y validar la sesión antes de guardar
   abrirModalProducto(producto: Product): void {
     const dialogRef = this.dialog.open(ProductDetailModalComponent, {
-     width: '750px',
+      width: '750px',
       maxWidth: '95vw',
+      maxHeight: '90vh',
       data: producto
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && result.cantidad > 0) {
-       this.cartService.agregarItem({
+
+        // 🔥 GUARDIA DE SESIÓN
+        const session = this.authService.getSession();
+        if (!session) {
+          alert('¡Ups! Debes iniciar sesión o registrarte para poder agregar productos a tu carrito.');
+          this.router.navigate(['/auth/login']);
+          return;
+        }
+
+        // 🔥 PROCEDEMOS A GUARDAR
+        this.cartService.agregarItem({
           idProducto: result.product.idProducto,
           cantidad: result.cantidad
         }).subscribe({
           next: () => {
             console.log('✅ Producto agregado al carrito');
+
+            // 🔥 AQUÍ AGREGAMOS EL MENSAJE DE ÉXITO PARA EL CLIENTE
+            alert(`¡Genial! Se agregó "${producto.nombre}" a tu carrito correctamente. 🛒`);
+
           },
-          error: (err) => console.error('Error al agregar al carrito:', err)
+          error: (err) => {
+            console.error('Error al agregar al carrito:', err);
+            if (err.status === 401 || err.status === 403) {
+              alert('Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
+              this.authService.logout();
+              this.router.navigate(['/auth/login']);
+            } else {
+              alert('Hubo un problema al agregar el producto. Inténtalo de nuevo.');
+            }
+          }
         });
       }
     });
