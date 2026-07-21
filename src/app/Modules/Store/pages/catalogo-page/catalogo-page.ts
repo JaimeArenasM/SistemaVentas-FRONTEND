@@ -9,6 +9,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ScrollTopButton } from '../../../../Shared/Components/scroll-top-button/scroll-top-button';
 import { Product } from '../../../../Core/Interfaces/IProduct.interface';
 import { ProductService } from '../../../../Core/Services/product.service';
+import { CarritoService } from '../../../../Core/Services/carrito.service';
+import { ProductDetailModalComponent } from '../../product-detail-modal/product-detail-modal';
 
 @Component({
   standalone: true,
@@ -59,8 +61,11 @@ export class CatalogoPage implements OnInit {
   private productService = inject(ProductService);
   private router = inject(Router);
 
+  // 🔥 INYECTAMOS EL DIÁLOGO Y EL SERVICIO DEL CARRITO
+  private dialog = inject(MatDialog);
+  private cartService = inject(CarritoService);
+
   ngOnInit(): void {
-    // Cargamos los productos para que el filtro por categoría funcione en el catálogo
     this.productService.getProductos().subscribe({
       next: (data: any) => {
         this.productos = data.content ? data.content : data;
@@ -105,7 +110,6 @@ export class CatalogoPage implements OnInit {
     });
   }
 
-  // Navegación profesional que filtra automáticamente la página de productos
   irCategoria(nombreCategoria: string): void {
     this.router.navigate(['/store/productos'], {
       queryParams: { categoria: nombreCategoria },
@@ -113,5 +117,26 @@ export class CatalogoPage implements OnInit {
     });
   }
 
+  // Función para abrir el modal desde el catálogo
+  abrirModalProducto(producto: Product): void {
+    const dialogRef = this.dialog.open(ProductDetailModalComponent, {
+     width: '750px',
+      maxWidth: '95vw',
+      data: producto
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.cantidad > 0) {
+       this.cartService.agregarItem({
+          idProducto: result.product.idProducto,
+          cantidad: result.cantidad
+        }).subscribe({
+          next: () => {
+            console.log('✅ Producto agregado al carrito');
+          },
+          error: (err) => console.error('Error al agregar al carrito:', err)
+        });
+      }
+    });
+  }
 }

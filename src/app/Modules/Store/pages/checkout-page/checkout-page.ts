@@ -75,17 +75,25 @@ export class CheckoutPage implements OnInit {
       next: () => {
         alert('¡Pago registrado con éxito! Tu pedido está en camino.');
 
+        // 1. Guardamos temporalmente los items para borrarlos de la BD
+        const itemsParaBorrar = [...this.cartItems];
+
+        // 2. Limpiamos la vista inmediatamente
         this.cartItems = [];
         this.totalCarrito = 0;
 
-        // Si tu CarritoService tiene un método para vaciar el carrito en el backend, llámalo aquí.
-        // Ej: this.cartService.vaciarCarrito().subscribe();
-
-        this.router.navigate(['/store/mis-compras']).then(() => {
-          // Truco de seguridad: Si el modal superior (navbar) usa un Subject y no se actualiza,
-          // forzamos una recarga limpia para asegurarnos de que traiga la BD limpia.
-          window.location.reload();
+        // 3. El Hack Frontend: Hacemos un bucle para borrar cada item de la BD usando tu endpoint existente
+      itemsParaBorrar.forEach(item => {
+          // 🔥 VALIDACIÓN: Solo intentamos borrar si el ID realmente existe
+          if (item.idProducto) {
+            this.cartService.eliminarItem(item.idProducto).subscribe({
+              error: (err) => console.error('Error limpiando carrito en BD:', err)
+            });
+          }
         });
+
+        // 4. Redirigimos a Mis Compras
+        this.router.navigate(['/store/mis-compras']);
       },
       error: (err) => {
         console.error('Error al procesar el pago:', err);

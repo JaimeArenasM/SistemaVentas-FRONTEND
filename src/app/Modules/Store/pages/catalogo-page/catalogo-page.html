@@ -33,9 +33,9 @@
         <mat-card-content>
           <span class="price">S/ {{ product.precio | number:'1.2-2' }}</span>
         </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-raised-button color="primary" (click)="irCategoria(cat)">
-            Ver categoría
+        <mat-card-actions style="padding-bottom: 16px; width: 100%; display: flex; justify-content: center;">
+          <button mat-raised-button color="primary" class="add-btn" (click)="abrirModalProducto(product)" style="width: 85%; border-radius: 20px;">
+            Agregar
           </button>
         </mat-card-actions>
       </mat-card>

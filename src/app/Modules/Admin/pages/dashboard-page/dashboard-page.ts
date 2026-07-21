@@ -29,6 +29,7 @@ export class DashboardPage implements OnInit {
   totalClientes: number = 0;
   ingresosMensuales: number = 0;
 
+
   private router = inject(Router);
   private productService = inject(ProductService);
   private usuarioService = inject(UsuarioService);
@@ -39,52 +40,61 @@ export class DashboardPage implements OnInit {
     this.calcularEstadisticas();
   }
 
-  calcularEstadisticas() {
-    // 1. Obtener total de productos (A prueba de paginación)
+calcularEstadisticas() {
+    // 1. PRODUCTOS
     this.productService.getProductos().subscribe({
-      next: (data: any) => {
-        const productos = Array.isArray(data) ? data : (data.content || data.data || []);
-        this.totalProductos = productos.length;
+      next: (res: any) => {
+        // Lógica "bulldozer" para atrapar el número donde sea que venga
+        let total = 0;
+        if (res && res.totalElements !== undefined) total = res.totalElements;
+        else if (res && res.content) total = res.content.length;
+        else if (Array.isArray(res)) total = res.length;
+        else if (res && res.data) total = res.data.length;
 
+        this.totalProductos = total;
         this.cdr.detectChanges();
       },
-      error: (err) => console.error('Error al cargar productos:', err)
+      error: (err) => console.error('❌ Error al cargar productos:', err)
     });
 
-    // 2. Obtener total de clientes
+    // 2. USUARIOS (CLIENTES)
     this.usuarioService.obtenerTodosLosUsuarios().subscribe({
       next: (res: any) => {
-        const usuarios = Array.isArray(res) ? res : (res.content || res.data || []);
-
-        //console.log("Usuarios recibidos para contar:", usuarios);
+        const usuarios = Array.isArray(res) ? res : (res?.content || res?.data || []);
 
         this.totalClientes = usuarios.filter((u: any) => {
-          const rol = String(u.tipoUsuario || '').toUpperCase();
+          const rol = String(u.tipoUsuario || '').trim().toUpperCase();
           return rol !== 'ADMIN';
         }).length;
 
         this.cdr.detectChanges();
       },
-      error: (err: any) => console.error('Error al cargar usuarios:', err)
+      error: (err: any) => console.error('❌ Error al cargar usuarios:', err)
     });
 
-    // 3. Obtener y sumar las ventas reales
+    // 3. VENTAS
     this.ventaService.obtenerTodasLasVentas().subscribe({
-      next: (ventas: any) => {
-        const listaVentas = Array.isArray(ventas) ? ventas : (ventas?.content || ventas?.data || []);
+      next: (res: any) => {
+        const listaVentas = Array.isArray(res) ? res : (res?.content || res?.data || []);
 
-        this.ingresosMensuales = listaVentas
-          .filter((v: any) => {
-            // Buscamos el estado usando el nombre correcto (estadoPago o estado)
-            const estadoReal = v.estado || v.estadoPago || '';
-            return estadoReal.toUpperCase() === 'PAGADO';
-          })
-          .reduce((suma: number, ventaActual: any) => suma + (ventaActual.total || 0), 0);
+        // Vamos a sumar TODO para que desaparezca el S/ 0.00.
+        // Si quieres que solo sume las pagadas, quita el comentario del 'if'
+        this.ingresosMensuales = listaVentas.reduce((suma: number, v: any) => {
+
+          const estado = String(v.estadoPago || '').trim().toUpperCase();
+
+          // if (estado === 'PAGADO') {
+            return suma + (Number(v.total) || 0);
+          // }
+          // return suma;
+
+        }, 0);
 
         this.cdr.detectChanges();
       },
-      error: (err: any) => console.error('Error al cargar ventas:', err)
-    });}
+      error: (err: any) => console.error('❌ Error al cargar ventas:', err)
+    });
+  }
 
   irVentas() {
     this.router.navigate(['/admin/ventas']);

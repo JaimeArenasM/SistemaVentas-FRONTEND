@@ -2,7 +2,6 @@
   <button class="close-btn" (click)="cerrar()">×</button>
 
   <div class="modal-image">
-    <!-- Reemplazado por placehold.co que no da error 500 ni se desconecta -->
     <img [src]="product.imagenUrl || 'https://placehold.co/400x400?text=Sin+Foto'" [alt]="product.nombre">
   </div>
 
@@ -15,9 +14,8 @@
 
     <p class="description">{{ product.descripcion }}</p>
 
-    <!-- Mantenemos tu lógica HEAD porque maneja el "Agotado" perfectamente -->
-    <p class="stock" [ngStyle]="{'color': product.stock > 0 ? '#4CAF50' : '#f44336'}">
-      <mat-icon style="font-size: 16px; height: 16px; width: 16px; vertical-align: middle;">
+    <p class="stock" [ngStyle]="{'color': product.stock > 0 ? '#10b981' : '#ef4444'}">
+      <mat-icon style="font-size: 18px; height: 18px; width: 18px;">
         {{ product.stock > 0 ? 'check_circle' : 'cancel' }}
       </mat-icon>
       {{ product.stock > 0 ? product.stock + ' unidades disponibles' : 'Agotado' }}
@@ -25,25 +23,21 @@
 
     <div class="quantity-section">
       <label>CANTIDAD</label>
-
-      <!-- Fusión: Diseño de feature-landing pero con validaciones seguras de HEAD -->
       <div class="quantity-control">
         <button type="button" class="qty-btn" (click)="disminuir()" [disabled]="cantidad <= 1 || product.stock === 0">−</button>
 
-        <!-- Usamos el input de la nueva rama pero en modo 'readonly' para que los botones controlen la variable segura -->
+        <!-- Quitamos readonly y agregamos el evento (input) -->
         <input
           type="number"
           min="1"
           [max]="product.stock"
           [value]="cantidad"
-          readonly
-          aria-label="Cantidad de compra"
-        />
+          (input)="validarCantidad($event)"
+          aria-label="Cantidad">
 
         <button type="button" class="qty-btn" (click)="aumentar()" [disabled]="cantidad >= product.stock || product.stock === 0">+</button>
       </div>
-
-      <small class="quantity-help">Ajusta la cantidad que deseas comprar, sin superar el stock disponible.</small>
+      <small class="quantity-help">Ajusta la cantidad sin superar el stock disponible.</small>
     </div>
 
     <button class="add-btn" (click)="agregar()" [disabled]="product.stock === 0">
